@@ -9,6 +9,7 @@
 
 4.自动处理下载和升级
 ##效果
+ ![](https://github.com/AlexLiuSheng/CheckVersionLib/blob/master/gif/version.gif)
 ##使用步骤
 ###android studio导入
 `compile file "";`
