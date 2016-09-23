@@ -1,11 +1,19 @@
 # CheckVersionLib
 这是一个android上的自动版本检测并更新库。库集成了检测版本以及下载版本升级
+##特点
+1.任何地方都可以检测
+
+2.任何地方都可以弹出升级对话框
+
+3.自定义性强，手动回调解析，适用于各种版本检测接口
+
+4.自动处理下载和升级
 ##效果
 ##使用步骤
 ###android studio导入
 `compile file "";`
 ###如何使用
-1.自定义service，service必须继承库的AVService，实现其中的 `onResponses(AVersionService service, String response)`抽象方法，该方法
+1.自定义service，service必须继承库的 `AVService`，实现其中的 `onResponses(AVersionService service, String response)`抽象方法，该方法
 主要是请求版本接口的回调，由于不同的使用者版本检测接口返回数据类型不一致，所以你需要自定解析数据，然后判断版本号之后调用 `service.showVersionDialog(downloadUrl,updateMsg )`
 方法。示例代码:
 
