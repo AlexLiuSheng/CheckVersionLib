@@ -21,10 +21,11 @@ public class VersionDemoActivity extends AppCompatActivity {
                 Map<String,Object>param=new HashMap<String, Object>();
                 param.put("user_type",1);
                 param.put("client_type",0);
+                String url="";
                 VersionParams versionField = new VersionParams()
                         .setIsForceUpdate(false)
                         .setRequestMethod(AVersionService.POST)
-                        .setRequestUrl("http://test.paopaoxia.me/px/user/client/versionCheck")
+                        .setRequestUrl(url)
                         .setRequestParams(param)
                         .setVersionServiceName("com.allenliu.versionchecklib.DemoService");
                 Intent intent = new Intent(VersionDemoActivity.this, DemoService.class);
