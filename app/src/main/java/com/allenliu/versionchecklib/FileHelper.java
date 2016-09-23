@@ -37,14 +37,14 @@ public class FileHelper {
 
 		String appCachePath = null;
 
-		String apkDownPath = "" + System.currentTimeMillis();
+	//	String apkDownPath = "" + System.currentTimeMillis();
 		/**
 		 * 内存卡是否可用
 		 */
 		if (checkSDCard()) {
-			appCachePath = Environment.getExternalStorageDirectory() + "/AllenVersionPath/" + apkDownPath;
+			appCachePath = Environment.getExternalStorageDirectory() + "/AllenVersionPath/" ;
 		} else {
-			appCachePath = Environment.getDataDirectory().getPath() + "/AllenVersionPath/" + apkDownPath;
+			appCachePath = Environment.getDataDirectory().getPath() + "/AllenVersionPath/" ;
 		}
 		File file = new File(appCachePath);
 		if (!file.exists()) {
