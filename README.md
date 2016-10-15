@@ -12,7 +12,7 @@
  ![](https://github.com/AlexLiuSheng/CheckVersionLib/blob/master/gif/version.gif)
 ##使用步骤
 ###android studio导入
-`compile 'com.allenliu:checkversionlib:1.0.1'`
+`compile 'com.allenliu:checkversionlib:1.0.2'`（新增直接POSTSTRING方式请求接口）
 ###如何使用
 1.自定义service，service必须继承库的 `AVersionService `，实现其中的 `onResponses(AVersionService service, String response)`抽象方法，该方法
 主要是请求版本接口的回调，由于不同的使用者版本检测接口返回数据类型不一致，所以你需要自定解析数据，然后判断版本号之后调用 `service.showVersionDialog(downloadUrl,updateMsg )`
