@@ -7,7 +7,9 @@ import android.app.PendingIntent;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.NotificationCompat;
 import android.util.Log;
@@ -149,7 +151,13 @@ public class VersionDialogActivity extends Activity {
                     successListener.onDownloadSuccess(file);
 
                 Intent i = new Intent(Intent.ACTION_VIEW);
-                Uri uri = Uri.fromFile(file);
+                Uri uri;
+                if(Build.VERSION.SDK_INT>= Build.VERSION_CODES.N){
+                    uri= FileProvider.getUriForFile(VersionDialogActivity.this, "com.allenliu.versionchecklib.fileprovider",file);
+                }else{
+                    uri=Uri.fromFile(file);
+                }
+
                 //设置intent的类型
                 i.setDataAndType(uri,
                         "application/vnd.android.package-archive");

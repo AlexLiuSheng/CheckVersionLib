@@ -29,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
         header.put("X-Geridge-Appid", "geridge-mobile");
         VersionParams versionParams = new VersionParams()
                 .setVersionServiceName(DemoService.class.getName())
-                .setRequestUrl("http://192.168.168.196/api/version/check")
+                .setRequestUrl("http://www.baidu.com")
                 .setRequestParams(params)
                 .setRequestMethod(HttpRequestMethod.GET)
                 .setHttpHeaders(header);

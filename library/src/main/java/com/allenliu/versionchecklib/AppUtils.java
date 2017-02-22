@@ -28,6 +28,8 @@ import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.pm.Signature;
 import android.net.Uri;
+import android.os.Build;
+import android.support.v4.content.FileProvider;
 import android.text.TextUtils;
 
 import java.io.ByteArrayInputStream;
@@ -66,7 +68,13 @@ public final class AppUtils {
         Intent intent = new Intent();
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.setAction(Intent.ACTION_VIEW);
-        intent.setDataAndType(Uri.fromFile(file),
+        Uri uri;
+        if(Build.VERSION.SDK_INT>= Build.VERSION_CODES.N){
+            uri= FileProvider.getUriForFile(context, "com.allenliu.versionchecklib.fileprovider",file);
+        }else{
+            uri=Uri.fromFile(file);
+        }
+        intent.setDataAndType(uri,
                 "application/vnd.android.package-archive");
         context.startActivity(intent);
     }
