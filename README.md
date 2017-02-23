@@ -45,6 +45,7 @@
    <img src="https://github.com/AlexLiuSheng/CheckVersionLib/blob/master/gif/versionparams.png" width=400/>
 	  
 3.**自定义界面** 如果想自定义界面，只需创建一个继承自`VersionDialogActivity`的Activity,Activity设置Theme为透明：
+
  ` android:theme="@style/versionCheckLibvtransparentTheme"`
  
   开启Service的时候，将自定义的Activity传入VersionParams
@@ -56,10 +57,11 @@
    - 自定义 下载失败dialog ,重写`showFailDialog`，实现自己的逻辑
    - 除此之外还可以在定义的Activity里面监听一些下载和点击回调
    	`  setOnDownloadSuccessListener(this);
-       .setOnDownloadingListener(this);
-       .setCommitClickListener(this);
-       .setCancelClickListener(this);`
-3.下载通知栏图标和文字替换，需要自定义图标只需在mimap文件下建立`ic_launcher`图标，替换标题只需在项目xml定义`app_name`属性,还有其他一些属性替换，如下表:
+       setOnDownloadingListener(this);
+       setCommitClickListener(this);
+       setCancelClickListener(this);`
+       
+4.下载通知栏图标和文字替换，需要自定义图标只需在mimap文件下建立`ic_launcher`图标，替换标题只需在项目xml定义`app_name`属性,还有其他一些属性替换，如下表:
 
 | 属性名        | 属性值           | 
 | ------------- |:-------------:|
