@@ -25,11 +25,14 @@
 1.自定义service，service必须继承库的 `AVersionService `，实现其中的 `onResponses(AVersionService service, String response)`抽象方法，该方法
 主要是请求版本接口的回调，由于不同的使用者版本检测接口返回数据类型不一致，所以你需要自定解析数据，然后判断版本号之后调用升级对话框，如果使用库自带的直接调用如下方法: `service.showVersionDialog(downloadUrl,title,updateMsg )`
 示例代码:
-
-             if (serverVersion > clientVersion) {
-             //传入下载地址，以及版本更新消息
-                  service.showVersionDialog(downloadUrl,title,updateMsg );
-              }
+           
+	     
+	     if (serverVersion > clientVersion) { 
+	      //传入下载地址，以及版本更新消息
+	     service.showVersionDialog(downloadUrl,title,updateMsg );}
+	     
+	
+	      
 如果拿到数据之后，不使用库的方法，那么你可以在回调 里做自己想做的事。记得这里需要自己手动关闭`service`（如果调用showVersionDialog则不需要手动关闭）
 
               
