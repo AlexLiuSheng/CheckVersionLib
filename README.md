@@ -46,7 +46,8 @@
 	  
 3.**自定义界面** 如果想自定义界面，只需创建一个继承自`VersionDialogActivity`的Activity,Activity设置Theme为透明：
  ` android:theme="@style/versionCheckLibvtransparentTheme"`
- 开启Service的时候，将自定义的Activity传入VersionParams
+ 
+  开启Service的时候，将自定义的Activity传入VersionParams
    
    `setCustomDownloadActivityClass(CustomVersionDialogActivity.class)`
    
