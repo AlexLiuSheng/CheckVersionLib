@@ -13,17 +13,17 @@ import java.util.Map;
  */
 
 public class VersionParams implements Serializable {
-//    Class versionServiceClass;
+
     String requestUrl;
     /**
      * 下载保存地址
      */
-    String downloadAPKPath=FileHelper.getDownloadApkCachePath();
-   HttpHeaders httpHeaders=new HttpHeaders();
+    String downloadAPKPath = FileHelper.getDownloadApkCachePath();
+    HttpHeaders httpHeaders = new HttpHeaders();
     long pauseRequestTime = 30 * 1000;
-    HttpRequestMethod requestMethod=HttpRequestMethod.POST;
-   HttpParams requestParams=new HttpParams();
-    Class customDownloadActivityClass=VersionDialogActivity.class;
+    HttpRequestMethod requestMethod = HttpRequestMethod.POST;
+    HttpParams requestParams = new HttpParams();
+    Class customDownloadActivityClass = VersionDialogActivity.class;
 
     public Class getCustomDownloadActivityClass() {
         return customDownloadActivityClass;
