@@ -41,11 +41,12 @@
         startService(intent);`
 	
    `VersionParams`有如下方法，除了requestUrl都是可选值
-   
-    <img src="https://github.com/AlexLiuSheng/CheckVersionLib/blob/master/gif/versionparams.png" width=400/>
+ 
+   <img src="https://github.com/AlexLiuSheng/CheckVersionLib/blob/master/gif/versionparams.png" width=400/>
 	  
-3.自定义界面
-   如果想自定义界面，只需创建一个继承自`VersionDialogActivity`的Activity,开启Service的时候，将自定义的Activity传入VersionParams
+3.**自定义界面** 如果想自定义界面，只需创建一个继承自`VersionDialogActivity`的Activity,Activity设置Theme为透明：
+ ` android:theme="@style/versionCheckLibvtransparentTheme"`
+ 开启Service的时候，将自定义的Activity传入VersionParams
    
    `setCustomDownloadActivityClass(CustomVersionDialogActivity.class)`
    
@@ -68,8 +69,8 @@
 |versionchecklib_download_finish | 下载完成，点击安装   |  
 |versionchecklib_downloading | 正在下载中...  |  
 |versionchecklib_check_new_version |检测到新版本  |  
-|versionchecklib_download_fail | 下载失败，点击重试|  
-
+|versionchecklib_download_fail | 下载失败，点击重试|  
+更详细的使用请看demo
 `欢迎star和提issue`
 ## License
         
