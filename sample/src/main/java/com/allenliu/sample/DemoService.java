@@ -1,11 +1,10 @@
 package com.allenliu.sample;
 
-import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
 import android.util.Log;
 
-import com.allenliu.versionchecklib.*;
+import com.allenliu.versionchecklib.AVersionService;
 
 public class DemoService extends AVersionService {
     public DemoService() {
@@ -20,6 +19,6 @@ public class DemoService extends AVersionService {
     @Override
     public void onResponses(AVersionService service, String response) {
       Log.e("DemoService", response);
-        service.showVersionDialog("http://www.apk3.com/uploads/soft/guiguangbao/UCllq.apk","检测到新版本","升级内容");
+        service.showVersionDialog("http://www.apk3.com/uploads/soft/guiguangbao/UCllq.apk","检测到新版本",getString(R.string.updatecontent));
     }
 }

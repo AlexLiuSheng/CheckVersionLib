@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
 
 import com.allenliu.versionchecklib.AVersionService;
 import com.allenliu.versionchecklib.HttpRequestMethod;
@@ -19,22 +20,38 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        HttpParams params = new HttpParams();
-        params.put("access_token", "IlRrVrdaauYbX2i7NiTHm6ExqEZT9IHs");
-        params.put("version_code", "1");
-        params.put("client_type", "2");
-        HttpHeaders header = new HttpHeaders();
-        header.put("Content-Type", "application/json");
-        header.put("Accept", "application/json");
-        header.put("X-Geridge-Appid", "geridge-mobile");
-        VersionParams versionParams = new VersionParams()
-                .setVersionServiceName(DemoService.class.getName())
-                .setRequestUrl("http://www.baidu.com")
-                .setRequestParams(params)
-                .setRequestMethod(HttpRequestMethod.GET)
-                .setHttpHeaders(header);
+    }
+
+    public void onClick(View view) {
+        VersionParams versionParams=null;
+       stopService(new Intent(this,DemoService.class));
+        switch (view.getId()) {
+            case R.id.btn1:
+                versionParams = new VersionParams()
+                        .setRequestUrl("http://www.baidu.com")
+                        .setRequestMethod(HttpRequestMethod.GET);
+                break;
+            case R.id.btn2:
+                HttpParams params = new HttpParams();
+                HttpHeaders header = new HttpHeaders();
+                versionParams = new VersionParams()
+                        .setRequestUrl("http://www.baidu.com")
+                        .setRequestParams(params)
+                        .setRequestMethod(HttpRequestMethod.GET)
+                        .setHttpHeaders(header)
+                        .setCustomDownloadActivityClass(CustomVersionDialogActivity.class);
+                break;
+            case R.id.btn3:
+                versionParams = new VersionParams()
+                        .setRequestUrl("http://www.baidu.com")
+                        .setRequestMethod(HttpRequestMethod.GET)
+                        .setCustomDownloadActivityClass(CustomVersionDialogTwoActivity.class);
+                break;
+
+        }
         Intent intent = new Intent(this, DemoService.class);
         intent.putExtra(AVersionService.VERSION_PARAMS_KEY, versionParams);
         startService(intent);
+
     }
 }

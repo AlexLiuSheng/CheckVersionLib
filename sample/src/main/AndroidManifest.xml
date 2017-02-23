@@ -21,7 +21,11 @@
             android:enabled="true"
             android:exported="true" />
 
-        <activity android:name=".CustomVersionDialogActivity"></activity>
+        <activity
+            android:name=".CustomVersionDialogActivity"
+            android:theme="@style/versionCheckLibvtransparentTheme" />
+        <activity android:name=".CustomVersionDialogTwoActivity"
+            android:theme="@style/versionCheckLibvtransparentTheme" ></activity>
     </application>
 
 </manifest>

@@ -27,7 +27,7 @@ public abstract class AVersionService extends Service {
     public static final String VERSION_PARAMS_KEY = "VERSION_PARAMS_KEY";
     public static final String FUCTION_KEY = "FUCTION_KEY";
     public static final int REQUEST_FLAG = 1;
-    public static final int DOWNLOAD_FLAG = 2;
+   // public static final int DOWNLOAD_FLAG = 2;
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -41,9 +41,6 @@ public abstract class AVersionService extends Service {
             case REQUEST_FLAG:
                 versionParams = (VersionParams) intent.getSerializableExtra(VERSION_PARAMS_KEY);
                 requestVersionUrlSync();
-
-                break;
-            case DOWNLOAD_FLAG:
                 break;
         }
 
@@ -120,8 +117,7 @@ public abstract class AVersionService extends Service {
 
 
     public void showVersionDialog(String downloadUrl, String title,String updateMsg) {
-
-        Intent intent = new Intent(getApplicationContext(), VersionDialogActivity.class);
+        Intent intent = new Intent(getApplicationContext(), versionParams.getCustomDownloadActivityClass());
         if (updateMsg != null)
             intent.putExtra("text", updateMsg);
         if (downloadUrl != null)

@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-<paths>
-    <external-path path="Android/data/com.allenliu.versionchecklib/" name="files_root" />
-    <external-path path="." name="external_storage_root" />
+<paths xmlns:android="http://schemas.android.com/apk/res/android">
+    <external-path name="external_files" path="."/>
 </paths>

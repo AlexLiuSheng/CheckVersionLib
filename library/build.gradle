@@ -1,14 +1,14 @@
 apply plugin: 'com.android.library'
 apply plugin: 'com.github.dcendents.android-maven'
 apply plugin: 'com.jfrog.bintray'
-version="1.0.0"
+version="1.1.0"
 android {
     compileSdkVersion 24
     buildToolsVersion "24.0.2"
     resourcePrefix "versionchecklib"
     defaultConfig {
          minSdkVersion 14
-        targetSdkVersion 23
+        targetSdkVersion 24
         versionCode 1
         versionName version
     }
@@ -61,6 +61,8 @@ install {
         }
     }
 }
+
+
 task sourcesJar(type: Jar) {
     from android.sourceSets.main.java.srcDirs
     classifier = 'sources'

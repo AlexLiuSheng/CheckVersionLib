@@ -13,7 +13,7 @@ import java.util.Map;
  */
 
 public class VersionParams implements Serializable {
-    String versionServiceName;
+//    Class versionServiceClass;
     String requestUrl;
     /**
      * 下载保存地址
@@ -23,15 +23,25 @@ public class VersionParams implements Serializable {
     long pauseRequestTime = 30 * 1000;
     HttpRequestMethod requestMethod=HttpRequestMethod.POST;
    HttpParams requestParams=new HttpParams();
+    Class customDownloadActivityClass=VersionDialogActivity.class;
 
-    public String getVersionServiceName() {
-        return versionServiceName;
+    public Class getCustomDownloadActivityClass() {
+        return customDownloadActivityClass;
     }
 
-    public VersionParams setVersionServiceName(String versionServiceName) {
-        this.versionServiceName = versionServiceName;
+    public VersionParams setCustomDownloadActivityClass(Class customDownloadActivityClass) {
+        this.customDownloadActivityClass = customDownloadActivityClass;
         return this;
     }
+
+//    public Class getVersionService() {
+//        return versionServiceClass;
+//    }
+//
+//    public VersionParams setVersionService(Class versionServiceClass) {
+//        this.versionServiceClass = versionServiceClass;
+//        return this;
+//    }
 
     public String getRequestUrl() {
         return requestUrl;

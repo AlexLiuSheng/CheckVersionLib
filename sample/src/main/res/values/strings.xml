@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Sample</string>
+    <string name="updatecontent">1.修复BUG\n2.优化界面\n3.向天空大声的呼喊说声妈卖批\n4.欢迎大家Star和提issue</string>
 </resources>

@@ -15,14 +15,18 @@ import android.support.v7.app.NotificationCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.WindowManager;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
+import com.allenliu.versionchecklib.callback.CancelClickListener;
+import com.allenliu.versionchecklib.callback.CommitClickListener;
+import com.allenliu.versionchecklib.callback.DownloadSuccessListener;
+import com.allenliu.versionchecklib.callback.DownloadingListener;
 import com.lzy.okgo.OkGo;
 import com.lzy.okgo.callback.FileCallback;
 import com.lzy.okgo.request.BaseRequest;
 
 import java.io.File;
-import java.util.logging.Logger;
 
 import okhttp3.Call;
 import okhttp3.Response;
@@ -30,7 +34,7 @@ import okhttp3.Response;
 public class VersionDialogActivity extends Activity {
 
     private AlertDialog dialog;
-    public static AlertDialog loadingDialog;
+    public AlertDialog loadingDialog;
     AlertDialog failDialog;
     private String downloadUrl;
     private VersionParams versionParams;
@@ -38,8 +42,8 @@ public class VersionDialogActivity extends Activity {
     private String content;
     CommitClickListener commitListener;
     CancelClickListener cancelListener;
-    onDownloadSuccessListener successListener;
-    onDownloadingListener loadingListener;
+    DownloadSuccessListener successListener;
+    DownloadingListener loadingListener;
     boolean isUseDefault;
 
     @Override
@@ -63,23 +67,25 @@ public class VersionDialogActivity extends Activity {
         }
     }
 
-    private void showVersionDialog() {
+    public void showVersionDialog() {
         showDefaultDialog();
     }
 
     private void showDefaultDialog() {
-        dialog = new AlertDialog.Builder(this).setTitle(title).setMessage(content).setPositiveButton(getString(R.string.confirm), new DialogInterface.OnClickListener() {
+        dialog = new AlertDialog.Builder(this).setTitle(title).setMessage(content).setPositiveButton(getString(R.string.versionchecklib_confirm), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 if (commitListener != null)
-                    commitListener.onClick();
+                    commitListener.onCommitClick();
                 downloadFile(downloadUrl);
             }
-        }).setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
+        }).setNegativeButton(getString(R.string.versionchecklib_cancel), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 if (cancelListener != null)
-                    cancelListener.onClick();
+                    cancelListener.onCancelClick();
+                finish();
+
             }
         }).create();
         dialog.setCanceledOnTouchOutside(false);
@@ -96,21 +102,6 @@ public class VersionDialogActivity extends Activity {
         }
     }
 
-    interface CommitClickListener {
-        void onClick();
-    }
-
-    interface CancelClickListener {
-        void onClick();
-    }
-
-    interface onDownloadingListener {
-        void onDownloading(float progress);
-    }
-
-    interface onDownloadSuccessListener {
-        void onDownloadSuccess(File file);
-    }
 
     public void setCommitClickListener(CommitClickListener commitListner) {
         this.commitListener = commitListner;
@@ -120,94 +111,137 @@ public class VersionDialogActivity extends Activity {
         this.cancelListener = cancelListener;
     }
 
-    public void setOnDownloadSuccessListener(onDownloadSuccessListener successListener) {
+    public void setOnDownloadSuccessListener(DownloadSuccessListener successListener) {
         this.successListener = successListener;
     }
 
-    public void setOnDownloadingListener(onDownloadingListener downloadingListner) {
+    public void setOnDownloadingListener(DownloadingListener downloadingListner) {
         this.loadingListener = downloadingListner;
     }
 
-    public void downloadFile(String url) {
-        final NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-        final NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
-        builder.setSmallIcon(R.mipmap.ic_launcher);
-        builder.setContentTitle(getString(R.string.app_name));
-        builder.setTicker(getString(R.string.downloading));
-        OkGo.get(url).execute(new FileCallback(versionParams.getDownloadAPKPath(), getString(R.string.app_name) + ".apk") {
-            @Override
-            public void onBefore(BaseRequest request) {
-                super.onBefore(request);
-                builder.setContentText(String.format(getString(R.string.download_progress), 0));
-                Notification notification = builder.build();
-                notification.vibrate = new long[]{500, 500};
-                notification.defaults = Notification.DEFAULT_VIBRATE | Notification.DEFAULT_SOUND;
-                manager.notify(0, notification);
-            }
+    int lastProgress = 0;
 
-            @Override
-            public void onSuccess(File file, Call call, Response response) {
-                if (successListener != null)
-                    successListener.onDownloadSuccess(file);
-
-                Intent i = new Intent(Intent.ACTION_VIEW);
-                Uri uri;
-                if(Build.VERSION.SDK_INT>= Build.VERSION_CODES.N){
-                    uri= FileProvider.getUriForFile(VersionDialogActivity.this, "com.allenliu.versionchecklib.fileprovider",file);
-                }else{
-                    uri=Uri.fromFile(file);
+    public void downloadFile(String url, FileCallback callback) {
+        if (callback == null) {
+            lastProgress = 0;
+            final NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+            final NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
+            builder.setSmallIcon(R.mipmap.ic_launcher);
+            builder.setContentTitle(getString(R.string.app_name));
+            builder.setTicker(getString(R.string.versionchecklib_downloading));
+            OkGo.get(url).execute(new FileCallback(versionParams.getDownloadAPKPath(), getString(R.string.app_name) + ".apk") {
+                @Override
+                public void onBefore(BaseRequest request) {
+                    super.onBefore(request);
+                    builder.setContentText(String.format(getString(R.string.versionchecklib_download_progress), 0));
+                    Notification notification = builder.build();
+                    notification.vibrate = new long[]{500, 500};
+                    notification.defaults = Notification.DEFAULT_VIBRATE | Notification.DEFAULT_SOUND;
+                    manager.notify(0, notification);
                 }
 
-                //设置intent的类型
-                i.setDataAndType(uri,
-                        "application/vnd.android.package-archive");
-                PendingIntent pendingIntent = PendingIntent.getActivity(VersionDialogActivity.this, 0, i, 0);
-                builder.setContentIntent(pendingIntent);
-                builder.setContentText(getString(R.string.download_finish));
-                builder.setProgress(100, 100, false);
-                manager.notify(0, builder.build());
-                AppUtils.installApk(getApplicationContext(), file);
-            }
+                @Override
+                public void onSuccess(File file, Call call, Response response) {
+                    if (successListener != null)
+                        successListener.onDownloadSuccess(file);
+                    if (loadingDialog != null)
+                        loadingDialog.dismiss();
+                    Intent i = new Intent(Intent.ACTION_VIEW);
+                    Uri uri;
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                        uri = FileProvider.getUriForFile(getApplicationContext(),  "com.allenliu.versionchecklib.provider", file);
+                        i.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                    } else {
+                        uri = Uri.fromFile(file);
+                    }
+                    //设置intent的类型
+                    i.setDataAndType(uri,
+                            "application/vnd.android.package-archive");
+                    PendingIntent pendingIntent = PendingIntent.getActivity(VersionDialogActivity.this, 0, i, 0);
+                    builder.setContentIntent(pendingIntent);
+                    builder.setContentText(getString(R.string.versionchecklib_download_finish));
+                    builder.setProgress(100, 100, false);
+                    manager.notify(0, builder.build());
+                    AppUtils.installApk(getApplicationContext(), file);
+                    finish();
 
-            @Override
-            public void downloadProgress(long currentSize, long totalSize, float progress, long networkSpeed) {
-                super.downloadProgress(currentSize, totalSize, progress, networkSpeed);
-                Log.e("VersionDilaogActivity", progress + "");
-                builder.setContentText(String.format(getString(R.string.download_progress), (int) (progress * 100)));
-                builder.setProgress(100, (int) (progress * 100), false);
-                manager.notify(0, builder.build());
-                if (loadingListener != null)
-                    loadingListener.onDownloading(progress);
-            }
+                }
 
-            @Override
-            public void onError(Call call, Response response, Exception e) {
-                super.onError(call, response, e);
-                Intent intent = new Intent(VersionDialogActivity.this, VersionDialogActivity.class);
-                PendingIntent pendingIntent = PendingIntent.getActivity(VersionDialogActivity.this, 0, intent, 0);
-                builder.setContentIntent(pendingIntent);
-                builder.setContentText(getString(R.string.download_fail));
-                builder.setProgress(100, 0, false);
-                manager.notify(0, builder.build());
-                showFailDialog();
-            }
-        });
+                @Override
+                public void downloadProgress(long currentSize, long totalSize, float progress, long networkSpeed) {
+                    super.downloadProgress(currentSize, totalSize, progress, networkSpeed);
+                    Log.e("VersionDilaogActivity", progress + "");
+                    int currentProgress = (int) (progress * 100);
+                    showLoadingDialog(currentProgress);
+                    if (currentProgress - lastProgress >= 5) {
+                        lastProgress = currentProgress;
+                        builder.setContentText(String.format(getString(R.string.versionchecklib_download_progress), lastProgress));
+                        builder.setProgress(100, lastProgress, false);
+                        manager.notify(0, builder.build());
+                    }
+                    if (loadingListener != null)
+                        loadingListener.onDownloading(progress);
+                }
+
+                @Override
+                public void onError(Call call, Response response, Exception e) {
+                    super.onError(call, response, e);
+                    Intent intent = new Intent(VersionDialogActivity.this, VersionDialogActivity.class);
+                    PendingIntent pendingIntent = PendingIntent.getActivity(VersionDialogActivity.this, 0, intent, 0);
+                    builder.setContentIntent(pendingIntent);
+                    builder.setContentText(getString(R.string.versionchecklib_download_fail));
+                    builder.setProgress(100, 0, false);
+                    manager.notify(0, builder.build());
+                    showFailDialog();
+                }
+            });
+        } else {
+            OkGo.get(url).execute(callback);
+        }
+
     }
 
-    private void showFailDialog() {
+    public void downloadFile(String url) {
+        downloadFile(url, null);
+    }
+
+    View loadingView;
+
+    public void showLoadingDialog(int currentProgress) {
+        if (loadingDialog == null) {
+            loadingView = LayoutInflater.from(this).inflate(R.layout.downloading_layout, null);
+            loadingDialog = new AlertDialog.Builder(this).setTitle("正在下载中...").setView(loadingView).create();
+            loadingDialog.setCancelable(false);
+            loadingDialog.setCanceledOnTouchOutside(false);
+            loadingDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+                @Override
+                public void onCancel(DialogInterface dialog) {
+                    finish();
+                }
+            });
+        }
+        ProgressBar pb = (ProgressBar) loadingView.findViewById(R.id.pb);
+        TextView tvProgress = (TextView) loadingView.findViewById(R.id.tv_progress);
+        tvProgress.setText(String.format(getString(R.string.versionchecklib_progress), currentProgress));
+        pb.setProgress(currentProgress);
+        loadingDialog.show();
+    }
+
+    public void showFailDialog() {
         if (failDialog == null) {
-            failDialog = new AlertDialog.Builder(this).setMessage(getString(R.string.download_fail_retry)).setPositiveButton(getString(R.string.confirm), new DialogInterface.OnClickListener() {
+            failDialog = new AlertDialog.Builder(this).setMessage(getString(R.string.versionchecklib_download_fail_retry)).setPositiveButton(getString(R.string.versionchecklib_confirm), new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     if (commitListener != null)
-                        commitListener.onClick();
+                        commitListener.onCommitClick();
                     downloadFile(downloadUrl);
                 }
-            }).setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
+            }).setNegativeButton(getString(R.string.versionchecklib_cancel), new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     if (cancelListener != null)
-                        cancelListener.onClick();
+                        cancelListener.onCancelClick();
+                    finish();
                 }
             }).create();
             failDialog.setCanceledOnTouchOutside(false);
@@ -215,4 +249,6 @@ public class VersionDialogActivity extends Activity {
         }
         failDialog.show();
     }
+
+
 }
