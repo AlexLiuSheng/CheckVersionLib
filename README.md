@@ -1,5 +1,5 @@
 # CheckVersionLib
-  现在热更新技术挺火的，大公司都出了自己的热更新框架，但个人感觉热更新技术还不是很完善，一般的IT公司还是倾向于传统的下载安装包进行版本升级，这是一个android上的自动版本检测并更新库。库集成了检测版本、下载版本以及自动安装升级
+  现在热更新技术挺火的，大公司都出了自己的热更新框架，但是各家热更新都有各自优缺点，终究不能解决bug，万不得已还是得进行版本升级，这是一个android上的自动版本检测并更新库。库集成了检测版本、下载版本以及自动安装升级
 ##特点
 1.任何地方都可以检测
 
@@ -11,7 +11,8 @@
 
 5.自定义界面
 
- ## 效果
+## 效果
+ 
  
  ![](https://github.com/AlexLiuSheng/CheckVersionLib/blob/master/gif/ui.gif)
  <img src="https://github.com/AlexLiuSheng/CheckVersionLib/blob/master/gif/style1.png" width=200/>
@@ -47,22 +48,27 @@
  
    <img src="https://github.com/AlexLiuSheng/CheckVersionLib/blob/master/gif/versionparams.png" width=400/>
 	  
-3.**自定义界面** 如果想自定义界面，只需创建一个继承自`VersionDialogActivity`的Activity,Activity设置Theme为透明：
+### **自定义界面** 
+   如果想自定义界面，只需创建一个继承自`VersionDialogActivity`的Activity,Activity设置Theme为透明：
 
  ` android:theme="@style/versionCheckLibvtransparentTheme"`
  
-  开启Service的时候，将自定义的Activity传入VersionParams
+   开启Service的时候，将自定义的Activity传入VersionParams
    
    `setCustomDownloadActivityClass(CustomVersionDialogActivity.class)`
    
-   - 自定义 版本显示dialog,重写 `showVersionDialog()` ,在里面实现自己的逻辑，最后调用`downloadFile(url)`或者`downloadFile(url,filecallback)`注意不要调用父类的方法
+   - 自定义 版本dialog,重写 `showVersionDialog()` ,在里面实现自己的逻辑，最后调用`downloadFile(url)`或者`downloadFile(url,filecallback)`注意不要调用父类的方法
    - 自定义 下载中dialog，重写`showLoadingDialog(int currentProgress)`,在里面实现自己的逻辑
    - 自定义 下载失败dialog ,重写`showFailDialog`，实现自己的逻辑
    - 除此之外还可以在定义的Activity里面监听一些下载和点击回调
-   	`  setOnDownloadSuccessListener(this);
-       setOnDownloadingListener(this);
-       setCommitClickListener(this);
-       setCancelClickListener(this);`
+   
+         setOnDownloadSuccessListener(this);
+     
+         setOnDownloadingListener(this);
+      
+         setCommitClickListener(this);
+      
+         setCancelClickListener(this);
        
 4.下载通知栏图标和文字替换，需要自定义图标只需在mimap文件下建立`ic_launcher`图标，替换标题只需在项目xml定义`app_name`属性,还有其他一些属性替换，如下表:
 
