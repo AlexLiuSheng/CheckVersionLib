@@ -63,11 +63,11 @@
    - 除此之外还可以在定义的Activity里面监听一些下载和点击回调
    
          setOnDownloadSuccessListener(this);
-     
-         setOnDownloadingListener(this);
-      
+	
+         `setOnDownloadingListener(this);`
+	  
          setCommitClickListener(this);
-      
+	  
          setCancelClickListener(this);
        
 4.下载通知栏图标和文字替换，需要自定义图标只需在mimap文件下建立`ic_launcher`图标，替换标题只需在项目xml定义`app_name`属性,还有其他一些属性替换，如下表:
