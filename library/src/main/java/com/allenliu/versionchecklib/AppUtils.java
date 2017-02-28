@@ -47,6 +47,8 @@ import java.util.regex.Pattern;
 
 import javax.security.auth.x500.X500Principal;
 
+import static android.support.v4.content.FileProvider.getUriForFile;
+
 /**
 
  * @author jingle1267@163.com
@@ -70,7 +72,7 @@ public final class AppUtils {
         intent.setAction(Intent.ACTION_VIEW);
         Uri uri;
         if(Build.VERSION.SDK_INT>= Build.VERSION_CODES.N){
-            uri= FileProvider.getUriForFile(context,"com.allenliu.versionchecklib.provider",file);
+            uri= VersionFileProvider.getUriForFile(context,"com.allenliu.versionchecklib.versionProvider",file);
             intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         }else{
             uri=Uri.fromFile(file);

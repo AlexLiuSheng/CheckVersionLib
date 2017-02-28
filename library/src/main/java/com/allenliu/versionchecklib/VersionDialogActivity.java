@@ -149,7 +149,7 @@ public class VersionDialogActivity extends Activity {
                     Intent i = new Intent(Intent.ACTION_VIEW);
                     Uri uri;
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                        uri = FileProvider.getUriForFile(getApplicationContext(),  "com.allenliu.versionchecklib.provider", file);
+                        uri = VersionFileProvider.getUriForFile(getApplicationContext(),  "com.allenliu.versionchecklib.versionProvider", file);
                         i.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                     } else {
                         uri = Uri.fromFile(file);

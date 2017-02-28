@@ -1,8 +1,0 @@
-To honour the JVM settings for this build a new JVM will be forked. Please consider using the daemon: https://docs.gradle.org/2.14.1/userguide/gradle_daemon.html.
-Observed package id 'build-tools;23.0.1' in inconsistent location 'D:\Eclipse\android-sdk\build-tools\build-tools-23.0.1' (Expected 'D:\Eclipse\android-sdk\build-tools\23.0.1')
-Observed package id 'build-tools;23.0.1' in inconsistent location 'D:\Eclipse\android-sdk\build-tools\build-tools-23.0.1' (Expected 'D:\Eclipse\android-sdk\build-tools\23.0.1')
-Incremental java compilation is an incubating feature.
-
-BUILD FAILED
-
-Total time: 14.507 secs
