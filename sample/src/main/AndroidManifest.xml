@@ -26,6 +26,7 @@
             android:theme="@style/versionCheckLibvtransparentTheme" />
         <activity android:name=".CustomVersionDialogTwoActivity"
             android:theme="@style/versionCheckLibvtransparentTheme" ></activity>
+
     </application>
 
 </manifest>

@@ -18,7 +18,7 @@
             android:theme="@style/versionCheckLibvtransparentTheme" />
         <provider
             android:name="com.allenliu.versionchecklib.VersionFileProvider"
-            android:authorities="com.allenliu.versionchecklib.versionProvider"
+            android:authorities="${applicationId}.versionProvider"
             android:grantUriPermissions="true"
             android:exported="false">
             <meta-data
