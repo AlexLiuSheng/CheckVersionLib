@@ -1,28 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:paddingBottom="10dp"
-    android:paddingTop="10dp"
+    android:padding="20dp"
     android:layout_height="wrap_content">
 
-    <ProgressBar
+    <android.support.v4.widget.ContentLoadingProgressBar
         android:layout_width="match_parent"
         android:id="@+id/pb"
         style="?android:attr/progressBarStyleHorizontal"
-        android:progressDrawable="@drawable/progressbar_horizontal"
-        android:layout_marginLeft="40dp"
+
         android:max="100"
         android:progress="40"
-        android:layout_marginRight="40dp"
+
         android:layout_height="15dp" />
+    <RelativeLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+    <TextView
+        android:textSize="15sp"
+        android:textColor="@color/versionchecklib_theme_color"
+        android:text="@string/versionchecklib_downloading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
     <TextView
         android:layout_width="wrap_content"
         android:id="@+id/tv_progress"
-        android:layout_marginTop="5dp"
-        android:layout_marginRight="40dp"
         android:text="@string/versionchecklib_progress"
-        android:textColor="#9999ff"
+        android:textColor="@color/versionchecklib_theme_color"
         android:textSize="15sp"
-        android:layout_gravity="right"
+        android:layout_alignParentRight="true"
         android:layout_height="wrap_content" />
+    </RelativeLayout>
 </LinearLayout>

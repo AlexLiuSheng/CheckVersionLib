@@ -210,7 +210,7 @@ public class VersionDialogActivity extends Activity {
     public void showLoadingDialog(int currentProgress) {
         if (loadingDialog == null) {
             loadingView = LayoutInflater.from(this).inflate(R.layout.downloading_layout, null);
-            loadingDialog = new AlertDialog.Builder(this).setTitle("正在下载中...").setView(loadingView).create();
+            loadingDialog = new AlertDialog.Builder(this).setTitle("").setView(loadingView).create();
             loadingDialog.setCancelable(false);
             loadingDialog.setCanceledOnTouchOutside(false);
             loadingDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {

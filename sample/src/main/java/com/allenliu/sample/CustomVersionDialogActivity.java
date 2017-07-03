@@ -1,8 +1,12 @@
 package com.allenliu.sample;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -74,10 +78,28 @@ public class CustomVersionDialogActivity extends VersionDialogActivity implement
         // super.showFailDialog();
         Toast.makeText(this, "使用自定义失败加载框", Toast.LENGTH_SHORT).show();
     }
-
+    View loadingView;
+    AlertDialog dialog;
     @Override
     public void showLoadingDialog(int currentProgress) {
-        super.showLoadingDialog(currentProgress);
+      //  super.showLoadingDialog(currentProgress);
+        if (dialog == null) {
+            loadingView = LayoutInflater.from(this).inflate(R.layout.custom_download_layout, null);
+            dialog = new AlertDialog.Builder(this).setTitle("").setView(loadingView).create();
+            dialog.setCancelable(false);
+            dialog.setCanceledOnTouchOutside(false);
+            dialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+                @Override
+                public void onCancel(DialogInterface dialog) {
+                    finish();
+                }
+            });
+        }
+        ProgressBar pb = (ProgressBar) loadingView.findViewById(com.allenliu.versionchecklib.R.id.pb);
+        TextView tvProgress = (TextView) loadingView.findViewById(com.allenliu.versionchecklib.R.id.tv_progress);
+        tvProgress.setText(String.format(getString(com.allenliu.versionchecklib.R.string.versionchecklib_progress), currentProgress));
+        pb.setProgress(currentProgress);
+        dialog.show();
 //        Toast.makeText(this, "显示自定义的下载加载框", Toast.LENGTH_SHORT).show();
     }
 
