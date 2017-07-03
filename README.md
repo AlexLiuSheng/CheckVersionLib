@@ -14,7 +14,7 @@
 ## 效果
  
  
- ![](https://github.com/AlexLiuSheng/CheckVersionLib/blob/master/gif/ui.gif)
+  <img src="https://github.com/AlexLiuSheng/CheckVersionLib/blob/master/gif/ui.gif" width=200/>
  <img src="https://github.com/AlexLiuSheng/CheckVersionLib/blob/master/gif/style1.png" width=200/>
  <img src="https://github.com/AlexLiuSheng/CheckVersionLib/blob/master/gif/style2.png" width=200/>
  <img src="https://github.com/AlexLiuSheng/CheckVersionLib/blob/master/gif/style3.png" width=200/>
