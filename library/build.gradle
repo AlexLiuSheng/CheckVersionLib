@@ -12,6 +12,10 @@ android {
         versionCode 1
         versionName version
     }
+    lintOptions {
+        abortOnError false
+    }
+
     buildTypes {
 
         release {
@@ -84,7 +88,7 @@ Properties properties = new Properties()
 properties.load(project.rootProject.file('local.properties').newDataInputStream())
 bintray {
     user = properties.getProperty("bintray.user")
-    key = properties.getProperty("bintray.apikey")
+    key = properties.getProperty("bintray.apiKey")
     configurations = ['archives']
     pkg {
         repo = "maven"

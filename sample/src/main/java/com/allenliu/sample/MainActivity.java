@@ -28,8 +28,8 @@ public class MainActivity extends AppCompatActivity {
         switch (view.getId()) {
             case R.id.btn1:
                 versionParams = new VersionParams()
-                        .setRequestUrl("http://www.baidu.com")
-                        .setRequestMethod(HttpRequestMethod.GET);
+                        .setRequestUrl("http://www.baidu.com");
+                       // .setRequestMethod(HttpRequestMethod.GET);
                 break;
             case R.id.btn2:
                 HttpParams params = new HttpParams();
