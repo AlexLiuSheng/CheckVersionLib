@@ -6,4 +6,5 @@ package com.allenliu.versionchecklib;
 
 public enum HttpRequestMethod {
     POST,GET, POSTJSON
+
 }

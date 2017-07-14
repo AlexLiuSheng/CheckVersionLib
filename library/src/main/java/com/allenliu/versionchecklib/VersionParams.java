@@ -1,5 +1,7 @@
 package com.allenliu.versionchecklib;
 
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.widget.Button;
 
 import com.lzy.okgo.model.HttpHeaders;
@@ -12,18 +14,18 @@ import java.util.Map;
  * Created by Allen Liu on 2016/9/22.
  */
 
-public class VersionParams implements Serializable {
+public class VersionParams implements Parcelable {
 
-    String requestUrl;
+    private String requestUrl;
     /**
      * 下载保存地址
      */
-    String downloadAPKPath = FileHelper.getDownloadApkCachePath();
-    HttpHeaders httpHeaders = new HttpHeaders();
-    long pauseRequestTime = 30 * 1000;
-    HttpRequestMethod requestMethod = HttpRequestMethod.POST;
-    HttpParams requestParams = new HttpParams();
-    Class customDownloadActivityClass = VersionDialogActivity.class;
+    private String downloadAPKPath = FileHelper.getDownloadApkCachePath();
+    private HttpHeaders httpHeaders = new HttpHeaders();
+    private long pauseRequestTime = 30 * 1000;
+    private HttpRequestMethod requestMethod = HttpRequestMethod.POST;
+    private HttpParams requestParams = new HttpParams();
+    private Class customDownloadActivityClass = VersionDialogActivity.class;
 
     public Class getCustomDownloadActivityClass() {
         return customDownloadActivityClass;
@@ -96,4 +98,47 @@ public class VersionParams implements Serializable {
         this.requestParams = requestParams;
         return this;
     }
+
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.requestUrl);
+        dest.writeString(this.downloadAPKPath);
+        dest.writeSerializable(this.httpHeaders);
+        dest.writeLong(this.pauseRequestTime);
+        dest.writeInt(this.requestMethod == null ? -1 : this.requestMethod.ordinal());
+        dest.writeSerializable(this.requestParams);
+        dest.writeSerializable(this.customDownloadActivityClass);
+    }
+
+    public VersionParams() {
+    }
+
+    protected VersionParams(Parcel in) {
+        this.requestUrl = in.readString();
+        this.downloadAPKPath = in.readString();
+        this.httpHeaders = (HttpHeaders) in.readSerializable();
+        this.pauseRequestTime = in.readLong();
+        int tmpRequestMethod = in.readInt();
+        this.requestMethod = tmpRequestMethod == -1 ? null : HttpRequestMethod.values()[tmpRequestMethod];
+        this.requestParams = (HttpParams) in.readSerializable();
+        this.customDownloadActivityClass = (Class) in.readSerializable();
+    }
+
+    public static final Parcelable.Creator<VersionParams> CREATOR = new Parcelable.Creator<VersionParams>() {
+        @Override
+        public VersionParams createFromParcel(Parcel source) {
+            return new VersionParams(source);
+        }
+
+        @Override
+        public VersionParams[] newArray(int size) {
+            return new VersionParams[size];
+        }
+    };
 }

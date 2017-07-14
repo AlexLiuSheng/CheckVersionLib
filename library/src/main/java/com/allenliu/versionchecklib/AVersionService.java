@@ -25,10 +25,6 @@ import static java.util.logging.Level.SEVERE;
 public abstract class AVersionService extends Service {
     private VersionParams versionParams;
     public static final String VERSION_PARAMS_KEY = "VERSION_PARAMS_KEY";
-    public static final String FUCTION_KEY = "FUCTION_KEY";
-    public static final int REQUEST_FLAG = 1;
-   // public static final int DOWNLOAD_FLAG = 2;
-
     @Override
     public IBinder onBind(Intent intent) {
         return null;
@@ -36,13 +32,8 @@ public abstract class AVersionService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        int fuctionIndex = intent.getIntExtra(FUCTION_KEY, REQUEST_FLAG);
-        switch (fuctionIndex) {
-            case REQUEST_FLAG:
-                versionParams = (VersionParams) intent.getSerializableExtra(VERSION_PARAMS_KEY);
-                requestVersionUrlSync();
-                break;
-        }
+        versionParams =  intent.getParcelableExtra(VERSION_PARAMS_KEY);
+        requestVersionUrlSync();
 
         return super.onStartCommand(intent, flags, startId);
     }
@@ -61,9 +52,9 @@ public abstract class AVersionService extends Service {
 
         @Override
         public void onError(Call call, Response response, Exception e) {
-            long pauseTime=versionParams.getPauseRequestTime();
+            long pauseTime = versionParams.getPauseRequestTime();
             //不为-1 间隔请求
-            if(pauseTime!=-1) {
+            if (pauseTime > 0) {
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
@@ -116,15 +107,15 @@ public abstract class AVersionService extends Service {
     }
 
 
-    public void showVersionDialog(String downloadUrl, String title,String updateMsg) {
+    public void showVersionDialog(String downloadUrl, String title, String updateMsg) {
         Intent intent = new Intent(getApplicationContext(), versionParams.getCustomDownloadActivityClass());
         if (updateMsg != null)
             intent.putExtra("text", updateMsg);
         if (downloadUrl != null)
             intent.putExtra("downloadUrl", downloadUrl);
-        if(title!=null)
-            intent.putExtra("title",title);
-         intent.putExtra("isUseDefault",true);
+        if (title != null)
+            intent.putExtra("title", title);
+        intent.putExtra("isUseDefault", true);
         intent.putExtra(VERSION_PARAMS_KEY, versionParams);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);

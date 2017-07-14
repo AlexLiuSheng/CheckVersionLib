@@ -59,7 +59,7 @@ public class VersionDialogActivity extends Activity {
         if (isUseDefault) {
             title = getIntent().getStringExtra("title");
             content = getIntent().getStringExtra("text");
-            versionParams = (VersionParams) getIntent().getSerializableExtra(AVersionService.VERSION_PARAMS_KEY);
+            versionParams = getIntent().getParcelableExtra(AVersionService.VERSION_PARAMS_KEY);
             downloadUrl = getIntent().getStringExtra("downloadUrl");
             if (title != null && content != null && downloadUrl != null && versionParams != null)
                 showVersionDialog();
@@ -148,7 +148,7 @@ public class VersionDialogActivity extends Activity {
                     Intent i = new Intent(Intent.ACTION_VIEW);
                     Uri uri;
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                        uri = VersionFileProvider.getUriForFile(getApplicationContext(),  getApplicationContext().getPackageName()+".versionProvider", file);
+                        uri = VersionFileProvider.getUriForFile(getApplicationContext(), getApplicationContext().getPackageName() + ".versionProvider", file);
                         i.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                     } else {
                         uri = Uri.fromFile(file);
