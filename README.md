@@ -11,12 +11,13 @@
 
 - 自定义界面
 
+- 支持强制更新
+
 ## 效果
  
  
- <img src="https://github.com/AlexLiuSheng/CheckVersionLib/blob/master/gif/ui.gif" width=200/><img src="https://github.com/AlexLiuSheng/CheckVersionLib/blob/master/gif/style1.png" width=200/>
+ <img src="https://github.com/AlexLiuSheng/CheckVersionLib/blob/master/gif/custom.gif" width=200/><img src="https://github.com/AlexLiuSheng/CheckVersionLib/blob/master/gif/style1.png" width=200/>
  <img src="https://github.com/AlexLiuSheng/CheckVersionLib/blob/master/gif/style2.png" width=200/>
- <img src="https://github.com/AlexLiuSheng/CheckVersionLib/blob/master/gif/style3.png" width=200/>
  
 ## 使用步骤
 ### android studio导入
@@ -58,9 +59,18 @@
    `setCustomDownloadActivityClass(CustomVersionDialogActivity.class)`
    
    - 自定义 版本dialog,重写 `showVersionDialog()` ,在里面实现自己的逻辑，最后调用`downloadFile(url)`或者`downloadFile(url,filecallback)`注意不要调用父类的方法
+   
    - 自定义 下载中dialog，重写`showLoadingDialog(int currentProgress)`,在里面实现自己的逻辑
+   
    - 自定义 下载失败dialog ,重写`showFailDialog`，实现自己的逻辑
-   - 除此之外还可以在定义的Activity里面监听一些下载和点击回调
+   
+   - 强制更新 如果使用默认的版本dialog，`setCancelClickListner`回调里实现，具体用法请看demo
+   
+   - 自定义 版本dialog,重写 `showVersionDialog()` ,在里面实现自己的逻辑，最后调用`downloadFile(url)`或者`downloadFile(url,filecallback)`注意不要调用父类的方法
+   
+   - 除此之外还可以在定义的Activity里面监听一些下载和点击回调
+   
+   - 自定义 版本dialog,重写 `showVersionDialog()` ,在里面实现自己的逻辑，最后调用`downloadFile(url)`或者`downloadFile(url,filecallback)`注意不要调用父类的方法
    
          setOnDownloadSuccessListener(this);
 	 
