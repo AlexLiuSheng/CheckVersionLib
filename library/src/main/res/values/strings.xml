@@ -10,4 +10,5 @@
     <string name="versionchecklib_download_progress">下载进度:%d%%/100%%</string>
     <string name="versionchecklib_download_fail">下载失败，点击重试</string>
     <string name="versionchecklib_progress">%d/100</string>
+    <string name="versionchecklib_write_permission_deny">下载安装包需要读写文件权限。</string>
 </resources>

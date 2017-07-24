@@ -1,7 +1,7 @@
 apply plugin: 'com.android.library'
 apply plugin: 'com.github.dcendents.android-maven'
 apply plugin: 'com.jfrog.bintray'
-version="1.0.6"
+version="1.0.7"
 android {
     compileSdkVersion 24
     buildToolsVersion "24.0.2"
@@ -29,6 +29,8 @@ dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     compile 'com.android.support:appcompat-v7:24.2.0'
     compile 'com.lzy.net:okgo:2.1.4'
+
+
 }
 def siteUrl = 'https://github.com/AlexLiuSheng/CheckVersionLib' // 项目的主页
 def gitUrl = 'https://github.com/AlexLiuSheng/CheckVersionLib.git' // Git仓库的url

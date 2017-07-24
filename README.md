@@ -21,7 +21,7 @@
  
 ## 使用步骤
 ### android studio导入
-`compile 'com.allenliu.versionchecklib:library:1.0.6'`
+`compile 'com.allenliu.versionchecklib:library:1.0.7'`
 ### 如何使用
 1.自定义service，service继承 `AVersionService `，实现其中的 `onResponses(AVersionService service, String response)`抽象方法.
 
