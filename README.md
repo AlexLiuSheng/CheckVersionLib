@@ -30,7 +30,8 @@
 ### 如何使用
 1.自定义service，service继承 `AVersionService `，实现其中的 `onResponses(AVersionService service, String response)`抽象方法.
 
-该方法主要是请求版本接口的回调，由于不同的使用者版本检测接口返回数据类型不一致，所以你需要自定解析数据，然后判断版本号之后调用升级对话框，如果使用库自带的直接调用如下方法: `service.showVersionDialog(downloadUrl,title,updateMsg )`
+该方法主要是请求版本接口的回调，由于不同的使用者版本检测接口返回数据类型不一致，所以你需要自己解析数据，判断版本号之后调用升级对话框，如果使用库默认的界面直接调用如下方法: `service.showVersionDialog(downloadUrl,title,updateMsg )`
+
 示例代码:
            
 	     
@@ -40,7 +41,6 @@
 	     
 	
 	      
-如果拿到数据之后，不使用库的方法，那么你可以在回调 里做自己想做的事。记得这里需要自己手动关闭`service`（如果调用showVersionDialog则不需要手动关闭）
 
               
 2.在任意地方开启自定义service，并传入`VersionParam`
