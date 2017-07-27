@@ -1,4 +1,4 @@
-# CheckVersionLib[ ![Download](https://api.bintray.com/packages/zkxy/maven/VersionCheckLib/images/download.svg) ](https://bintray.com/zkxy/maven/VersionCheckLib/_latestVersion)
+# CheckVersionLib[ ![Download](https://api.bintray.com/packages/zkxy/maven/VersionCheckLib/images/download.svg) ](https://bintray.com/zkxy/maven/VersionCheckLib/_latestVersion)[![](https://travis-ci.org/AlexLiuSheng/CheckVersionLib.svg?branch=master)](https://travis-ci.org/AlexLiuSheng/CheckVersionLib)
   现在热更新技术挺火的，大公司都出了自己的热更新框架，但是各家热更新都有各自优缺点，终究不能解决所有bug，万不得已还是得进行版本升级，这是一个android上的自动版本检测并更新库。库集成了检测版本、下载版本以及自动安装升级
 ## 特点
 - [x] 任何地方都可以检测（可设置定时检测）
