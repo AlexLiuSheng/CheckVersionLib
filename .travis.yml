@@ -10,10 +10,3 @@ before_install:
 - chmod +x gradlew
 script:
 - "./gradlew assembleRelease"
-deploy:
-  provider: releases
-  api_key:
-    secure: KYwFy4L8sXtEeW1G5arxooHPKKRaZMzot0g5WE+QPVucQQYT78P42oQ9/mpsbAO2j8ZRl7wXFiBL/vpgNLtTPtHvI9vv0reKZ47Nju79ADldltLYf2a/v490QHHVgqehAGQiGl+VdKROKvfWuZaYONETNer+goAIrfAalyTyKyQp7WmXHE349eduS9Z/MDMST3RuFaamZ2C1wOD9awQhHO10FlgSWI9hycQ7kshBIYyFQQ9VQU6somwKKwxRu8gm6ZmamOxUCrEGQSX4nnP+gHJnz19i40ah0XyFTeGJn3Y4v5lCZ2GwiOSxo5x6+g3leoSG+As+RFiX7Rnkj0EI2qQBhKrTo6tlglPQvBSf8mwj34C4gMYRI7V9obIqCUZnZ6LJIsbR/4i08Yez2azhiGpcX/FkaN4Tvi8gDIMifbXB/jFgXESKyeAyeXIhxRir7/EHH/jSV8NK+Om7zUszVLoPNn4Zvlo5RXwZbEen8XZ6J9ORluohP8XPdXOo5EMr9+2i3LyvExatb3FG0vkk5LRgcUEvpQz+drEEeRixRZ2FfpV4KqCVMn9PstKi8mqTpFcocHdJ+psNVlrMzgNaI5XI2uHFUz02HMcxt7w86+37L51WHqQZkqYrRAC0QBAPh4/w4STt3eb5XrFX2K00MrBcD1Lyl3CGFi9PzO4lHgs=
-  file: checkVersionLib'
-  on:
-    repo: AlexLiuSheng/CheckVersionLib
