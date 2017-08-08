@@ -5,6 +5,8 @@ import android.app.Activity;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -49,7 +51,7 @@ public class VersionDialogActivity extends Activity {
     CancelClickListener cancelListener;
     DownloadSuccessListener successListener;
     DownloadingListener loadingListener;
-    boolean isUseDefault;
+    //boolean isUseDefault;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,15 +63,12 @@ public class VersionDialogActivity extends Activity {
      * url msg versionField
      */
     private void initialize() {
-        isUseDefault = getIntent().getBooleanExtra("isUseDefault", false);
-        if (isUseDefault) {
-            title = getIntent().getStringExtra("title");
-            content = getIntent().getStringExtra("text");
-            versionParams = getIntent().getParcelableExtra(AVersionService.VERSION_PARAMS_KEY);
-            downloadUrl = getIntent().getStringExtra("downloadUrl");
-            if (title != null && content != null && downloadUrl != null && versionParams != null)
-                showVersionDialog();
-        }
+        title = getIntent().getStringExtra("title");
+        content = getIntent().getStringExtra("text");
+        versionParams = getIntent().getParcelableExtra(AVersionService.VERSION_PARAMS_KEY);
+        downloadUrl = getIntent().getStringExtra("downloadUrl");
+        if (title != null && content != null && downloadUrl != null && versionParams != null)
+            showVersionDialog();
     }
 
     public void showVersionDialog() {
@@ -127,6 +126,14 @@ public class VersionDialogActivity extends Activity {
     int lastProgress = 0;
 
     public void downloadFile(String url, FileCallback callback) {
+        ApkBroadCastReceiver.downloadApkPath = versionParams.getDownloadAPKPath();
+        //判断本地文件是否存在
+        String downloadPath = checkAPKExists();
+        if (downloadPath != null) {
+            AppUtils.installApk(getApplicationContext(), new File(downloadPath));
+            finish();
+        }
+
         if (callback == null) {
             lastProgress = 0;
             final NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
@@ -134,7 +141,7 @@ public class VersionDialogActivity extends Activity {
             builder.setSmallIcon(R.mipmap.ic_launcher);
             builder.setContentTitle(getString(R.string.app_name));
             builder.setTicker(getString(R.string.versionchecklib_downloading));
-            OkGo.get(url).execute(new FileCallback(versionParams.getDownloadAPKPath(), getString(R.string.app_name) + ".apk") {
+            OkGo.get(url).execute(new FileCallback(versionParams.getDownloadAPKPath(), getString(R.string.versionchecklib_download_apkname, getPackageName())) {
                 @Override
                 public void onBefore(BaseRequest request) {
                     super.onBefore(request);
@@ -286,9 +293,9 @@ public class VersionDialogActivity extends Activity {
                 // app-defined int constant. The callback method gets the
                 // result of the request.
             }
-        }else{
-            if(!downloadUrl.isEmpty())
-                downloadFile(downloadUrl,null);
+        } else {
+            if (!downloadUrl.isEmpty())
+                downloadFile(downloadUrl, null);
         }
     }
 
@@ -303,10 +310,10 @@ public class VersionDialogActivity extends Activity {
 
                     // permission was granted, yay! Do the
                     // contacts-related task you need to do.
-                    if(!downloadUrl.isEmpty())
-                        downloadFile(downloadUrl,null);
+                    if (!downloadUrl.isEmpty())
+                        downloadFile(downloadUrl, null);
                 } else {
-                    Toast.makeText(this,getString(R.string.versionchecklib_write_permission_deny),Toast.LENGTH_LONG).show();
+                    Toast.makeText(this, getString(R.string.versionchecklib_write_permission_deny), Toast.LENGTH_LONG).show();
                     finish();
                     // permission denied, boo! Disable the
                     // functionality that depends on this permission.
@@ -318,5 +325,15 @@ public class VersionDialogActivity extends Activity {
             // permissions this app might request
         }
     }
+
+    private String checkAPKExists() {
+        String downloadPath = versionParams.getDownloadAPKPath() + getString(R.string.versionchecklib_download_apkname, getPackageName());
+        File file = new File(downloadPath);
+        if (file.exists()) {
+            return downloadPath;
+        }
+        return null;
+    }
+
 
 }

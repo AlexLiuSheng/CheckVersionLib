@@ -115,7 +115,6 @@ public abstract class AVersionService extends Service {
             intent.putExtra("downloadUrl", downloadUrl);
         if (title != null)
             intent.putExtra("title", title);
-        intent.putExtra("isUseDefault", true);
         intent.putExtra(VERSION_PARAMS_KEY, versionParams);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
