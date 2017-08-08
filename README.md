@@ -23,7 +23,7 @@
  
 ## 使用步骤
 ### android studio导入
-`compile 'com.allenliu.versionchecklib:library:1.0.8'`
+`compile 'com.allenliu.versionchecklib:library:1.0.9'`
 
 ### eclipse 
  [download jar](https://github.com/AlexLiuSheng/CheckVersionLib/blob/master/library.jar)

@@ -5,10 +5,9 @@ import android.app.Activity;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
@@ -128,10 +127,11 @@ public class VersionDialogActivity extends Activity {
     public void downloadFile(String url, FileCallback callback) {
         ApkBroadCastReceiver.downloadApkPath = versionParams.getDownloadAPKPath();
         //判断本地文件是否存在
-        String downloadPath = checkAPKExists();
+        String downloadPath = checkAPKIsRight();
         if (downloadPath != null) {
             AppUtils.installApk(getApplicationContext(), new File(downloadPath));
             finish();
+            return;
         }
 
         if (callback == null) {
@@ -326,13 +326,29 @@ public class VersionDialogActivity extends Activity {
         }
     }
 
-    private String checkAPKExists() {
+    private String checkAPKIsRight() {
         String downloadPath = versionParams.getDownloadAPKPath() + getString(R.string.versionchecklib_download_apkname, getPackageName());
         File file = new File(downloadPath);
         if (file.exists()) {
-            return downloadPath;
+            boolean result = false;
+            try {
+                PackageManager pm = getPackageManager();
+                PackageInfo info = pm.getPackageArchiveInfo(downloadPath,
+                        PackageManager.GET_ACTIVITIES);
+                if (info != null) {
+                    result = true;
+                }
+            } catch (Exception e) {
+                result = false;
+            }
+            if (result)
+                return downloadPath;
+            else
+                return null;
         }
         return null;
+
+
     }
 
 
