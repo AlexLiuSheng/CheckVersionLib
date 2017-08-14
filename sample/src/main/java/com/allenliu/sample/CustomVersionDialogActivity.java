@@ -155,12 +155,12 @@ public class CustomVersionDialogActivity extends VersionDialogActivity implement
 
 
     View loadingView;
-    AlertDialog dialog;
 
     /**
      * 要更改下载中界面 只需要重写此方法即可
      * 因为下载的时候会不断回调此方法
      * dialog使用全局 只初始化一次
+     * 使用父类的loadingDialog保证下载成功会dimiss掉dialog
      *
      * @param currentProgress
      */
@@ -169,12 +169,13 @@ public class CustomVersionDialogActivity extends VersionDialogActivity implement
         if (!isCustomDownloading) {
             super.showLoadingDialog(currentProgress);
         } else {
-            if (dialog == null) {
+            //使用父类的loadingDialog保证下载成功会dimiss掉dialog
+            if (loadingDialog == null) {
                 loadingView = LayoutInflater.from(this).inflate(R.layout.custom_download_layout, null);
-                dialog = new AlertDialog.Builder(this).setTitle("").setView(loadingView).create();
-                dialog.setCancelable(false);
-                dialog.setCanceledOnTouchOutside(false);
-                dialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+                loadingDialog = new AlertDialog.Builder(this).setTitle("").setView(loadingView).create();
+                loadingDialog.setCancelable(false);
+                loadingDialog.setCanceledOnTouchOutside(false);
+                loadingDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
                     @Override
                     public void onCancel(DialogInterface dialog) {
                         finish();
@@ -185,7 +186,7 @@ public class CustomVersionDialogActivity extends VersionDialogActivity implement
             TextView tvProgress = (TextView) loadingView.findViewById(com.allenliu.versionchecklib.R.id.tv_progress);
             tvProgress.setText(String.format(getString(com.allenliu.versionchecklib.R.string.versionchecklib_progress), currentProgress));
             pb.setProgress(currentProgress);
-            dialog.show();
+            loadingDialog.show();
         }
 //        Toast.makeText(this, "显示自定义的下载加载框", Toast.LENGTH_SHORT).show();
     }

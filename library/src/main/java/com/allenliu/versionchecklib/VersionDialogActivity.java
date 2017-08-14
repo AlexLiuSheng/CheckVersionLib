@@ -2,6 +2,7 @@ package com.allenliu.versionchecklib;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.Dialog;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -39,9 +40,9 @@ import okhttp3.Response;
 public class VersionDialogActivity extends Activity {
 
     private static final int MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE = 0x123;
-    private AlertDialog dialog;
-    public AlertDialog loadingDialog;
-    AlertDialog failDialog;
+    private Dialog dialog;
+    protected Dialog loadingDialog;
+    protected Dialog failDialog;
     private String downloadUrl;
     private VersionParams versionParams;
     private String title;

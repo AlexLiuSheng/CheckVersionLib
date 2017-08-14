@@ -25,7 +25,6 @@ public class ApkBroadCastReceiver extends BroadcastReceiver {
                     String downloadPath = checkAPKExists(context);
                     if (downloadPath != null)
                         new File(downloadPath).delete();
-
                 } else {
                     return;
                 }
