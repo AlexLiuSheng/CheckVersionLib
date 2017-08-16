@@ -1,6 +1,5 @@
 # CheckVersionLib[ ![Download](https://api.bintray.com/packages/zkxy/maven/VersionCheckLib/images/download.svg) ](https://bintray.com/zkxy/maven/VersionCheckLib/_latestVersion)
-
-
+  现在热更新技术挺火的，大公司都出了自己的热更新框架，但是各家热更新都有各自优缺点，终究不能解决所有bug，万不得已还是得进行版本升级，这是一个android上的自动版本检测并更新库。库集成了检测版本、下载版本以及自动安装升级
 ## 特点
 - [x] 任何地方都可以检测（可设置定时检测）
 
@@ -24,7 +23,7 @@
  
 ## 使用步骤
 ### android studio导入
-`compile 'com.allenliu.versionchecklib:library:1.2'`
+`compile 'com.allenliu.versionchecklib:library:1.1'`
 
 
 ### 如何使用
@@ -40,25 +39,15 @@
 	     service.showVersionDialog(downloadUrl,title,updateMsg );}
 	     
 	
+	      
 
               
 2.在任意地方开启自定义service，并传入`VersionParam`
 
- - 1.1版本之前开启service：
-      ```
-         versionParams = new VersionParams().setRequestUrl("http://www.baidu.com");
-         Intent intent = new Intent(this, DemoService.class);
-         intent.putExtra(AVersionService.VERSION_PARAMS_KEY, versionParams);
-         startService(intent);
-     ```
- - 1.2版本后开启service：
-      ```VersionParams.Builder builder = new VersionParams.Builder()
-                      .setRequestUrl("http://www.baidu.com")
-                      .setService(DemoService.class)
-                      .build();
-         AllenChecker.startVersionCheck(this, builder.build());
-      ```
-	
+        versionParams = new VersionParams().setRequestUrl("http://www.baidu.com");
+        Intent intent = new Intent(this, DemoService.class);
+        intent.putExtra(AVersionService.VERSION_PARAMS_KEY, versionParams);
+        startService(intent);
 	
    `VersionParams`有如下方法，除了requestUrl都是可选值
  

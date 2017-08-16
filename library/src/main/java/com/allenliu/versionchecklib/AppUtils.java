@@ -26,10 +26,6 @@ import java.io.File;
  */
 public final class AppUtils {
 
-    private static final boolean DEBUG = true;
-    private static final String TAG = "AppUtils";
-
-
     /**
      * Don't let anyone instantiate this class.
      */

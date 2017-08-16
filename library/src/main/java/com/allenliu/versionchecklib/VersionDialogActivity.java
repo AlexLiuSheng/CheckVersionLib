@@ -127,12 +127,14 @@ public class VersionDialogActivity extends Activity {
 
     public void downloadFile(String url, FileCallback callback) {
         ApkBroadCastReceiver.downloadApkPath = versionParams.getDownloadAPKPath();
-        //判断本地文件是否存在
-        String downloadPath = checkAPKIsRight();
-        if (downloadPath != null) {
-            AppUtils.installApk(getApplicationContext(), new File(downloadPath));
-            finish();
-            return;
+        if(!versionParams.isForceRedownload()) {
+            //判断本地文件是否存在
+            String downloadPath = checkAPKIsRight();
+            if (downloadPath != null) {
+                AppUtils.installApk(getApplicationContext(), new File(downloadPath));
+                finish();
+                return;
+            }
         }
 
         if (callback == null) {
@@ -348,7 +350,6 @@ public class VersionDialogActivity extends Activity {
                 return null;
         }
         return null;
-
 
     }
 
