@@ -52,7 +52,8 @@
          startService(intent);
      ```
  - 1.2版本后开启service：
-      ```VersionParams.Builder builder = new VersionParams.Builder()
+      ```
+         VersionParams.Builder builder = new VersionParams.Builder()
                       .setRequestUrl("http://www.baidu.com")
                       .setService(DemoService.class)
                       .build();
