@@ -21,7 +21,7 @@
 ## 效果
  
  
- <img src="https://github.com/AlexLiuSheng/CheckVersionLib/blob/master/gif/custom.gif" width=200/> <img src="https://github.com/AlexLiuSheng/CheckVersionLib/blob/master/gif/style4.png" width=200/><img src="https://github.com/AlexLiuSheng/CheckVersionLib/blob/master/gif/style1.png" width=200/>
+ <img src="https://github.com/AlexLiuSheng/CheckVersionLib/blob/master/gif/custom.gif" width=200/> <img src="https://github.com/AlexLiuSheng/CheckVersionLib/blob/master/gif/style4.png" width=200/> <img src="https://github.com/AlexLiuSheng/CheckVersionLib/blob/master/gif/style4.png" width=200/><img src="https://github.com/AlexLiuSheng/CheckVersionLib/blob/master/gif/style1.png" width=200/>
  <img src="https://github.com/AlexLiuSheng/CheckVersionLib/blob/master/gif/style2.png" width=200/>
  
 ## 使用步骤
@@ -68,8 +68,8 @@
    | requestMethod   | 否 |GET|http版本请求方式|
    | requestParams   | 否 |不传为空|http版本请求携带的参数|
    | customDownloadActivityClass   | 否 |VersionDialogActivity.class|版本dialog Activity,使用默认界面不指定|
-    | isForceRedownload   | 否 |true|如果本地有缓存，是否强制重新下载apk|
-    | isSilentDownload   | 否 |false|静默下载开关|
+   | isForceRedownload   | 否 |true|如果本地有缓存，是否强制重新下载apk(设置false会如果下载了安装包而用户没有安装则不会再次下载)|
+   | isSilentDownload   | 否 |false|静默下载开关|
  
 3.开启和关闭log
 
