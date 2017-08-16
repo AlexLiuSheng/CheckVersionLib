@@ -1,4 +1,4 @@
-package com.allenliu.versionchecklib;
+package com.allenliu.versionchecklib.core;
 
 import android.content.Context;
 import android.content.Intent;
@@ -14,12 +14,12 @@ public class AllenChecker {
         intent.putExtra(AVersionService.VERSION_PARAMS_KEY, versionParams);
         context.startService(intent);
     }
-//    public static void init(boolean debug){
-//        isDebug=debug;
-//    }
-//    public static boolean isDebug(){
-//        return isDebug;
-//    }
+    public static void init(boolean debug){
+        isDebug=debug;
+    }
+    public static boolean isDebug(){
+        return isDebug;
+    }
 
 
 

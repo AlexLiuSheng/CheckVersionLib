@@ -12,12 +12,12 @@
         android:supportsRtl="true"
        >
         <activity
-            android:name=".VersionDialogActivity"
+            android:name=".core.VersionDialogActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
             android:theme="@style/versionCheckLibvtransparentTheme" />
         <provider
-            android:name="com.allenliu.versionchecklib.VersionFileProvider"
+            android:name="com.allenliu.versionchecklib.core.VersionFileProvider"
             android:authorities="${applicationId}.versionProvider"
             android:grantUriPermissions="true"
             android:exported="false">
@@ -26,7 +26,7 @@
                 android:resource="@xml/versionchecklib_file_paths" />
         </provider>
         <receiver
-            android:name="com.allenliu.versionchecklib.ApkBroadCastReceiver"
+            android:name="com.allenliu.versionchecklib.core.ApkBroadCastReceiver"
             android:enabled="true" >
             <intent-filter>
                 <action android:name="android.intent.action.PACKAGE_ADDED" />

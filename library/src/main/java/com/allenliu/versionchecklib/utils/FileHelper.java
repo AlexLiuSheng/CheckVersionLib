@@ -1,4 +1,4 @@
-package com.allenliu.versionchecklib;
+package com.allenliu.versionchecklib.utils;
 
 import android.content.Context;
 import android.os.Environment;

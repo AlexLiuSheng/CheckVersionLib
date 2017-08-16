@@ -1,4 +1,4 @@
-package com.allenliu.versionchecklib;
+package com.allenliu.versionchecklib.core;
 
 /**
  * Created by Allen Liu on 2017/2/22.

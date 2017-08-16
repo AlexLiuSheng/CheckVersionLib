@@ -16,15 +16,17 @@
 
 - [x] 支持强制更新
 
+- [x] 支持静默下载
+
 ## 效果
  
  
- <img src="https://github.com/AlexLiuSheng/CheckVersionLib/blob/master/gif/custom.gif" width=200/><img src="https://github.com/AlexLiuSheng/CheckVersionLib/blob/master/gif/style1.png" width=200/>
+ <img src="https://github.com/AlexLiuSheng/CheckVersionLib/blob/master/gif/custom.gif" width=200/> <img src="https://github.com/AlexLiuSheng/CheckVersionLib/blob/master/gif/style4.png" width=200/><img src="https://github.com/AlexLiuSheng/CheckVersionLib/blob/master/gif/style1.png" width=200/>
  <img src="https://github.com/AlexLiuSheng/CheckVersionLib/blob/master/gif/style2.png" width=200/>
  
 ## 使用步骤
 ### android studio导入
-`compile 'com.allenliu.versionchecklib:library:1.2'`
+`compile 'com.allenliu.versionchecklib:library:1.3'`
 
 
 ### 如何使用
@@ -44,14 +46,6 @@
               
 2.在任意地方开启自定义service，并传入`VersionParam`
 
- - 1.1版本之前开启service：
-      ```
-         versionParams = new VersionParams().setRequestUrl("http://www.baidu.com");
-         Intent intent = new Intent(this, DemoService.class);
-         intent.putExtra(AVersionService.VERSION_PARAMS_KEY, versionParams);
-         startService(intent);
-     ```
- - 1.2版本后开启service：
       ```
          VersionParams.Builder builder = new VersionParams.Builder()
                       .setRequestUrl("http://www.baidu.com")
@@ -61,40 +55,50 @@
       ```
 	
 	
-   `VersionParams`有如下方法，除了requestUrl都是可选值
+   `VersionParams`属性见下表：
  
-   <img src="https://github.com/AlexLiuSheng/CheckVersionLib/blob/master/gif/versionparams.png" width=400/>
+   | 属性名        | 是否必须           | 默认值 |解释|
+   | ------------- |:-------------|:-------------|:-------------:|
+   | requestUrl   | 是 |-|请求版本接口的url|
+   | service   | 是 |-|指定你自己的service|
+   |downloadAPKPath|否|/storage/emulated/0/AllenVersionPath/|apk下载路径|
+   | httpHeaders   | 否 |不传为空|http版本请求header|
+   | pauseRequestTime   | 否 |1000*30|版本接口请求失败与下次请求间隔时间（如果为-1表示请求失败不继续请求）|
+   | httpHeaders   | 否 |不传为空|http版本请求header|
+   | requestMethod   | 否 |GET|http版本请求方式|
+   | requestParams   | 否 |不传为空|http版本请求携带的参数|
+   | customDownloadActivityClass   | 否 |VersionDialogActivity.class|版本dialog Activity,使用默认界面不指定|
+    | isForceRedownload   | 否 |true|如果本地有缓存，是否强制重新下载apk|
+    | isSilentDownload   | 否 |false|静默下载开关|
+ 
+3.开启和关闭log
+
+ `AllenChecker.init(true)`
 	  
 ### **自定义界面** 
    如果想自定义界面，只需创建一个继承自`VersionDialogActivity`的Activity,Activity设置Theme为透明：
 
  ` android:theme="@style/versionCheckLibvtransparentTheme"`
  
-   开启Service的时候，将自定义的Activity传入VersionParams
+   开启Service的之前，记住将自定义的Activity传入VersionParams
    
    `setCustomDownloadActivityClass(CustomVersionDialogActivity.class)`
    
-   - 自定义 版本dialog,重写 `showVersionDialog()` ,在里面实现自己的逻辑，最后调用`downloadFile(url)`或者`downloadFile(url,filecallback)`注意不要调用父类的方法
+   - 自定义 `versionDialog`：
+     重写 `showVersionDialog()` ,在里面实现自己的逻辑，最后调用 `super.dealAPK();`注意不要调用父类的方法
    
-   - 自定义 下载中dialog，重写`showLoadingDialog(int currentProgress)`,在里面实现自己的逻辑
+   - 自定义 `downloadingDialog`，重写`showLoadingDialog(int currentProgress)`,在里面实现自己的逻辑
    
-   - 自定义 下载失败dialog ,重写`showFailDialog`，实现自己的逻辑
+   - 自定义 `failDialog` ,重写`showFailDialog`，实现自己的逻辑
    
-   - 强制更新。如果使用默认的版本dialog，`setCancelClickListner`回调里实现，具体用法请看demo
-   
-   - 自定义 版本dialog,重写 `showVersionDialog()` ,在里面实现自己的逻辑，最后调用`downloadFile(url)`或者`downloadFile(url,filecallback)`注意不要调用父类的方法
+   - 强制更新。如果使用默认的版本dialog，`dialogDismiss`回调里实现，具体用法请看demo
    
    - 除此之外还可以在定义的Activity里面监听一些下载和点击回调 
    
-   - 自定义 版本dialog,重写 `showVersionDialog()` ,在里面实现自己的逻辑，最后调用`downloadFile(url)`或者`downloadFile(url,filecallback)`注意不要调用父类的方法
    
-         setOnDownloadSuccessListener(this);
-	 
-         setCommitClickListener(this);
-	  
-         setCancelClickListener(this);
-	 
-	     setOnDownloadingListener(this);
+                 setApkDownloadListener(this);
+                 setCommitClickListener(this);
+                 setDialogDimissListener(this);
        
 ### 下载通知栏图标和文字替换
 需要自定义图标只需在mimap文件下建立`ic_launcher`图标，替换标题只需在项目xml定义`app_name`属性,还有其他一些属性替换，如下表:
@@ -111,6 +115,17 @@
 |versionchecklib_download_fail | 下载失败，点击重试|  
 更详细的使用请看demo
 `欢迎star和提issue`
+## 更新日志
+- V1.3 
+   - 增加**静默下载**功能
+   - 优化库启动方式
+- V1.2
+   - **强制重新下载开关**功能
+- V1.1
+   - 添加apk下载缓存，下载完成之后默认不再次下载。安装之后删除安装包
+   
+## TODO
+- [ ] Kotlin版本
 ## License
         
         Copyright 2017 AllenLiu.

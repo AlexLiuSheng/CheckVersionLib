@@ -1,13 +1,11 @@
-package com.allenliu.versionchecklib;
+package com.allenliu.versionchecklib.core;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.support.annotation.IntRange;
 
+import com.allenliu.versionchecklib.utils.FileHelper;
 import com.lzy.okgo.model.HttpHeaders;
 import com.lzy.okgo.model.HttpParams;
-
-import okhttp3.internal.http.HttpMethod;
 
 /**
  * Created by allenliu on 2017/8/15.
@@ -20,13 +18,16 @@ public class VersionParams implements Parcelable {
     private long pauseRequestTime;
     private HttpRequestMethod requestMethod;
     private HttpParams requestParams;
-    private Class customDownloadActivityClass;
-    private boolean isForceUpdate;
-    private boolean isForceRedownload;
-    private boolean isSilentDownload;
+    private Class<? extends VersionDialogActivity> customDownloadActivityClass;
+//    public boolean isForceUpdate;
+    public boolean isForceRedownload;
+    public boolean isSilentDownload;
     private Class<? extends AVersionService> service;
 
-    private VersionParams(String requestUrl, String downloadAPKPath, HttpHeaders httpHeaders, long pauseRequestTime, HttpRequestMethod requestMethod, HttpParams requestParams, Class customDownloadActivityClass, boolean isForceUpdate, boolean isForceRedownload, boolean isSilentDownload, Class<? extends AVersionService> service) {
+    private VersionParams() {
+    }
+
+    private VersionParams(String requestUrl, String downloadAPKPath, HttpHeaders httpHeaders, long pauseRequestTime, HttpRequestMethod requestMethod, HttpParams requestParams, Class customDownloadActivityClass,  boolean isForceRedownload, boolean isSilentDownload, Class<? extends AVersionService> service) {
         this.requestUrl = requestUrl;
         this.downloadAPKPath = downloadAPKPath;
         this.httpHeaders = httpHeaders;
@@ -34,7 +35,7 @@ public class VersionParams implements Parcelable {
         this.requestMethod = requestMethod;
         this.requestParams = requestParams;
         this.customDownloadActivityClass = customDownloadActivityClass;
-        this.isForceUpdate = isForceUpdate;
+//        this.isForceUpdate = isForceUpdate;
         this.isForceRedownload = isForceRedownload;
         this.isSilentDownload = isSilentDownload;
         this.service = service;
@@ -79,9 +80,9 @@ public class VersionParams implements Parcelable {
         return customDownloadActivityClass;
     }
 
-    public boolean isForceUpdate() {
-        return isForceUpdate;
-    }
+//    public boolean isForceUpdate() {
+//        return isForceUpdate;
+//    }
 
     public boolean isForceRedownload() {
         return isForceRedownload;
@@ -98,8 +99,8 @@ public class VersionParams implements Parcelable {
         private long pauseRequestTime;
         private HttpRequestMethod requestMethod;
         private HttpParams requestParams;
-        private Class customDownloadActivityClass;
-        private boolean isForceUpdate;
+        private Class<? extends VersionDialogActivity> customDownloadActivityClass;
+
         private boolean isForceRedownload;
         private boolean isSilentDownload;
         private Class<? extends AVersionService> service;
@@ -109,8 +110,8 @@ public class VersionParams implements Parcelable {
             this.pauseRequestTime = 1000 * 30;
             this.requestMethod = HttpRequestMethod.GET;
             this.customDownloadActivityClass = VersionDialogActivity.class;
-            this.isForceUpdate = false;
-            this.isForceRedownload = false;
+//            this.isForceUpdate = false;
+            this.isForceRedownload = true;
             this.isSilentDownload = false;
         }
 
@@ -149,10 +150,10 @@ public class VersionParams implements Parcelable {
             return this;
         }
 
-        public Builder setForceUpdate(boolean forceUpdate) {
-            isForceUpdate = forceUpdate;
-            return this;
-        }
+//        public Builder setForceUpdate(boolean forceUpdate) {
+//            isForceUpdate = forceUpdate;
+//            return this;
+//        }
 
         public Builder setForceRedownload(boolean forceRedownload) {
             isForceRedownload = forceRedownload;
@@ -170,7 +171,7 @@ public class VersionParams implements Parcelable {
         }
 
         public VersionParams build() {
-            return new VersionParams(requestUrl, downloadAPKPath, httpHeaders, pauseRequestTime, requestMethod, requestParams, customDownloadActivityClass, isForceUpdate, isForceRedownload, isSilentDownload, service);
+            return new VersionParams(requestUrl, downloadAPKPath, httpHeaders, pauseRequestTime, requestMethod, requestParams, customDownloadActivityClass, isForceRedownload, isSilentDownload, service);
         }
     }
 
@@ -189,7 +190,7 @@ public class VersionParams implements Parcelable {
         dest.writeInt(this.requestMethod == null ? -1 : this.requestMethod.ordinal());
         dest.writeSerializable(this.requestParams);
         dest.writeSerializable(this.customDownloadActivityClass);
-        dest.writeByte(this.isForceUpdate ? (byte) 1 : (byte) 0);
+//        dest.writeByte(this.isForceUpdate ? (byte) 1 : (byte) 0);
         dest.writeByte(this.isForceRedownload ? (byte) 1 : (byte) 0);
         dest.writeByte(this.isSilentDownload ? (byte) 1 : (byte) 0);
         dest.writeSerializable(this.service);
@@ -203,8 +204,8 @@ public class VersionParams implements Parcelable {
         int tmpRequestMethod = in.readInt();
         this.requestMethod = tmpRequestMethod == -1 ? null : HttpRequestMethod.values()[tmpRequestMethod];
         this.requestParams = (HttpParams) in.readSerializable();
-        this.customDownloadActivityClass = (Class) in.readSerializable();
-        this.isForceUpdate = in.readByte() != 0;
+        this.customDownloadActivityClass = (Class<? extends VersionDialogActivity>) in.readSerializable();
+//        this.isForceUpdate = in.readByte() != 0;
         this.isForceRedownload = in.readByte() != 0;
         this.isSilentDownload = in.readByte() != 0;
         this.service = (Class<? extends AVersionService>) in.readSerializable();

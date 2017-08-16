@@ -10,11 +10,10 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.allenliu.versionchecklib.VersionDialogActivity;
-import com.allenliu.versionchecklib.callback.CancelClickListener;
+import com.allenliu.versionchecklib.core.VersionDialogActivity;
+import com.allenliu.versionchecklib.callback.APKDownloadListener;
+import com.allenliu.versionchecklib.callback.DialogDismissListener;
 import com.allenliu.versionchecklib.callback.CommitClickListener;
-import com.allenliu.versionchecklib.callback.DownloadSuccessListener;
-import com.allenliu.versionchecklib.callback.DownloadingListener;
 
 import java.io.File;
 
@@ -27,8 +26,10 @@ import java.io.File;
  * 如果不想自定义界面和一些自定义功能不用设置
  * versionParams.setCustomDownloadActivityClass(CustomVersionDialogActivity.class);
  * 使用库默认自带的就行了
+ * @important 如果要重写几个ui:
+ * ，请分别使用父类的versionDialog／loadingDialog/failDialog以便库管理显示和消失
  */
-public class CustomVersionDialogActivity extends VersionDialogActivity implements CommitClickListener, CancelClickListener, DownloadingListener, DownloadSuccessListener {
+public class CustomVersionDialogActivity extends VersionDialogActivity implements CommitClickListener, DialogDismissListener, APKDownloadListener {
     public static int customVersionDialogIndex = 3;
     public static boolean isForceUpdate = false;
     public static boolean isCustomDownloading = false;
@@ -37,10 +38,9 @@ public class CustomVersionDialogActivity extends VersionDialogActivity implement
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //这里是几个回调
-        setOnDownloadSuccessListener(this);
-        setOnDownloadingListener(this);
+        setApkDownloadListener(this);
         setCommitClickListener(this);
-        setCancelClickListener(this);
+        setDialogDimissListener(this);
     }
 
     @Override
@@ -49,26 +49,14 @@ public class CustomVersionDialogActivity extends VersionDialogActivity implement
     }
 
     @Override
-    public void onDownloading(float progress) {
-        Log.e("CustomVersionDialogActi", "正在下载中回调...");
+    public void onDownloadFail() {
+
     }
 
-    /**
-     * 注意本方法只有《使用默认界面》
-     * 点击取消之后，如果要强制更新 这里就可以强制退出app
-     * 建议用一个ActivityManger记录每个Activity出入堆栈
-     * 最后全部关闭activity 实现app exit
-     * ActivityTaskManger.finishAllActivity();
-     */
-
     @Override
-    public void onCancelClick() {
-        Log.e("CustomVersionDialogActi", "取消按钮点击回调");
-        finish();
-        if (isForceUpdate) {
-            //我这里为了简便直接finish 就行了
-            MainActivity.mainActivity.finish();
-        }
+    public void onDownloading(int progress) {
+
+//        Log.e("CustomVersionDialogActi", "正在下载中回调...");
     }
 
     @Override
@@ -96,60 +84,68 @@ public class CustomVersionDialogActivity extends VersionDialogActivity implement
 
     /**
      * 自定义dialog one
+     * 使用父类的versionDialog字段来初始化
      */
     private void customVersionDialogOne() {
-        final BaseDialog baseDialog = new BaseDialog(this, R.style.BaseDialog, R.layout.custom_dialog_one_layout);
-        TextView tvCancel = (TextView) baseDialog.findViewById(R.id.tv_cancel);
-        TextView tvUpdate = (TextView) baseDialog.findViewById(R.id.tv_update);
+        versionDialog = new BaseDialog(this, R.style.BaseDialog, R.layout.custom_dialog_one_layout);
+        //设置dismiss listener 用于强制更新会回调dialogDismiss方法
+        versionDialog.setOnDismissListener(this);
+        TextView tvCancel = (TextView) versionDialog.findViewById(R.id.tv_cancel);
+        TextView tvUpdate = (TextView) versionDialog.findViewById(R.id.tv_update);
         tvCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                onCancelClick();
+                versionDialog.dismiss();
+                finish();
             }
         });
         tvUpdate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                baseDialog.dismiss();
-                downloadFile("http://www.apk3.com/uploads/soft/guiguangbao/UCllq.apk");
+                versionDialog.dismiss();
+                //交给父类处理 （包括了静默下载判断）
+                CustomVersionDialogActivity.super.dealAPK();
+//                requestPermissionAndDownloadFile();
             }
         });
-        baseDialog.show();
+        versionDialog.show();
     }
 
     /**
      * 自定义dialog two
      */
     private void customVersionDialogTwo() {
-        final BaseDialog baseDialog = new BaseDialog(this, R.style.BaseDialog, R.layout.custom_dialog_two_layout);
-        baseDialog.show();
-//        TextView tvCancel = (TextView) baseDialog.findViewById(R.id.tv_cancel);
-        TextView tvUpdate = (TextView) baseDialog.findViewById(R.id.tv_update);
-//        tvCancel.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                onCancelClick();
-//            }
-//        });
-        baseDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+        versionDialog = new BaseDialog(this, R.style.BaseDialog, R.layout.custom_dialog_two_layout);
+        versionDialog.show();
+        //设置dismiss listener 用于强制更新会回调dialogDismiss方法
+        versionDialog.setOnDismissListener(this);
+        TextView tvUpdate = (TextView) versionDialog.findViewById(R.id.tv_update);
+
+        versionDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
             @Override
             public void onCancel(DialogInterface dialog) {
-                onCancelClick();
+                versionDialog.dismiss();
             }
         });
         tvUpdate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                baseDialog.dismiss();
-                downloadFile("http://www.apk3.com/uploads/soft/guiguangbao/UCllq.apk");
+                versionDialog.dismiss();
+//                downloadFile();
+                CustomVersionDialogActivity.super.dealAPK();
+
             }
         });
-        baseDialog.show();
+        versionDialog.show();
     }
 
+    /**
+     * 自定义下载失败重试对话框
+     * 使用父类的failDialog
+     */
     @Override
     public void showFailDialog() {
-        // super.showFailDialog();
+        super.showFailDialog();
         Toast.makeText(this, "重写此方法使用自定义失败加载框", Toast.LENGTH_SHORT).show();
     }
 
@@ -191,8 +187,23 @@ public class CustomVersionDialogActivity extends VersionDialogActivity implement
 //        Toast.makeText(this, "显示自定义的下载加载框", Toast.LENGTH_SHORT).show();
     }
 
-    private void forceCloseAPP() {
 
+    /**
+     * versiondialog dismiss 的时候会回调此方法
+     * 这里面可以进行强制更新操作
+     * <p>
+     * 建议用一个ActivityManger记录每个Activity出入堆栈
+     * 最后全部关闭activity 实现app exit
+     * ActivityTaskManger.finishAllActivity();
+     *
+     * @param dialog
+     */
+    @Override
+    public void dialogDismiss(DialogInterface dialog) {
+        Log.e("CustomVersionDialogActi", "dialog dismiss 回调");
+        if (isForceUpdate) {
+            //我这里为了简便直接finish 就行了
+            MainActivity.mainActivity.finish();
+        }
     }
-
 }

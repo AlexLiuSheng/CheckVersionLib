@@ -1,4 +1,4 @@
-package com.allenliu.versionchecklib;
+package com.allenliu.versionchecklib.core;
 
 import android.support.v4.content.FileProvider;
 

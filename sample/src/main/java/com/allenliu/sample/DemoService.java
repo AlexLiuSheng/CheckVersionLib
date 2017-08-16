@@ -4,7 +4,7 @@ import android.content.Intent;
 import android.os.IBinder;
 import android.util.Log;
 
-import com.allenliu.versionchecklib.AVersionService;
+import com.allenliu.versionchecklib.core.AVersionService;
 
 public class DemoService extends AVersionService {
     public DemoService() {
@@ -18,7 +18,10 @@ public class DemoService extends AVersionService {
 
     @Override
     public void onResponses(AVersionService service, String response) {
-      Log.e("DemoService", response);
-        service.showVersionDialog("http://www.apk3.com/uploads/soft/guiguangbao/UCllq.apk","检测到新版本",getString(R.string.updatecontent));
+        Log.e("DemoService", response);
+        //可以在判断版本之后在设置是否强制更新或者VersionParams
+        //eg
+        // versionParams.isForceUpdate=true;
+        showVersionDialog("http://www.apk3.com/uploads/soft/guiguangbao/UCllq.apk", "检测到新版本", getString(R.string.updatecontent));
     }
 }

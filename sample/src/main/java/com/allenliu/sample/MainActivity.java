@@ -8,17 +8,20 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.RadioGroup;
 
-import com.allenliu.versionchecklib.AVersionService;
-import com.allenliu.versionchecklib.AllenChecker;
-import com.allenliu.versionchecklib.VersionDialogActivity;
-import com.allenliu.versionchecklib.VersionParams;
+import com.allenliu.versionchecklib.core.AllenChecker;
+import com.allenliu.versionchecklib.core.VersionDialogActivity;
+import com.allenliu.versionchecklib.core.VersionParams;
 
 public class MainActivity extends AppCompatActivity {
     private EditText etPauseTime;
     private EditText etAddress;
     private RadioGroup radioGroup;
     private CheckBox forceUpdateCheckBox;
+    private CheckBox silentDownloadCheckBox;
+    private CheckBox forceDownloadCheckBox;
+
     private RadioGroup radioGroup2;
+
     public static MainActivity mainActivity;
 
     @Override
@@ -29,20 +32,18 @@ public class MainActivity extends AppCompatActivity {
         etAddress = (EditText) findViewById(R.id.etAddress);
         radioGroup = (RadioGroup) findViewById(R.id.radioGroup);
         radioGroup2 = (RadioGroup) findViewById(R.id.radioGroup2);
-
+        silentDownloadCheckBox = (CheckBox) findViewById(R.id.checkbox2);
         forceUpdateCheckBox = (CheckBox) findViewById(R.id.checkbox);
+        forceDownloadCheckBox = (CheckBox) findViewById(R.id.checkbox3);
+
         mainActivity = this;
+
     }
 
     public void onClick(View view) {
         //you can add your request params and request method
         //eg.
-//        HttpRequestMethod requestMethod=HttpRequestMethod.GET;
-//        HttpHeaders httpHeaders=new HttpHeaders();
-//        HttpParams httpParams=new HttpParams();
-
-        //只有requsetUrl 是必须值 其他参数都有默认值，可选
-
+        //只有requsetUrl service 是必须值 其他参数都有默认值，可选
         VersionParams.Builder builder = new VersionParams.Builder()
 //                .setHttpHeaders(httpHeaders)
 //                .setRequestMethod(requestMethod)
@@ -102,7 +103,18 @@ public class MainActivity extends AppCompatActivity {
                     CustomVersionDialogActivity.isForceUpdate = false;
                     builder.setCustomDownloadActivityClass(CustomVersionDialogActivity.class);
                 }
-
+                //静默下载
+                if (silentDownloadCheckBox.isChecked()) {
+                    builder.setSilentDownload(true);
+                } else {
+                    builder.setSilentDownload(false);
+                }
+                //强制重新下载
+                if (forceDownloadCheckBox.isChecked()) {
+                    builder.setForceRedownload(true);
+                } else {
+                    builder.setForceRedownload(false);
+                }
                 AllenChecker.startVersionCheck(this, builder.build());
                 break;
 

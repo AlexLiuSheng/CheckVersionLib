@@ -1,10 +1,12 @@
-package com.allenliu.versionchecklib;
+package com.allenliu.versionchecklib.core;
 
 import android.app.Service;
 import android.content.Intent;
 import android.os.Handler;
 import android.os.IBinder;
 
+import com.allenliu.versionchecklib.callback.DownloadListener;
+import com.allenliu.versionchecklib.utils.ALog;
 import com.lzy.okgo.OkGo;
 import com.lzy.okgo.callback.StringCallback;
 import com.lzy.okgo.model.HttpHeaders;
@@ -13,6 +15,7 @@ import com.lzy.okgo.model.HttpParams;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -22,9 +25,10 @@ import okhttp3.Response;
 import static java.util.logging.Level.SEVERE;
 
 
-public abstract class AVersionService extends Service {
-    private VersionParams versionParams;
+public abstract class AVersionService extends Service implements DownloadListener {
+    protected VersionParams versionParams;
     public static final String VERSION_PARAMS_KEY = "VERSION_PARAMS_KEY";
+
     @Override
     public IBinder onBind(Intent intent) {
         return null;
@@ -32,9 +36,8 @@ public abstract class AVersionService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        versionParams =  intent.getParcelableExtra(VERSION_PARAMS_KEY);
+        versionParams = intent.getParcelableExtra(VERSION_PARAMS_KEY);
         requestVersionUrlSync();
-
         return super.onStartCommand(intent, flags, startId);
     }
 
@@ -55,6 +58,7 @@ public abstract class AVersionService extends Service {
             long pauseTime = versionParams.getPauseRequestTime();
             //不为-1 间隔请求
             if (pauseTime > 0) {
+                ALog.e("请求版本接口失败，下次请求将在" + pauseTime + "ms后开始");
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
@@ -68,7 +72,7 @@ public abstract class AVersionService extends Service {
 
     private void requestVersionUrl() {
         OkGo.init(getApplication());
-        OkGo.getInstance().debug("AVersionService", SEVERE, true);
+        OkGo.getInstance().debug("Allen Checker", SEVERE, true);
         String url = versionParams.getRequestUrl();
         HttpRequestMethod requestMethod = versionParams.getRequestMethod();
         HttpParams params = versionParams.getRequestParams();
@@ -106,8 +110,39 @@ public abstract class AVersionService extends Service {
         return json;
     }
 
+    String downloadUrl, title, updateMsg;
 
     public void showVersionDialog(String downloadUrl, String title, String updateMsg) {
+        this.downloadUrl = downloadUrl;
+        this.title = title;
+        this.updateMsg = updateMsg;
+        if (versionParams.isSilentDownload()) {
+            silentDownload();
+        } else {
+            goToVersionDialog();
+        }
+    }
+
+    private void silentDownload() {
+        DownloadManager.downloadAPK(getApplicationContext(), downloadUrl, versionParams, this);
+    }
+
+    @Override
+    public void onCheckerDownloading(int progress) {
+
+    }
+
+    @Override
+    public void onCheckerDownloadSuccess(File file) {
+        goToVersionDialog();
+    }
+
+    @Override
+    public void onCheckerDownloadFail() {
+        stopSelf();
+    }
+
+    private void goToVersionDialog() {
         Intent intent = new Intent(getApplicationContext(), versionParams.getCustomDownloadActivityClass());
         if (updateMsg != null)
             intent.putExtra("text", updateMsg);
@@ -119,5 +154,9 @@ public abstract class AVersionService extends Service {
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
         stopSelf();
+    }
+
+    public void setVersionParams(VersionParams versionParams) {
+        this.versionParams = versionParams;
     }
 }

@@ -1,4 +1,4 @@
-package com.allenliu.versionchecklib; /**
+package com.allenliu.versionchecklib.utils; /**
  * Copyright 2014 Zhenguo Jin
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,6 +18,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
+
+import com.allenliu.versionchecklib.core.VersionFileProvider;
 
 import java.io.File;
 
