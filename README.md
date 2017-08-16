@@ -85,7 +85,7 @@
    `setCustomDownloadActivityClass(CustomVersionDialogActivity.class)`
    
    - 自定义 `versionDialog`：
-     重写 `showVersionDialog()` ,在里面实现自己的逻辑，最后调用 `super.dealAPK();`注意不要调用父类的方法
+     重写 `showVersionDialog()` ,在里面实现自己的逻辑，在确认按钮里调用 `super.dealAPK();`
    
    - 自定义 `downloadingDialog`，重写`showLoadingDialog(int currentProgress)`,在里面实现自己的逻辑
    
