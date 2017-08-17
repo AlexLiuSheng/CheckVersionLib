@@ -33,10 +33,10 @@ public class VersionDialogActivity extends Activity implements DownloadListener,
     protected Dialog versionDialog;
     protected Dialog loadingDialog;
     protected Dialog failDialog;
-    private String downloadUrl;
+    protected String downloadUrl;
     private VersionParams versionParams;
-    private String title;
-    private String content;
+    protected String title;
+    protected String updateMsg;
     private CommitClickListener commitListener;
     private DialogDismissListener cancelListener;
     private APKDownloadListener apkDownloadListener;
@@ -52,13 +52,13 @@ public class VersionDialogActivity extends Activity implements DownloadListener,
      */
     private void initialize() {
         title = getIntent().getStringExtra("title");
-        content = getIntent().getStringExtra("text");
+        updateMsg = getIntent().getStringExtra("text");
         versionParams = getIntent().getParcelableExtra(AVersionService.VERSION_PARAMS_KEY);
         downloadUrl = getIntent().getStringExtra("downloadUrl");
         //判断是否是静默下载
         //静默下载直接在后台下载不显示版本信息 只有下载完成之后在显示版本信息
 
-        if (title != null && content != null && downloadUrl != null && versionParams != null) {
+        if (title != null && updateMsg != null && downloadUrl != null && versionParams != null) {
             showVersionDialog();
         }
 
@@ -66,7 +66,7 @@ public class VersionDialogActivity extends Activity implements DownloadListener,
     }
 
     protected void showVersionDialog() {
-        versionDialog = new AlertDialog.Builder(this).setTitle(title).setMessage(content).setPositiveButton(getString(R.string.versionchecklib_confirm), new DialogInterface.OnClickListener() {
+        versionDialog = new AlertDialog.Builder(this).setTitle(title).setMessage(updateMsg).setPositiveButton(getString(R.string.versionchecklib_confirm), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 if (commitListener != null)
