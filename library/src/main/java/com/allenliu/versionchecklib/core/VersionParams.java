@@ -111,7 +111,7 @@ public class VersionParams implements Parcelable {
             this.requestMethod = HttpRequestMethod.GET;
             this.customDownloadActivityClass = VersionDialogActivity.class;
 //            this.isForceUpdate = false;
-            this.isForceRedownload = true;
+            this.isForceRedownload = false;
             this.isSilentDownload = false;
         }
 

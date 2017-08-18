@@ -2,8 +2,10 @@ package com.allenliu.versionchecklib.core;
 
 import android.app.Service;
 import android.content.Intent;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
+import android.os.Parcelable;
 
 import com.allenliu.versionchecklib.callback.DownloadListener;
 import com.allenliu.versionchecklib.utils.ALog;
@@ -28,6 +30,7 @@ import static java.util.logging.Level.SEVERE;
 public abstract class AVersionService extends Service implements DownloadListener {
     protected VersionParams versionParams;
     public static final String VERSION_PARAMS_KEY = "VERSION_PARAMS_KEY";
+    public static final String VERSION_PARAMS_EXTRA_KEY = "VERSION_PARAMS_EXTRA_KEY";
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -111,11 +114,17 @@ public abstract class AVersionService extends Service implements DownloadListene
     }
 
     String downloadUrl, title, updateMsg;
+    Bundle paramBundle;
 
     public void showVersionDialog(String downloadUrl, String title, String updateMsg) {
+     showVersionDialog(downloadUrl,title,updateMsg,null);
+    }
+
+    public void showVersionDialog(String downloadUrl, String title, String updateMsg,Bundle paramBundle) {
         this.downloadUrl = downloadUrl;
         this.title = title;
         this.updateMsg = updateMsg;
+        this.paramBundle=paramBundle;
         if (versionParams.isSilentDownload()) {
             silentDownload();
         } else {
@@ -123,7 +132,7 @@ public abstract class AVersionService extends Service implements DownloadListene
         }
     }
 
-    private void silentDownload() {
+        private void silentDownload() {
         DownloadManager.downloadAPK(getApplicationContext(), downloadUrl, versionParams, this);
     }
 
@@ -151,6 +160,8 @@ public abstract class AVersionService extends Service implements DownloadListene
         if (title != null)
             intent.putExtra("title", title);
         intent.putExtra(VERSION_PARAMS_KEY, versionParams);
+        if(paramBundle!=null)
+        intent.putExtra(VERSION_PARAMS_EXTRA_KEY,paramBundle);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
         stopSelf();

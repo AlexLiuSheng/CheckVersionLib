@@ -24,6 +24,7 @@
             android:padding="15dp">
 
             <TextView
+                android:id="@+id/tv_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
@@ -33,7 +34,7 @@
                 android:textSize="13sp" />
 
             <TextView
-                android:id="@+id/tv2"
+                android:id="@+id/tv_msg"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
@@ -43,7 +44,7 @@
 
             <Button
                 android:layout_marginTop="10dp"
-                android:id="@+id/tv_update"
+                android:id="@+id/btn_update"
                 android:layout_width="match_parent"
                 android:layout_height="35dp"
                 android:background="@drawable/shape_corner"

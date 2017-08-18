@@ -180,7 +180,8 @@ public class DownloadManager {
                 PackageManager pm = context.getPackageManager();
                 PackageInfo info = pm.getPackageArchiveInfo(downloadPath,
                         PackageManager.GET_ACTIVITIES);
-                if (info != null) {
+                //判断安装包存在并且包名一样并且版本号不一样
+                if (info != null &&context.getPackageName().equals(info.packageName)&& context.getPackageManager().getPackageInfo(context.getPackageName(), 0).versionCode != info.versionCode) {
                     result = true;
                 }
             } catch (Exception e) {

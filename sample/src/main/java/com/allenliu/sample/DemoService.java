@@ -23,5 +23,8 @@ public class DemoService extends AVersionService {
         //eg
         // versionParams.isForceUpdate=true;
         showVersionDialog("http://www.apk3.com/uploads/soft/guiguangbao/UCllq.apk", "检测到新版本", getString(R.string.updatecontent));
+//        or
+//        showVersionDialog("http://www.apk3.com/uploads/soft/guiguangbao/UCllq.apk", "检测到新版本", getString(R.string.updatecontent),bundle);
+
     }
 }

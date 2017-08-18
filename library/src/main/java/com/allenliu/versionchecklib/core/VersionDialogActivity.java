@@ -33,10 +33,12 @@ public class VersionDialogActivity extends Activity implements DownloadListener,
     protected Dialog versionDialog;
     protected Dialog loadingDialog;
     protected Dialog failDialog;
-    protected String downloadUrl;
+    private String downloadUrl;
     private VersionParams versionParams;
-    protected String title;
-    protected String updateMsg;
+    private String title;
+    private String updateMsg;
+    private Bundle paramBundle;
+
     private CommitClickListener commitListener;
     private DialogDismissListener cancelListener;
     private APKDownloadListener apkDownloadListener;
@@ -47,6 +49,26 @@ public class VersionDialogActivity extends Activity implements DownloadListener,
         initialize();
     }
 
+    public String getDownloadUrl() {
+        return downloadUrl;
+    }
+
+    public VersionParams getVersionParams() {
+        return versionParams;
+    }
+
+    public String getVersionTitle() {
+        return title;
+    }
+
+    public String getVersionUpdateMsg() {
+        return updateMsg;
+    }
+
+    public Bundle getVersionParamBundle() {
+        return paramBundle;
+    }
+
     /**
      * url msg versionField
      */
@@ -55,6 +77,7 @@ public class VersionDialogActivity extends Activity implements DownloadListener,
         updateMsg = getIntent().getStringExtra("text");
         versionParams = getIntent().getParcelableExtra(AVersionService.VERSION_PARAMS_KEY);
         downloadUrl = getIntent().getStringExtra("downloadUrl");
+        paramBundle=getIntent().getBundleExtra(AVersionService.VERSION_PARAMS_EXTRA_KEY);
         //判断是否是静默下载
         //静默下载直接在后台下载不显示版本信息 只有下载完成之后在显示版本信息
 
@@ -269,6 +292,5 @@ public class VersionDialogActivity extends Activity implements DownloadListener,
 
     @Override
     public void onDismiss(DialogInterface dialogInterface) {
-
     }
 }

@@ -26,7 +26,7 @@
  
 ## 使用步骤
 ### android studio导入
-`compile 'com.allenliu.versionchecklib:library:1.4'`
+`compile 'com.allenliu.versionchecklib:library:1.5'`
 
 
 ### 如何使用
@@ -39,7 +39,10 @@
 	     
 	     if (serverVersion > clientVersion) { 
 	      //传入下载地址，以及版本更新消息
-	     service.showVersionDialog(downloadUrl,title,updateMsg );}
+	     service.showVersionDialog(downloadUrl,title,updateMsg );
+	    // or 
+	    service.showVersionDialog(downloadUrl,title,updateMsg,bundle);
+	     }
 	     
 	
 
@@ -68,7 +71,7 @@
    | requestMethod   | 否 |GET|http版本请求方式|
    | requestParams   | 否 |不传为空|http版本请求携带的参数|
    | customDownloadActivityClass   | 否 |VersionDialogActivity.class|版本dialog Activity,使用默认界面不指定|
-   | isForceRedownload   | 否 |true|如果本地有缓存，是否强制重新下载apk(设置false会如果下载了安装包而用户没有安装则不会再次下载)|
+   | isForceRedownload   | 否 |false|如果本地有缓存，是否强制重新下载apk(设置false会如果下载了安装包而用户没有安装则不会再次下载)|
    | isSilentDownload   | 否 |false|静默下载开关|
  
 3.开启和关闭log
@@ -83,6 +86,8 @@
    开启Service的之前，记住将自定义的Activity传入VersionParams
    
    `setCustomDownloadActivityClass(CustomVersionDialogActivity.class)`
+   
+   - 调用父类`getVersionTitle()` ,`getVersionUpdateMsg()`,`getVersionParamBundle()`方法,这是从service传过来的值，可以在自定义界面使用
    
    - 自定义 `versionDialog`：
      重写 `showVersionDialog()` ,在里面实现自己的逻辑，在确认按钮里调用 `super.dealAPK();`
@@ -116,6 +121,9 @@
 更详细的使用请看demo
 `欢迎star和提issue`
 ## 更新日志
+- V1.5
+   - 增加getVersionTitle,getVersionParamBundle,getVersionUpdateMsg方法，方便自定义界面使用
+   - 修复了对本地缓存apk的判断优化。只有本地安装包与当前app的包名一样并且versioncode不一样才会认为本地有apk
 - V1.4
    - 修复了之前自定义界面不能使用从service传过去的title，updateMsg问题
 - V1.3 
