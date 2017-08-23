@@ -26,7 +26,7 @@
  
 ## 使用步骤
 ### android studio导入
-`compile 'com.allenliu.versionchecklib:library:1.5'`
+`compile 'com.allenliu.versionchecklib:library:1.5.1'`
 
 
 ### 如何使用
@@ -121,6 +121,8 @@
 更详细的使用请看demo
 `欢迎star和提issue`
 ## 更新日志
+- V1.5.1
+   - solve [issues#24](https://github.com/AlexLiuSheng/CheckVersionLib/issues/24)
 - V1.5
    - 增加getVersionTitle,getVersionParamBundle,getVersionUpdateMsg方法，方便自定义界面使用
    - 修复了对本地缓存apk的判断优化。只有本地安装包与当前app的包名一样并且versioncode不一样才会认为本地有apk

@@ -39,8 +39,10 @@ public abstract class AVersionService extends Service implements DownloadListene
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        versionParams = intent.getParcelableExtra(VERSION_PARAMS_KEY);
-        requestVersionUrlSync();
+        if(intent!=null) {
+            versionParams = intent.getParcelableExtra(VERSION_PARAMS_KEY);
+            requestVersionUrlSync();
+        }
         return super.onStartCommand(intent, flags, startId);
     }
 
