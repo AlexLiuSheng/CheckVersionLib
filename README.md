@@ -96,7 +96,7 @@
    
    - 自定义 `failDialog` ,重写`showFailDialog`，实现自己的逻辑
    
-   - 强制更新。如果使用默认的版本dialog，`dialogDismiss`回调里实现，具体用法请看demo
+   - 强制更新。如果使用默认的版本dialog，`dialogDismiss`和`onDownloadSuccess`回调里关闭app，具体用法请看demo
    
    - 除此之外还可以在定义的Activity里面监听一些下载和点击回调 
    

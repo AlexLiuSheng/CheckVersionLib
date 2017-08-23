@@ -44,8 +44,15 @@ public class CustomVersionDialogActivity extends VersionDialogActivity implement
         setDialogDimissListener(this);
     }
 
+    /**
+     * 下载文件成功也关闭app
+     * 也判断是否强制更新
+     *
+     * @param file
+     */
     @Override
     public void onDownloadSuccess(File file) {
+        forceCloseApp();
         Log.e("CustomVersionDialogActi", "文件下载成功回调");
     }
 
@@ -206,9 +213,15 @@ public class CustomVersionDialogActivity extends VersionDialogActivity implement
     public void dialogDismiss(DialogInterface dialog) {
         Log.e("CustomVersionDialogActi", "dialog dismiss 回调");
 //        finish();
+        forceCloseApp();
+    }
+
+
+    private void forceCloseApp() {
         if (isForceUpdate) {
             //我这里为了简便直接finish 就行了
             MainActivity.mainActivity.finish();
         }
     }
+
 }
