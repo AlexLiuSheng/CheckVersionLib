@@ -77,10 +77,9 @@ public class VersionDialogActivity extends Activity implements DownloadListener,
         updateMsg = getIntent().getStringExtra("text");
         versionParams = getIntent().getParcelableExtra(AVersionService.VERSION_PARAMS_KEY);
         downloadUrl = getIntent().getStringExtra("downloadUrl");
-        paramBundle=getIntent().getBundleExtra(AVersionService.VERSION_PARAMS_EXTRA_KEY);
+        paramBundle = getIntent().getBundleExtra(AVersionService.VERSION_PARAMS_EXTRA_KEY);
         //判断是否是静默下载
         //静默下载直接在后台下载不显示版本信息 只有下载完成之后在显示版本信息
-
         if (title != null && updateMsg != null && downloadUrl != null && versionParams != null) {
             showVersionDialog();
         }
@@ -191,6 +190,8 @@ public class VersionDialogActivity extends Activity implements DownloadListener,
 //    int lastProgress = 0;
 
     protected void downloadFile() {
+        //提前让loadingDialog实例化
+        showLoadingDialog(0);
         DownloadManager.downloadAPK(this, downloadUrl, versionParams, this);
     }
 
@@ -292,5 +293,12 @@ public class VersionDialogActivity extends Activity implements DownloadListener,
 
     @Override
     public void onDismiss(DialogInterface dialogInterface) {
+        if (cancelListener != null) {
+            //通过loadingdialog是否显示来判断是取消还是继续加载
+            if (versionParams.isSilentDownload() || (!versionParams.isSilentDownload() && loadingDialog == null) || (!versionParams.isSilentDownload() && loadingDialog != null && !loadingDialog.isShowing())) {
+                cancelListener.dialogDismiss(dialogInterface);
+                finish();
+            }
+        }
     }
 }
