@@ -43,7 +43,7 @@ public class DownloadManager {
             return;
         }
         lastProgress = 0;
-        ApkBroadCastReceiver.downloadApkPath = versionParams.getDownloadAPKPath();
+//        ApkBroadCastReceiver.downloadApkPath = versionParams.getDownloadAPKPath();
         if (!versionParams.isForceRedownload()) {
             //判断本地文件是否存在
             String downloadPath = versionParams.getDownloadAPKPath() + context.getString(R.string.versionchecklib_download_apkname, context.getPackageName());
@@ -172,7 +172,7 @@ public class DownloadManager {
         });
     }
 
-    private static boolean checkAPKIsExists(Context context, String downloadPath) {
+    public static boolean checkAPKIsExists(Context context, String downloadPath) {
         File file = new File(downloadPath);
         boolean result = false;
         if (file.exists()) {
@@ -181,6 +181,7 @@ public class DownloadManager {
                 PackageInfo info = pm.getPackageArchiveInfo(downloadPath,
                         PackageManager.GET_ACTIVITIES);
                 //判断安装包存在并且包名一样并且版本号不一样
+                 ALog.e("本地安装包版本号："+info.versionCode+"\n 当前app版本号："+context.getPackageManager().getPackageInfo(context.getPackageName(), 0).versionCode);
                 if (info != null &&context.getPackageName().equals(info.packageName)&& context.getPackageManager().getPackageInfo(context.getPackageName(), 0).versionCode != info.versionCode) {
                     result = true;
                 }

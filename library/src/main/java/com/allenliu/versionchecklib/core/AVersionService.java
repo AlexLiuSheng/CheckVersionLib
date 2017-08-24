@@ -7,6 +7,7 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.Parcelable;
 
+import com.allenliu.versionchecklib.R;
 import com.allenliu.versionchecklib.callback.DownloadListener;
 import com.allenliu.versionchecklib.utils.ALog;
 import com.lzy.okgo.OkGo;
@@ -41,9 +42,25 @@ public abstract class AVersionService extends Service implements DownloadListene
     public int onStartCommand(Intent intent, int flags, int startId) {
         if(intent!=null) {
             versionParams = intent.getParcelableExtra(VERSION_PARAMS_KEY);
+            verfiyAndDeleteAPK();
             requestVersionUrlSync();
         }
         return super.onStartCommand(intent, flags, startId);
+    }
+
+    /**
+     * 验证安装包是否存在，并且在安装成功情况下删除安装包
+     */
+    private void verfiyAndDeleteAPK() {
+        //判断versioncode与当前版本不一样的apk是否存在，存在删除安装包
+        String downloadPath = versionParams.getDownloadAPKPath() + getApplicationContext().getString(R.string.versionchecklib_download_apkname, getApplicationContext().getPackageName());
+        if(!DownloadManager.checkAPKIsExists(getApplicationContext(),downloadPath)){
+            try {
+                ALog.e("删除本地apk");
+                new File(downloadPath).delete();
+            }catch (Exception e){
+            }
+        }
     }
 
     private void requestVersionUrlSync() {
