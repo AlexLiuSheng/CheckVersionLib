@@ -271,6 +271,7 @@ public class VersionDialogActivity extends Activity implements DownloadListener,
             apkDownloadListener.onDownloadSuccess(file);
         dismissAllDialog();
 
+
     }
 
     @Override
