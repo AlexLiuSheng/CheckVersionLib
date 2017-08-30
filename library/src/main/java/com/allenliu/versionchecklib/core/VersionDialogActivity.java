@@ -99,7 +99,6 @@ public class VersionDialogActivity extends Activity implements DownloadListener,
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 finish();
-
             }
         }).create();
 

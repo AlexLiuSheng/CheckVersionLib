@@ -216,7 +216,12 @@ public class CustomVersionDialogActivity extends VersionDialogActivity implement
         forceCloseApp();
     }
 
-
+    /**
+     * 在dialogDismiss和onDownloadSuccess里面强制更新
+     * 分别表示两种情况：
+     * 一种用户取消下载  关闭app
+     * 一种下载成功安装的时候 应该也关闭app
+     */
     private void forceCloseApp() {
         if (isForceUpdate) {
             //我这里为了简便直接finish 就行了
