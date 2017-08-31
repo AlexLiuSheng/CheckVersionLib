@@ -110,10 +110,11 @@
 ### 强制更新
 
 主要思路就是监听
-
+                 ```
                  setApkDownloadListener(this);
-                 setCommitClickListener(this);
-                 setDialogDimissListener(this);
+		 setDialogDimissListener(this);
+		 ```
+		 
 具体查看[ForceUpdate](https://github.com/AlexLiuSheng/CheckVersionLib/tree/master/ForceUpdateDemo)
  
 ### 下载通知栏图标和文字替换
