@@ -54,8 +54,8 @@
       ```
          VersionParams.Builder builder = new VersionParams.Builder()
                       .setRequestUrl("http://www.baidu.com")
-                      .setService(DemoService.class)
-                      .build();
+                      .setService(DemoService.class);
+                      
          AllenChecker.startVersionCheck(this, builder.build());
       ```
 	
