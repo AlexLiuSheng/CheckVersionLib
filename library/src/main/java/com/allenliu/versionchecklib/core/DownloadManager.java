@@ -14,15 +14,16 @@ import android.support.v7.app.NotificationCompat;
 
 import com.allenliu.versionchecklib.R;
 import com.allenliu.versionchecklib.callback.DownloadListener;
+import com.allenliu.versionchecklib.core.http.AllenHttp;
+import com.allenliu.versionchecklib.core.http.FileCallBack;
 import com.allenliu.versionchecklib.utils.ALog;
 import com.allenliu.versionchecklib.utils.AppUtils;
-import com.lzy.okgo.OkGo;
-import com.lzy.okgo.callback.FileCallback;
-import com.lzy.okgo.request.BaseRequest;
 
 import java.io.File;
+import java.io.IOException;
 
 import okhttp3.Call;
+import okhttp3.Request;
 import okhttp3.Response;
 
 import static android.content.Context.NOTIFICATION_SERVICE;
@@ -66,17 +67,14 @@ public class DownloadManager {
         builder.setContentTitle(context.getString(R.string.app_name));
         builder.setTicker(context.getString(R.string.versionchecklib_downloading));
 
-        OkGo.get(url).execute(new FileCallback(versionParams.getDownloadAPKPath(), context.getString(R.string.versionchecklib_download_apkname, context.getPackageName())) {
-            @Override
-            public void onBefore(BaseRequest request) {
-                super.onBefore(request);
-                builder.setContentText(String.format(context.getString(R.string.versionchecklib_download_progress), 0));
-                Notification notification = builder.build();
-                notification.vibrate = new long[]{500, 500};
-                notification.defaults = Notification.DEFAULT_VIBRATE | Notification.DEFAULT_SOUND;
-                manager.notify(0, notification);
-            }
 
+        builder.setContentText(String.format(context.getString(R.string.versionchecklib_download_progress), 0));
+        Notification notification = builder.build();
+        notification.vibrate = new long[]{500, 500};
+        notification.defaults = Notification.DEFAULT_VIBRATE | Notification.DEFAULT_SOUND;
+        manager.notify(0, notification);
+        Request request = new Request.Builder().url(url).build();
+        AllenHttp.getHttpClient().newCall(request).enqueue(new FileCallBack(versionParams.getDownloadAPKPath(), context.getString(R.string.versionchecklib_download_apkname, context.getPackageName())) {
             @Override
             public void onSuccess(File file, Call call, Response response) {
                 listener.onCheckerDownloadSuccess(file);
@@ -105,10 +103,9 @@ public class DownloadManager {
             }
 
             @Override
-            public void downloadProgress(long currentSize, long totalSize, float progress, long networkSpeed) {
-                super.downloadProgress(currentSize, totalSize, progress, networkSpeed);
+            public void onDownloading(int progress) {
                 ALog.e("downloadProgress:" + progress + "");
-                int currentProgress = (int) (progress * 100);
+                int currentProgress = progress;
 //                showLoadingDialog(currentProgress);
                 listener.onCheckerDownloading(currentProgress);
                 if (currentProgress - lastProgress >= 5) {
@@ -117,12 +114,10 @@ public class DownloadManager {
                     builder.setProgress(100, lastProgress, false);
                     manager.notify(0, builder.build());
                 }
-
             }
 
             @Override
-            public void onError(Call call, Response response, Exception e) {
-                super.onError(call, response, e);
+            public void onDownloadFailed() {
                 Intent intent = new Intent(context, versionParams.getCustomDownloadActivityClass());
                 intent.putExtra("isRetry", true);
                 PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
@@ -133,18 +128,16 @@ public class DownloadManager {
                 ALog.e("file download failed");
 //                showFailDialog();
                 listener.onCheckerDownloadFail();
+
             }
         });
     }
 
+
     private static void silentDownloadAPK(final Context context, String url, final VersionParams versionParams, final DownloadListener listener) {
+        Request request = new Request.Builder().url(url).build();
+        AllenHttp.getHttpClient().newCall(request).enqueue(new FileCallBack(versionParams.getDownloadAPKPath(), context.getString(R.string.versionchecklib_download_apkname, context.getPackageName())) {
 
-        OkGo.get(url).execute(new FileCallback(versionParams.getDownloadAPKPath(), context.getString(R.string.versionchecklib_download_apkname, context.getPackageName())) {
-            @Override
-            public void onBefore(BaseRequest request) {
-                super.onBefore(request);
-
-            }
 
             @Override
             public void onSuccess(File file, Call call, Response response) {
@@ -153,10 +146,9 @@ public class DownloadManager {
             }
 
             @Override
-            public void downloadProgress(long currentSize, long totalSize, float progress, long networkSpeed) {
-                super.downloadProgress(currentSize, totalSize, progress, networkSpeed);
+            public void onDownloading(int progress) {
                 ALog.e("silent downloadProgress:" + progress + "");
-                int currentProgress = (int) (progress * 100);
+                int currentProgress = progress;
 //                showLoadingDialog(currentProgress);
                 if (currentProgress - lastProgress >= 5) {
                     lastProgress = currentProgress;
@@ -165,8 +157,7 @@ public class DownloadManager {
             }
 
             @Override
-            public void onError(Call call, Response response, Exception e) {
-                super.onError(call, response, e);
+            public void onDownloadFailed() {
                 ALog.e("file silent download failed");
 //                showFailDialog();
                 listener.onCheckerDownloadFail();

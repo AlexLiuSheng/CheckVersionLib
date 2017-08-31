@@ -12,6 +12,9 @@ import com.allenliu.versionchecklib.core.AllenChecker;
 import com.allenliu.versionchecklib.core.VersionDialogActivity;
 import com.allenliu.versionchecklib.core.VersionParams;
 
+import okhttp3.Headers;
+import okhttp3.internal.http.HttpHeaders;
+
 public class MainActivity extends AppCompatActivity {
     private EditText etPauseTime;
     private EditText etAddress;
@@ -44,8 +47,11 @@ public class MainActivity extends AppCompatActivity {
         //you can add your request params and request method
         //eg.
         //只有requsetUrl service 是必须值 其他参数都有默认值，可选
+
+//        com.allenliu.versionchecklib.core.http.HttpHeaders headers=new com.allenliu.versionchecklib.core.http.HttpHeaders();
+//        headers.put("a","b");
         VersionParams.Builder builder = new VersionParams.Builder()
-//                .setHttpHeaders(httpHeaders)
+//                .setHttpHeaders(headers)
 //                .setRequestMethod(requestMethod)
 //                .setRequestParams(httpParams)
                 .setRequestUrl("http://www.baidu.com")

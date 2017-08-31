@@ -3,9 +3,11 @@ package com.allenliu.versionchecklib.core;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.allenliu.versionchecklib.core.http.HttpHeaders;
+import com.allenliu.versionchecklib.core.http.HttpParams;
+import com.allenliu.versionchecklib.core.http.HttpRequestMethod;
 import com.allenliu.versionchecklib.utils.FileHelper;
-import com.lzy.okgo.model.HttpHeaders;
-import com.lzy.okgo.model.HttpParams;
+
 
 /**
  * Created by allenliu on 2017/8/15.
@@ -14,12 +16,12 @@ import com.lzy.okgo.model.HttpParams;
 public class VersionParams implements Parcelable {
     private String requestUrl;
     private String downloadAPKPath;
-    private HttpHeaders httpHeaders;
+    private com.allenliu.versionchecklib.core.http.HttpHeaders httpHeaders;
     private long pauseRequestTime;
     private HttpRequestMethod requestMethod;
     private HttpParams requestParams;
     private Class<? extends VersionDialogActivity> customDownloadActivityClass;
-//    public boolean isForceUpdate;
+    //    public boolean isForceUpdate;
     public boolean isForceRedownload;
     public boolean isSilentDownload;
     private Class<? extends AVersionService> service;
@@ -27,7 +29,7 @@ public class VersionParams implements Parcelable {
     private VersionParams() {
     }
 
-    private VersionParams(String requestUrl, String downloadAPKPath, HttpHeaders httpHeaders, long pauseRequestTime, HttpRequestMethod requestMethod, HttpParams requestParams, Class customDownloadActivityClass,  boolean isForceRedownload, boolean isSilentDownload, Class<? extends AVersionService> service) {
+    private VersionParams(String requestUrl, String downloadAPKPath, HttpHeaders httpHeaders, long pauseRequestTime, HttpRequestMethod requestMethod, HttpParams requestParams, Class customDownloadActivityClass, boolean isForceRedownload, boolean isSilentDownload, Class<? extends AVersionService> service) {
         this.requestUrl = requestUrl;
         this.downloadAPKPath = downloadAPKPath;
         this.httpHeaders = httpHeaders;
@@ -44,7 +46,6 @@ public class VersionParams implements Parcelable {
         }
         if (requestUrl == null) {
             throw new RuntimeException("requestUrl is needed.");
-
         }
     }
 
@@ -93,60 +94,52 @@ public class VersionParams implements Parcelable {
     }
 
     public static class Builder {
-        private String requestUrl;
-        private String downloadAPKPath;
-        private HttpHeaders httpHeaders;
-        private long pauseRequestTime;
-        private HttpRequestMethod requestMethod;
-        private HttpParams requestParams;
-        private Class<? extends VersionDialogActivity> customDownloadActivityClass;
 
-        private boolean isForceRedownload;
-        private boolean isSilentDownload;
-        private Class<? extends AVersionService> service;
+        VersionParams params;
 
         public Builder() {
-            this.downloadAPKPath = FileHelper.getDownloadApkCachePath();
-            this.pauseRequestTime = 1000 * 30;
-            this.requestMethod = HttpRequestMethod.GET;
-            this.customDownloadActivityClass = VersionDialogActivity.class;
+            params = new VersionParams();
+            params.downloadAPKPath = FileHelper.getDownloadApkCachePath();
+            params.pauseRequestTime = 1000 * 30;
+            params.requestMethod = HttpRequestMethod.GET;
+            params.customDownloadActivityClass = VersionDialogActivity.class;
 //            this.isForceUpdate = false;
-            this.isForceRedownload = false;
-            this.isSilentDownload = false;
+            params.isForceRedownload = false;
+            params.isSilentDownload = false;
         }
 
         public Builder setRequestUrl(String requestUrl) {
-            this.requestUrl = requestUrl;
+            params.requestUrl = requestUrl;
             return this;
         }
 
         public Builder setDownloadAPKPath(String downloadAPKPath) {
-            this.downloadAPKPath = downloadAPKPath;
+            params.downloadAPKPath = downloadAPKPath;
             return this;
         }
 
         public Builder setHttpHeaders(HttpHeaders httpHeaders) {
-            this.httpHeaders = httpHeaders;
+            params.httpHeaders = httpHeaders;
             return this;
         }
 
         public Builder setPauseRequestTime(long pauseRequestTime) {
-            this.pauseRequestTime = pauseRequestTime;
+            params.pauseRequestTime = pauseRequestTime;
             return this;
         }
 
         public Builder setRequestMethod(HttpRequestMethod requestMethod) {
-            this.requestMethod = requestMethod;
+            params.requestMethod = requestMethod;
             return this;
         }
 
         public Builder setRequestParams(HttpParams requestParams) {
-            this.requestParams = requestParams;
+            params.requestParams = requestParams;
             return this;
         }
 
         public Builder setCustomDownloadActivityClass(Class customDownloadActivityClass) {
-            this.customDownloadActivityClass = customDownloadActivityClass;
+            params.customDownloadActivityClass = customDownloadActivityClass;
             return this;
         }
 
@@ -156,22 +149,22 @@ public class VersionParams implements Parcelable {
 //        }
 
         public Builder setForceRedownload(boolean forceRedownload) {
-            isForceRedownload = forceRedownload;
+            params.isForceRedownload = forceRedownload;
             return this;
         }
 
         public Builder setSilentDownload(boolean silentDownload) {
-            isSilentDownload = silentDownload;
+            params.isSilentDownload = silentDownload;
             return this;
         }
 
         public Builder setService(Class<? extends AVersionService> service) {
-            this.service = service;
+            params.service = service;
             return this;
         }
 
         public VersionParams build() {
-            return new VersionParams(requestUrl, downloadAPKPath, httpHeaders, pauseRequestTime, requestMethod, requestParams, customDownloadActivityClass, isForceRedownload, isSilentDownload, service);
+            return params;
         }
     }
 
@@ -190,7 +183,6 @@ public class VersionParams implements Parcelable {
         dest.writeInt(this.requestMethod == null ? -1 : this.requestMethod.ordinal());
         dest.writeSerializable(this.requestParams);
         dest.writeSerializable(this.customDownloadActivityClass);
-//        dest.writeByte(this.isForceUpdate ? (byte) 1 : (byte) 0);
         dest.writeByte(this.isForceRedownload ? (byte) 1 : (byte) 0);
         dest.writeByte(this.isSilentDownload ? (byte) 1 : (byte) 0);
         dest.writeSerializable(this.service);
@@ -205,7 +197,6 @@ public class VersionParams implements Parcelable {
         this.requestMethod = tmpRequestMethod == -1 ? null : HttpRequestMethod.values()[tmpRequestMethod];
         this.requestParams = (HttpParams) in.readSerializable();
         this.customDownloadActivityClass = (Class<? extends VersionDialogActivity>) in.readSerializable();
-//        this.isForceUpdate = in.readByte() != 0;
         this.isForceRedownload = in.readByte() != 0;
         this.isSilentDownload = in.readByte() != 0;
         this.service = (Class<? extends AVersionService>) in.readSerializable();

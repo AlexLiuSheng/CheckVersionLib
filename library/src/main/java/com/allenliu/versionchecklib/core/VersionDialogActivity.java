@@ -295,7 +295,9 @@ public class VersionDialogActivity extends Activity implements DownloadListener,
     public void onDismiss(DialogInterface dialogInterface) {
         if (cancelListener != null) {
             //通过loadingdialog是否显示来判断是取消还是继续加载
-            if (versionParams.isSilentDownload() || (!versionParams.isSilentDownload() && loadingDialog == null) || (!versionParams.isSilentDownload() && loadingDialog != null && !loadingDialog.isShowing())) {
+            if (versionParams.isSilentDownload()
+                    || (!versionParams.isSilentDownload() && loadingDialog == null)
+                    || (!versionParams.isSilentDownload() && loadingDialog != null && !loadingDialog.isShowing())) {
                 cancelListener.dialogDismiss(dialogInterface);
                 finish();
             }

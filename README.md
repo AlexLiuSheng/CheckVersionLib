@@ -18,6 +18,8 @@
 
 - [x] 支持静默下载
 
+- [x] 使用okhttp请求，不与第三方请求框架冲突
+
 ## 效果
  
  
@@ -26,7 +28,7 @@
  
 ## 使用步骤
 ### android studio导入
-`compile 'com.allenliu.versionchecklib:library:1.5.4'`
+`compile 'com.allenliu.versionchecklib:library:1.6.0'`
 
 
 ### 如何使用
@@ -121,6 +123,9 @@
 更详细的使用请看demo
 `欢迎star和提issue`
 ## 更新日志
+- V1.6.0
+   - 优化项目，移除okgo
+   - 使用okhttp实现请求和下载
 - V1.5.4 [issues#27](https://github.com/AlexLiuSheng/CheckVersionLib/issues/27)
    - 解决了 [issues#27](https://github.com/AlexLiuSheng/CheckVersionLib/issues/27)
 - V1.5.3 [issues#26](https://github.com/AlexLiuSheng/CheckVersionLib/issues/26)
