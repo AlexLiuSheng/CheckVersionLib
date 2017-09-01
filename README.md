@@ -106,7 +106,17 @@
                  setApkDownloadListener(this);
                  setCommitClickListener(this);
                  setDialogDimissListener(this);
-       
+		 
+### 强制更新
+
+主要思路就是监听
+   ```
+                 setApkDownloadListener(this);
+		         setDialogDimissListener(this);
+   ```
+		 
+具体查看[ForceUpdate](https://github.com/AlexLiuSheng/CheckVersionLib/tree/master/ForceUpdateDemo)
+ 
 ### 下载通知栏图标和文字替换
 需要自定义图标只需在mimap文件下建立`ic_launcher`图标，替换标题只需在项目xml定义`app_name`属性,还有其他一些属性替换，如下表:
 
