@@ -110,10 +110,12 @@
 ### 强制更新
 
 主要思路就是监听
+
    ```
                  setApkDownloadListener(this);
 		         setDialogDimissListener(this);
    ```
+ 
 		 
 具体查看[ForceUpdate](https://github.com/AlexLiuSheng/CheckVersionLib/tree/master/ForceUpdateDemo)
  
