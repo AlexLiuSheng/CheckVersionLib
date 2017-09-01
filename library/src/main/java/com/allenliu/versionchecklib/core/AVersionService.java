@@ -96,7 +96,7 @@ public abstract class AVersionService extends Service implements DownloadListene
         //不为-1 间隔请求
         if (pauseTime > 0) {
             ALog.e("请求版本接口失败，下次请求将在" + pauseTime + "ms后开始");
-            new Handler().postDelayed(new Runnable() {
+            new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
                 @Override
                 public void run() {
                     requestVersionUrlSync();
