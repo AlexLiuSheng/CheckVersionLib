@@ -183,7 +183,7 @@ public class VersionDialogActivity extends Activity implements DownloadListener,
             AppUtils.installApk(VersionDialogActivity.this, new File(downloadPath));
             finish();
         } else {
-            downloadFile();
+            requestPermissionAndDownloadFile();
         }
     }
 //    int lastProgress = 0;

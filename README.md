@@ -28,7 +28,7 @@
  
 ## 使用步骤
 ### android studio导入
-`compile 'com.allenliu.versionchecklib:library:1.6.1'`
+`compile 'com.allenliu.versionchecklib:library:1.6.3'`
 
 
 ### 如何使用
@@ -135,6 +135,7 @@
 更详细的使用请看demo
 `欢迎star和提issue`
 ## 更新日志
+
 - V1.6.0
    - 优化项目，移除okgo
    - 使用okhttp实现请求和下载
