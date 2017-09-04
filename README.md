@@ -28,7 +28,7 @@
  
 ## 使用步骤
 ### android studio导入
-`compile 'com.allenliu.versionchecklib:library:1.6.3'`
+`compile 'com.allenliu.versionchecklib:library:1.6.4'`
 
 
 ### 如何使用
