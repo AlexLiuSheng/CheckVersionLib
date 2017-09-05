@@ -55,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
 //                .setRequestMethod(requestMethod)
 //                .setRequestParams(httpParams)
                 .setRequestUrl("http://www.baidu.com")
-                .setDownloadAPKPath(getApplicationContext().getFilesDir()+"/")
+//                .setDownloadAPKPath(getApplicationContext().getFilesDir()+"/")
                 .setService(DemoService.class);
 
         stopService(new Intent(this, DemoService.class));
