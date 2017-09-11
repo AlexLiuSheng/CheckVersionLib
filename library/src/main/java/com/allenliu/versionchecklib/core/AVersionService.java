@@ -1,7 +1,10 @@
 package com.allenliu.versionchecklib.core;
 
 import android.app.Service;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
@@ -27,7 +30,7 @@ public abstract class AVersionService extends Service implements DownloadListene
     protected VersionParams versionParams;
     public static final String VERSION_PARAMS_KEY = "VERSION_PARAMS_KEY";
     public static final String VERSION_PARAMS_EXTRA_KEY = "VERSION_PARAMS_EXTRA_KEY";
-
+    public static final String PERMISSION_ACTION="com.allenliu.versionchecklib.filepermisssion.action";
     @Override
     public IBinder onBind(Intent intent) {
         return null;
@@ -137,7 +140,11 @@ public abstract class AVersionService extends Service implements DownloadListene
         this.updateMsg = updateMsg;
         this.paramBundle = paramBundle;
         if (versionParams.isSilentDownload()) {
-            silentDownload();
+            BroadcastReceiver receiver=new VersionBroadCastReceiver();
+            IntentFilter intentFilter=new IntentFilter(PERMISSION_ACTION);
+            registerReceiver(receiver,intentFilter);
+            startActivity(new Intent(this,PermissionDialogActivity.class));
+//            silentDownload();
         } else {
             goToVersionDialog();
         }
@@ -180,5 +187,17 @@ public abstract class AVersionService extends Service implements DownloadListene
 
     public void setVersionParams(VersionParams versionParams) {
         this.versionParams = versionParams;
+    }
+    public class VersionBroadCastReceiver extends BroadcastReceiver{
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+          if(intent.getAction().equals(PERMISSION_ACTION)){
+              boolean result=intent.getBooleanExtra("result",false);
+              if(result)
+              silentDownload();
+              unregisterReceiver(this);
+          }
+        }
     }
 }

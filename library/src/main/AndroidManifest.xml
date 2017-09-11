@@ -9,22 +9,27 @@
 
     <application
         android:allowBackup="true"
-        android:supportsRtl="true"
-       >
+        android:supportsRtl="true">
         <activity
             android:name=".core.VersionDialogActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
             android:theme="@style/versionCheckLibvtransparentTheme" />
+
         <provider
-            android:name="com.allenliu.versionchecklib.core.VersionFileProvider"
+            android:name=".core.VersionFileProvider"
             android:authorities="${applicationId}.versionProvider"
-            android:grantUriPermissions="true"
-            android:exported="false">
+            android:exported="false"
+            android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/versionchecklib_file_paths" />
         </provider>
+
+        <activity
+            android:name=".core.PermissionDialogActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/versionCheckLibvtransparentTheme"></activity>
     </application>
 
 </manifest>

@@ -28,7 +28,7 @@
  
 ## 使用步骤
 ### android studio导入
-`compile 'com.allenliu.versionchecklib:library:1.6.5'`
+`compile 'com.allenliu.versionchecklib:library:1.6.6'`
 
 
 ### 如何使用
@@ -135,6 +135,8 @@
 更详细的使用请看demo
 `欢迎star和提issue`
 ## 更新日志
+- V1.6.6
+   - 解决[issues#33](https://github.com/AlexLiuSheng/CheckVersionLib/issues/33)
 - V1.6.5
    - 解决了[issues#32](https://github.com/AlexLiuSheng/CheckVersionLib/issues/32)
 - V1.6.0

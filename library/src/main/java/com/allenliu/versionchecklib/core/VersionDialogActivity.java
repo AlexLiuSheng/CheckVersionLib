@@ -29,7 +29,7 @@ import java.io.File;
 
 public class VersionDialogActivity extends Activity implements DownloadListener, DialogInterface.OnDismissListener {
 
-    private static final int MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE = 0x123;
+    public static final int MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE = 0x123;
     protected Dialog versionDialog;
     protected Dialog loadingDialog;
     protected Dialog failDialog;
