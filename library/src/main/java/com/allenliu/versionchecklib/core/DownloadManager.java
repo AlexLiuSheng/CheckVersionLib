@@ -10,6 +10,7 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Bundle;
 import android.support.v7.app.NotificationCompat;
 
 import com.allenliu.versionchecklib.R;
@@ -26,6 +27,7 @@ import okhttp3.Call;
 import okhttp3.Request;
 import okhttp3.Response;
 
+import static android.app.PendingIntent.FLAG_UPDATE_CURRENT;
 import static android.content.Context.NOTIFICATION_SERVICE;
 
 /**
@@ -35,7 +37,7 @@ import static android.content.Context.NOTIFICATION_SERVICE;
 public class DownloadManager {
     private static int lastProgress = 0;
 
-    public static void downloadAPK(final Context context, String url, final VersionParams versionParams, final DownloadListener listener) {
+    public static void downloadAPK(final Context context, final String url, final VersionParams versionParams, final DownloadListener listener, final Bundle paramBundle) {
         if (url == null || url.isEmpty()) {
             return;
         }
@@ -120,7 +122,10 @@ public class DownloadManager {
             public void onDownloadFailed() {
                 Intent intent = new Intent(context, versionParams.getCustomDownloadActivityClass());
                 intent.putExtra("isRetry", true);
-                PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
+                intent.putExtra(AVersionService.VERSION_PARAMS_KEY, paramBundle);
+                intent.putExtra(AVersionService.VERSION_PARAMS_KEY, versionParams);
+                intent.putExtra("downloadUrl", url);
+                PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, FLAG_UPDATE_CURRENT);
                 builder.setContentIntent(pendingIntent);
                 builder.setContentText(context.getString(R.string.versionchecklib_download_fail));
                 builder.setProgress(100, 0, false);

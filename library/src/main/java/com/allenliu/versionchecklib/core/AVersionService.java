@@ -143,7 +143,9 @@ public abstract class AVersionService extends Service implements DownloadListene
             BroadcastReceiver receiver=new VersionBroadCastReceiver();
             IntentFilter intentFilter=new IntentFilter(PERMISSION_ACTION);
             registerReceiver(receiver,intentFilter);
-            startActivity(new Intent(this,PermissionDialogActivity.class));
+            Intent intent=new Intent(this,PermissionDialogActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
 //            silentDownload();
         } else {
             goToVersionDialog();
@@ -151,7 +153,7 @@ public abstract class AVersionService extends Service implements DownloadListene
     }
 
     private void silentDownload() {
-        DownloadManager.downloadAPK(getApplicationContext(), downloadUrl, versionParams, this);
+        DownloadManager.downloadAPK(getApplicationContext(), downloadUrl, versionParams, this,paramBundle);
     }
 
     @Override

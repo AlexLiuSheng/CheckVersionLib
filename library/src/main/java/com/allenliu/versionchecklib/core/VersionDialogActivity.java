@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.annotation.IntDef;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
@@ -46,7 +47,12 @@ public class VersionDialogActivity extends Activity implements DownloadListener,
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        initialize();
+        boolean isRetry = getIntent().getBooleanExtra("isRetry", false);
+        Log.e("isRetry", isRetry + "");
+        if (isRetry) {
+            retryDownload(getIntent());
+        } else
+            initialize();
     }
 
     public String getDownloadUrl() {
@@ -68,6 +74,7 @@ public class VersionDialogActivity extends Activity implements DownloadListener,
     public Bundle getVersionParamBundle() {
         return paramBundle;
     }
+
 
     /**
      * url msg versionField
@@ -159,9 +166,17 @@ public class VersionDialogActivity extends Activity implements DownloadListener,
     protected void onNewIntent(Intent intent) {
         boolean isRetry = intent.getBooleanExtra("isRetry", false);
         Log.e("isRetry", isRetry + "");
-        if (isRetry) {
-            requestPermissionAndDownloadFile();
-        }
+        if (isRetry)
+            retryDownload(intent);
+    }
+
+    private void retryDownload(Intent intent) {
+
+        versionParams = intent.getParcelableExtra(AVersionService.VERSION_PARAMS_KEY);
+        downloadUrl = intent.getStringExtra("downloadUrl");
+        paramBundle = intent.getBundleExtra(AVersionService.VERSION_PARAMS_EXTRA_KEY);
+        requestPermissionAndDownloadFile();
+
     }
 
     public void setApkDownloadListener(APKDownloadListener apkDownloadListener) {
@@ -193,7 +208,7 @@ public class VersionDialogActivity extends Activity implements DownloadListener,
     protected void downloadFile() {
         //提前让loadingDialog实例化
         showLoadingDialog(0);
-        DownloadManager.downloadAPK(this, downloadUrl, versionParams, this);
+        DownloadManager.downloadAPK(this, downloadUrl, versionParams, this, paramBundle);
     }
 
 
