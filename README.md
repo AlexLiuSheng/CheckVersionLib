@@ -62,7 +62,7 @@
 	
 #### 只使用下载模块
 
-    只使用下载模块只需传入VersiongParams 设置onlyDownload 为true。并且传入downloadUrl和需要显示的信息
+    只使用下载模块在上面第一种方式的前提下 requestUrl不用传 设置onlyDownload 为true。并且传入downloadUrl和需要显示的信息
 
 ```
     //如果仅使用下载功能，downloadUrl是必须的
