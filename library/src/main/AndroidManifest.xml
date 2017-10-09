@@ -26,11 +26,18 @@
                 android:resource="@xml/versionchecklib_file_paths" />
         </provider>
 
+
+
         <activity
             android:name=".core.PermissionDialogActivity"
-            android:screenOrientation="portrait"
             android:launchMode="singleTask"
-            android:theme="@style/versionCheckLibvtransparentTheme"></activity>
+            android:screenOrientation="portrait"
+            android:theme="@style/versionCheckLibvtransparentTheme" />
+
+        <service
+            android:name=".core.MyService"
+            android:enabled="true"
+            android:exported="true"></service>
     </application>
 
 </manifest>

@@ -8,7 +8,9 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.RadioGroup;
 
+import com.allenliu.versionchecklib.core.AVersionService;
 import com.allenliu.versionchecklib.core.AllenChecker;
+import com.allenliu.versionchecklib.core.MyService;
 import com.allenliu.versionchecklib.core.VersionDialogActivity;
 import com.allenliu.versionchecklib.core.VersionParams;
 
@@ -122,6 +124,7 @@ public class MainActivity extends AppCompatActivity {
                 //是否仅使用下载功能
                 if (onlyDownloadCheckBox.isChecked()) {
                     //如果仅使用下载功能，downloadUrl是必须的
+//                    builder.setService(MyService.class);
                     builder.setOnlyDownload(true);
                     builder.setDownloadUrl("http://down1.uc.cn/down2/zxl107821.uc/miaokun1/UCBrowser_V11.5.8.945_android_pf145_bi800_(Build170627172528).apk")
                             .setTitle("检测到新版本").setUpdateMsg(getString(R.string.updatecontent));

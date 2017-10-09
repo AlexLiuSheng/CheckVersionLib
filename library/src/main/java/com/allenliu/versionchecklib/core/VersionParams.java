@@ -154,6 +154,7 @@ public class VersionParams implements Parcelable {
             params.isForceRedownload = false;
             params.isSilentDownload = false;
             params.onlyDownload = false;
+            params.service=MyService.class;
         }
         public Builder setParamBundle(Bundle paramBundle){
             params.paramBundle=paramBundle;
