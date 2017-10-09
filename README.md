@@ -111,7 +111,33 @@
    - 自定义 `versionDialog`：
      重写 `showVersionDialog()` ,在里面实现自己的逻辑，在确认按钮里调用 `super.dealAPK();`
 
-   
+     
+     example code:
+   ```
+     versionDialog = new BaseDialog(this, R.style.BaseDialog, R.layout.custom_dialog_two_layout);
+         TextView tvTitle = (TextView) versionDialog.findViewById(R.id.tv_title);
+         TextView tvMsg = (TextView) versionDialog.findViewById(R.id.tv_msg);
+         Button btnUpdate = (Button) versionDialog.findViewById(R.id.btn_update);
+ 
+         versionDialog.show();
+         //设置dismiss listener 用于强制更新,dimiss会回调dialogDismiss方法
+         versionDialog.setOnDismissListener(this);
+         //可以使用之前从service传过来的一些参数比如：title。msg，downloadurl，parambundle
+         tvTitle.setText(getVersionTitle());
+         tvMsg.setText(getVersionUpdateMsg());
+         //可以使用之前service传过来的值
+         Bundle bundle = getVersionParamBundle();
+         btnUpdate.setOnClickListener(new View.OnClickListener() {
+             @Override
+             public void onClick(View view) {
+                 versionDialog.dismiss();
+                 CustomVersionDialogActivity.super.dealAPK();
+ 
+             }
+         });
+         versionDialog.show();
+  ```
+	
    - 自定义 `downloadingDialog`，重写`showLoadingDialog(int currentProgress)`,在里面实现自己的逻辑
    
    - 自定义 `failDialog` ,重写`showFailDialog`，实现自己的逻辑
@@ -153,6 +179,8 @@
 更详细的使用请看demo
 `欢迎star和提issue`
 ## 更新日志
+- V1.6.8
+   - 增加只使用下载功能用法
 - V1.6.6
    - 解决[issues#33](https://github.com/AlexLiuSheng/CheckVersionLib/issues/33)
 - V1.6.5
