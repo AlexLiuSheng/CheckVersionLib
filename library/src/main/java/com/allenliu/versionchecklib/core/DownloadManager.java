@@ -180,7 +180,7 @@ public class DownloadManager {
                         PackageManager.GET_ACTIVITIES);
                 //判断安装包存在并且包名一样并且版本号不一样
                 ALog.e("本地安装包版本号：" + info.versionCode + "\n 当前app版本号：" + context.getPackageManager().getPackageInfo(context.getPackageName(), 0).versionCode);
-                if (info != null && context.getPackageName().equals(info.packageName) && context.getPackageManager().getPackageInfo(context.getPackageName(), 0).versionCode != info.versionCode) {
+                if (info != null && context.getPackageName().equalsIgnoreCase(info.packageName) && context.getPackageManager().getPackageInfo(context.getPackageName(), 0).versionCode != info.versionCode) {
                     result = true;
                 }
             } catch (Exception e) {

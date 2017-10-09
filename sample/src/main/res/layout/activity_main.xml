@@ -153,6 +153,24 @@
         android:text="强制更新"
         android:textColor="@android:color/black"
         android:textSize="12sp" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="left"
+        android:text="请求模式选择:"
+        android:textColor="@android:color/black"
+        android:textSize="12sp" />
+
+    <CheckBox
+        android:id="@+id/checkbox4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="left"
+        android:layout_marginTop="5dp"
+        android:checked="false"
+        android:text="仅使用下载功能"
+        android:textColor="@android:color/black"
+        android:textSize="12sp" />
 
     <TextView
         android:layout_width="wrap_content"

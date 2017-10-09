@@ -115,7 +115,6 @@ public class CustomVersionDialogActivity extends VersionDialogActivity implement
                 versionDialog.dismiss();
                 //交给父类处理 （包括了静默下载判断）
                 CustomVersionDialogActivity.super.dealAPK();
-//                requestPermissionAndDownloadFile();
             }
         });
         versionDialog.show();
@@ -141,7 +140,6 @@ public class CustomVersionDialogActivity extends VersionDialogActivity implement
         btnUpdate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                downloadFile();
                 versionDialog.dismiss();
                 CustomVersionDialogActivity.super.dealAPK();
 

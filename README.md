@@ -28,10 +28,11 @@
  
 ## 使用步骤
 ### android studio导入
-`compile 'com.allenliu.versionchecklib:library:1.6.7'`
+`compile 'com.allenliu.versionchecklib:library:1.6.8'`
 
 
 ### 如何使用
+#### 使用请求版本接口+下载apk
 1.自定义service，service继承 `AVersionService `，实现其中的 `onResponses(AVersionService service, String response)`抽象方法.
 
 该方法主要是请求版本接口的回调，由于不同的使用者版本检测接口返回数据类型不一致，所以你需要自己解析数据，判断版本号之后调用升级对话框，如果使用库默认的界面直接调用如下方法: `service.showVersionDialog(downloadUrl,title,updateMsg )`
@@ -59,6 +60,17 @@
          AllenChecker.startVersionCheck(this, builder.build());
       ```
 	
+#### 只使用下载模块
+
+    只使用下载模块只需传入VersiongParams 设置onlyDownload 为true。并且传入downloadUrl和需要显示的信息
+
+```
+    //如果仅使用下载功能，downloadUrl是必须的
+                        builder.setOnlyDownload(true);
+                        builder.setDownloadUrl("http://down1.uc.cn/down2/zxl107821.uc/miaokun1/UCBrowser_V11.5.8.945_android_pf145_bi800_(Build170627172528).apk")
+                                .setTitle("检测到新版本").setUpdateMsg(getString(R.string.updatecontent));
+    
+ ```
 	
    `VersionParams`属性见下表：
  
@@ -75,6 +87,11 @@
    | customDownloadActivityClass   | 否 |VersionDialogActivity.class|版本dialog Activity,使用默认界面不指定|
    | isForceRedownload   | 否 |false|如果本地有缓存，是否强制重新下载apk(设置false会如果下载了安装包而用户没有安装则不会再次下载)|
    | isSilentDownload   | 否 |false|静默下载开关|
+   | onlyDownload  |否|false|是否只使用下载模块|
+   |title|否|null|只使用下载模块时，升级对话框的title|
+   |updateMsg|否|null|只使用下载模块时，升级对话框内容|
+   |downloadUrl|只使用下载模式时必须|-|只使用下载模块时传入的下载apk地址|
+   |paramBundle|否|null|额外的一些参数可以放里面，可以在versiongDialogActivity里面使用|
  
 3.开启和关闭log
 
@@ -93,6 +110,7 @@
    
    - 自定义 `versionDialog`：
      重写 `showVersionDialog()` ,在里面实现自己的逻辑，在确认按钮里调用 `super.dealAPK();`
+
    
    - 自定义 `downloadingDialog`，重写`showLoadingDialog(int currentProgress)`,在里面实现自己的逻辑
    

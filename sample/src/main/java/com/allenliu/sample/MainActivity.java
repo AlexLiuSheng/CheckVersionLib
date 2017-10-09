@@ -12,9 +12,6 @@ import com.allenliu.versionchecklib.core.AllenChecker;
 import com.allenliu.versionchecklib.core.VersionDialogActivity;
 import com.allenliu.versionchecklib.core.VersionParams;
 
-import okhttp3.Headers;
-import okhttp3.internal.http.HttpHeaders;
-
 public class MainActivity extends AppCompatActivity {
     private EditText etPauseTime;
     private EditText etAddress;
@@ -22,7 +19,7 @@ public class MainActivity extends AppCompatActivity {
     private CheckBox forceUpdateCheckBox;
     private CheckBox silentDownloadCheckBox;
     private CheckBox forceDownloadCheckBox;
-
+    private CheckBox onlyDownloadCheckBox;
     private RadioGroup radioGroup2;
 
     public static MainActivity mainActivity;
@@ -38,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
         silentDownloadCheckBox = (CheckBox) findViewById(R.id.checkbox2);
         forceUpdateCheckBox = (CheckBox) findViewById(R.id.checkbox);
         forceDownloadCheckBox = (CheckBox) findViewById(R.id.checkbox3);
-
+        onlyDownloadCheckBox = (CheckBox) findViewById(R.id.checkbox4);
         mainActivity = this;
 
     }
@@ -122,6 +119,15 @@ public class MainActivity extends AppCompatActivity {
                 } else {
                     builder.setForceRedownload(false);
                 }
+                //是否仅使用下载功能
+                if (onlyDownloadCheckBox.isChecked()) {
+                    //如果仅使用下载功能，downloadUrl是必须的
+                    builder.setOnlyDownload(true);
+                    builder.setDownloadUrl("http://down1.uc.cn/down2/zxl107821.uc/miaokun1/UCBrowser_V11.5.8.945_android_pf145_bi800_(Build170627172528).apk")
+                            .setTitle("检测到新版本").setUpdateMsg(getString(R.string.updatecontent));
+                } else
+                    builder.setOnlyDownload(false);
+
                 AllenChecker.startVersionCheck(this, builder.build());
                 break;
 
