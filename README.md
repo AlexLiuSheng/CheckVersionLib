@@ -62,7 +62,7 @@
 	
 #### 只使用下载模块
 
-    只使用下载模块只需要传入VersionParam 不需要自定义service，requestUrl和service不用传 只用设置onlyDownload 为true。并且传入downloadUrl和需要显示的信息
+    只使用下载模块时，只需要传入VersionParam，不需要自定义service，requestUrl和service不用设置，只用设置onlyDownload 为true。并且传入downloadUrl和需要显示的信息
 
 ```
     //如果仅使用下载功能，downloadUrl是必须的
