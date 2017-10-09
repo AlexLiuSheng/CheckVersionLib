@@ -28,7 +28,7 @@
  
 ## 使用步骤
 ### android studio导入
-`compile 'com.allenliu.versionchecklib:library:1.6.8'`
+`compile 'com.allenliu.versionchecklib:library:1.6.9'`
 
 
 ### 如何使用
@@ -179,6 +179,8 @@
 更详细的使用请看demo
 `欢迎star和提issue`
 ## 更新日志
+- V1.6.9
+   - VersionDialogActivity statusbar transparent
 - V1.6.8
    - 增加只使用下载功能用法
 - V1.6.6
