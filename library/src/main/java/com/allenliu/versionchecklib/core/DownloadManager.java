@@ -10,7 +10,6 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
-import android.os.Bundle;
 import android.support.v7.app.NotificationCompat;
 
 import com.allenliu.versionchecklib.R;
@@ -21,7 +20,6 @@ import com.allenliu.versionchecklib.utils.ALog;
 import com.allenliu.versionchecklib.utils.AppUtils;
 
 import java.io.File;
-import java.io.IOException;
 
 import okhttp3.Call;
 import okhttp3.Request;
@@ -37,7 +35,7 @@ import static android.content.Context.NOTIFICATION_SERVICE;
 public class DownloadManager {
     private static int lastProgress = 0;
 
-    public static void downloadAPK(final Context context, final String url, final VersionParams versionParams, final DownloadListener listener, final Bundle paramBundle) {
+    public static void downloadAPK(final Context context, final String url, final VersionParams versionParams, final DownloadListener listener) {
         if (url == null || url.isEmpty()) {
             return;
         }
@@ -59,45 +57,53 @@ public class DownloadManager {
                 return;
             }
         }
-        final NotificationManager manager = (NotificationManager) context.getSystemService(NOTIFICATION_SERVICE);
-        final NotificationCompat.Builder builder = new NotificationCompat.Builder(context);
-        Intent intent = new Intent(context, versionParams.getCustomDownloadActivityClass());
-        intent.putExtra("isRetry", false);
-        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
-        builder.setContentIntent(pendingIntent);
-        builder.setSmallIcon(R.mipmap.ic_launcher);
-        builder.setContentTitle(context.getString(R.string.app_name));
-        builder.setTicker(context.getString(R.string.versionchecklib_downloading));
+        NotificationCompat.Builder builder = null;
+        NotificationManager manager = null;
+        if (versionParams.isShowNotification()) {
+            manager = (NotificationManager) context.getSystemService(NOTIFICATION_SERVICE);
+            builder = new NotificationCompat.Builder(context);
+            Intent intent = new Intent(context, versionParams.getCustomDownloadActivityClass());
+            intent.putExtra("isRetry", false);
+            PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
+            builder.setContentIntent(pendingIntent);
+            builder.setSmallIcon(R.mipmap.ic_launcher);
+            builder.setContentTitle(context.getString(R.string.app_name));
+            builder.setTicker(context.getString(R.string.versionchecklib_downloading));
+            builder.setContentText(String.format(context.getString(R.string.versionchecklib_download_progress), 0));
+            Notification notification = builder.build();
+            notification.vibrate = new long[]{500, 500};
+            notification.defaults = Notification.DEFAULT_VIBRATE | Notification.DEFAULT_SOUND;
+            manager.notify(0, notification);
+        }
 
-
-        builder.setContentText(String.format(context.getString(R.string.versionchecklib_download_progress), 0));
-        Notification notification = builder.build();
-        notification.vibrate = new long[]{500, 500};
-        notification.defaults = Notification.DEFAULT_VIBRATE | Notification.DEFAULT_SOUND;
-        manager.notify(0, notification);
+        final NotificationCompat.Builder finalBuilder = builder;
+        final NotificationManager finalManager = manager;
         Request request = new Request.Builder().url(url).build();
         AllenHttp.getHttpClient().newCall(request).enqueue(new FileCallBack(versionParams.getDownloadAPKPath(), context.getString(R.string.versionchecklib_download_apkname, context.getPackageName())) {
             @Override
             public void onSuccess(File file, Call call, Response response) {
                 listener.onCheckerDownloadSuccess(file);
-                Intent i = new Intent(Intent.ACTION_VIEW);
-                Uri uri;
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                    uri = VersionFileProvider.getUriForFile(context, context.getPackageName() + ".versionProvider", file);
-                    ALog.e(context.getPackageName() + "");
-                    i.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                } else {
-                    uri = Uri.fromFile(file);
+                if (versionParams.isShowNotification()) {
+                    Intent i = new Intent(Intent.ACTION_VIEW);
+                    Uri uri;
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                        uri = VersionFileProvider.getUriForFile(context, context.getPackageName() + ".versionProvider", file);
+                        ALog.e(context.getPackageName() + "");
+                        i.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                    } else {
+                        uri = Uri.fromFile(file);
+                    }
+                    ALog.e("APK download Success");
+                    //设置intent的类型
+                    i.setDataAndType(uri,
+                            "application/vnd.android.package-archive");
+                    PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, i, 0);
+                    finalBuilder.setContentIntent(pendingIntent);
+                    finalBuilder.setContentText(context.getString(R.string.versionchecklib_download_finish));
+                    finalBuilder.setProgress(100, 100, false);
+                    finalManager.notify(0, finalBuilder.build());
                 }
-                ALog.e("APK download Success");
-                //设置intent的类型
-                i.setDataAndType(uri,
-                        "application/vnd.android.package-archive");
-                PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, i, 0);
-                builder.setContentIntent(pendingIntent);
-                builder.setContentText(context.getString(R.string.versionchecklib_download_finish));
-                builder.setProgress(100, 100, false);
-                manager.notify(0, builder.build());
+
                 AppUtils.installApk(context, file);
                 if (context instanceof Activity) {
                     ((Activity) context).finish();
@@ -112,24 +118,28 @@ public class DownloadManager {
                 listener.onCheckerDownloading(currentProgress);
                 if (currentProgress - lastProgress >= 5) {
                     lastProgress = currentProgress;
-                    builder.setContentText(String.format(context.getString(R.string.versionchecklib_download_progress), lastProgress));
-                    builder.setProgress(100, lastProgress, false);
-                    manager.notify(0, builder.build());
+                    if (versionParams.isShowNotification()) {
+                        finalBuilder.setContentText(String.format(context.getString(R.string.versionchecklib_download_progress), lastProgress));
+                        finalBuilder.setProgress(100, lastProgress, false);
+                        finalManager.notify(0, finalBuilder.build());
+                    }
                 }
             }
 
             @Override
             public void onDownloadFailed() {
-                Intent intent = new Intent(context, versionParams.getCustomDownloadActivityClass());
-                intent.putExtra("isRetry", true);
-                intent.putExtra(AVersionService.VERSION_PARAMS_KEY, paramBundle);
-                intent.putExtra(AVersionService.VERSION_PARAMS_KEY, versionParams);
-                intent.putExtra("downloadUrl", url);
-                PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, FLAG_UPDATE_CURRENT);
-                builder.setContentIntent(pendingIntent);
-                builder.setContentText(context.getString(R.string.versionchecklib_download_fail));
-                builder.setProgress(100, 0, false);
-                manager.notify(0, builder.build());
+                if (versionParams.isShowNotification()) {
+                    Intent intent = new Intent(context, versionParams.getCustomDownloadActivityClass());
+                    intent.putExtra("isRetry", true);
+//                intent.putExtra(AVersionService.VERSION_PARAMS_KEY, paramBundle);
+                    intent.putExtra(AVersionService.VERSION_PARAMS_KEY, versionParams);
+                    intent.putExtra("downloadUrl", url);
+                    PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, FLAG_UPDATE_CURRENT);
+                    finalBuilder.setContentIntent(pendingIntent);
+                    finalBuilder.setContentText(context.getString(R.string.versionchecklib_download_fail));
+                    finalBuilder.setProgress(100, 0, false);
+                    finalManager.notify(0, finalBuilder.build());
+                }
                 ALog.e("file download failed");
 //                showFailDialog();
                 listener.onCheckerDownloadFail();

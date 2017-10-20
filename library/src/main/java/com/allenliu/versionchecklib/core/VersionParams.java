@@ -31,6 +31,16 @@ public class VersionParams implements Parcelable {
     private String downloadUrl;
     private String updateMsg;
     private Bundle paramBundle;
+    private boolean isShowDownloadingDialog;
+    private boolean isShowNotification;
+
+    public boolean isShowDownloadingDialog() {
+        return isShowDownloadingDialog;
+    }
+
+    public boolean isShowNotification() {
+        return isShowNotification;
+    }
 
     public String getTitle() {
         return title;
@@ -140,6 +150,11 @@ public class VersionParams implements Parcelable {
         return onlyDownload;
     }
 
+    public void setParamBundle(Bundle paramBundle) {
+        this.paramBundle = paramBundle;
+    }
+
+
     public static class Builder {
 
         VersionParams params;
@@ -154,10 +169,13 @@ public class VersionParams implements Parcelable {
             params.isForceRedownload = false;
             params.isSilentDownload = false;
             params.onlyDownload = false;
-            params.service=MyService.class;
+            params.service = MyService.class;
+            params.isShowNotification = true;
+            params.isShowDownloadingDialog = true;
         }
-        public Builder setParamBundle(Bundle paramBundle){
-            params.paramBundle=paramBundle;
+
+        public Builder setParamBundle(Bundle paramBundle) {
+            params.paramBundle = paramBundle;
             return this;
         }
 
@@ -236,6 +254,16 @@ public class VersionParams implements Parcelable {
             return this;
         }
 
+        public Builder setShowDownloadingDialog(boolean showDownloadingDialog) {
+            params.isShowDownloadingDialog = showDownloadingDialog;
+            return this;
+        }
+
+        public Builder setShowNotification(boolean showNotification) {
+            params.isShowNotification = showNotification;
+            return this;
+        }
+
         public VersionParams build() {
             return params;
         }
@@ -264,6 +292,8 @@ public class VersionParams implements Parcelable {
         dest.writeString(this.downloadUrl);
         dest.writeString(this.updateMsg);
         dest.writeBundle(this.paramBundle);
+        dest.writeByte(this.isShowDownloadingDialog ? (byte) 1 : (byte) 0);
+        dest.writeByte(this.isShowNotification ? (byte) 1 : (byte) 0);
     }
 
     protected VersionParams(Parcel in) {
@@ -283,6 +313,8 @@ public class VersionParams implements Parcelable {
         this.downloadUrl = in.readString();
         this.updateMsg = in.readString();
         this.paramBundle = in.readBundle();
+        this.isShowDownloadingDialog = in.readByte() != 0;
+        this.isShowNotification = in.readByte() != 0;
     }
 
     public static final Creator<VersionParams> CREATOR = new Creator<VersionParams>() {

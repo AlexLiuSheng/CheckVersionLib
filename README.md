@@ -23,12 +23,12 @@
 ## 效果
  
  
- <img src="https://github.com/AlexLiuSheng/CheckVersionLib/blob/master/gif/custom.gif" width=200/> <img src="https://github.com/AlexLiuSheng/CheckVersionLib/blob/master/gif/style4.png" width=200/> <img src="https://github.com/AlexLiuSheng/CheckVersionLib/blob/master/gif/style1.png" width=200/>
+ <img src="https://github.com/AlexLiuSheng/CheckVersionLib/blob/master/gif/custom.gif" width=200/> <img src="https://github.com/AlexLiuSheng/CheckVersionLib/blob/master/gif/main.jpg" width=200/> <img src="https://github.com/AlexLiuSheng/CheckVersionLib/blob/master/gif/style1.png" width=200/>
  <img src="https://github.com/AlexLiuSheng/CheckVersionLib/blob/master/gif/style2.png" width=200/>
  
 ## 使用步骤
 ### android studio导入
-`compile 'com.allenliu.versionchecklib:library:1.7.0'`
+`compile 'com.allenliu.versionchecklib:library:1.7.1'`
 
 
 ### 如何使用
@@ -62,14 +62,16 @@
 	
 #### 只使用下载模块
 
-    只使用下载模块只需要传入VersionParam 不需要自定义service，requestUrl和service不用传 只用设置onlyDownload 为true。并且传入downloadUrl和需要显示的信息
+    只使用下载模块不用定义第一步的service，正常传入versiongParams参数，不设置requestUrl和service，只用设置onlyDownload 为true。并且传入downloadUrl和需要显示的信息
 
-```
-    //如果仅使用下载功能，downloadUrl是必须的
-                        builder.setOnlyDownload(true);
-                        builder.setDownloadUrl("http://down1.uc.cn/down2/zxl107821.uc/miaokun1/UCBrowser_V11.5.8.945_android_pf145_bi800_(Build170627172528).apk")
-                                .setTitle("检测到新版本").setUpdateMsg(getString(R.string.updatecontent));
-    
+ ```
+  //如果仅使用下载功能，downloadUrl是必须的
+   builder.setOnlyDownload(true)
+                .setDownloadUrl("http://down1.uc.cn/down2/zxl107821.uc/miaokun1/UCBrowser_V11.5.8.945_android_pf145_bi800_(Build170627172528).apk")
+                .setTitle("检测到新版本")
+                .setUpdateMsg(getString(R.string.updatecontent));
+                
+   AllenChecker.startVersionCheck(this, builder.build());
  ```
 	
    `VersionParams`属性见下表：
@@ -92,6 +94,8 @@
    |updateMsg|否|null|只使用下载模块时，升级对话框内容|
    |downloadUrl|只使用下载模式时必须|-|只使用下载模块时传入的下载apk地址|
    |paramBundle|否|null|额外的一些参数可以放里面，可以在versiongDialogActivity里面使用|
+   |isShowDownloadingDialog|否|true|是否显示下载对话框|
+   |isShowNotification|否|true|是否显示下载的通知栏|
  
 3.开启和关闭log
 
@@ -102,7 +106,7 @@
 
  ` android:theme="@style/versionCheckLibvtransparentTheme"`
  
-   开启Service的之前，记住将自定义的Activity传入VersionParams
+   记住将自定义的Activity传入VersionParams
    
    `setCustomDownloadActivityClass(CustomVersionDialogActivity.class)`
    
@@ -179,6 +183,9 @@
 更详细的使用请看demo
 `欢迎star和提issue`
 ## 更新日志
+- V1.7.1
+   - 增加是否显示下载通知栏开关
+   - 增加是否显示下载对话框开关
 - V1.6.9
    - VersionDialogActivity statusbar transparent
 - V1.6.8

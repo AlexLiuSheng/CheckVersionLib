@@ -8,9 +8,7 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.RadioGroup;
 
-import com.allenliu.versionchecklib.core.AVersionService;
 import com.allenliu.versionchecklib.core.AllenChecker;
-import com.allenliu.versionchecklib.core.MyService;
 import com.allenliu.versionchecklib.core.VersionDialogActivity;
 import com.allenliu.versionchecklib.core.VersionParams;
 
@@ -22,6 +20,8 @@ public class MainActivity extends AppCompatActivity {
     private CheckBox silentDownloadCheckBox;
     private CheckBox forceDownloadCheckBox;
     private CheckBox onlyDownloadCheckBox;
+    private CheckBox showNotificationCheckBox;
+    private CheckBox showDownloadingCheckBox;
     private RadioGroup radioGroup2;
 
     public static MainActivity mainActivity;
@@ -38,6 +38,8 @@ public class MainActivity extends AppCompatActivity {
         forceUpdateCheckBox = (CheckBox) findViewById(R.id.checkbox);
         forceDownloadCheckBox = (CheckBox) findViewById(R.id.checkbox3);
         onlyDownloadCheckBox = (CheckBox) findViewById(R.id.checkbox4);
+        showNotificationCheckBox = (CheckBox) findViewById(R.id.checkbox5);
+        showDownloadingCheckBox = (CheckBox) findViewById(R.id.checkbox6);
         mainActivity = this;
 
     }
@@ -75,7 +77,6 @@ public class MainActivity extends AppCompatActivity {
                 switch (radioGroup.getCheckedRadioButtonId()) {
                     case R.id.btn1:
                         CustomVersionDialogActivity.customVersionDialogIndex = 3;
-                        //这里其实不用设置的，库默认就会使用的 我是为了展示demo，来回切换界面的原因才写的
                         builder.setCustomDownloadActivityClass(VersionDialogActivity.class);
                         break;
                     case R.id.btn2:
@@ -124,12 +125,21 @@ public class MainActivity extends AppCompatActivity {
                 //是否仅使用下载功能
                 if (onlyDownloadCheckBox.isChecked()) {
                     //如果仅使用下载功能，downloadUrl是必须的
-//                    builder.setService(MyService.class);
-                    builder.setOnlyDownload(true);
-                    builder.setDownloadUrl("http://down1.uc.cn/down2/zxl107821.uc/miaokun1/UCBrowser_V11.5.8.945_android_pf145_bi800_(Build170627172528).apk")
-                            .setTitle("检测到新版本").setUpdateMsg(getString(R.string.updatecontent));
+                    builder.setOnlyDownload(true)
+                            .setDownloadUrl("http://down1.uc.cn/down2/zxl107821.uc/miaokun1/UCBrowser_V11.5.8.945_android_pf145_bi800_(Build170627172528).apk")
+                            .setTitle("检测到新版本")
+                            .setUpdateMsg(getString(R.string.updatecontent));
                 } else
                     builder.setOnlyDownload(false);
+                //是否显示通知栏
+                if (showNotificationCheckBox.isChecked()) {
+                    builder.setShowNotification(true);
+                } else
+                    builder.setShowNotification(false);
+                if (showDownloadingCheckBox.isChecked()) {
+                    builder.setShowDownloadingDialog(true);
+                } else
+                    builder.setShowDownloadingDialog(false);
 
                 AllenChecker.startVersionCheck(this, builder.build());
                 break;
