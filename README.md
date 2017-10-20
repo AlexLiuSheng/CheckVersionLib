@@ -62,7 +62,9 @@
 	
 #### 只使用下载模块
 
+
     只使用下载模块不用定义第一步的service，正常传入versiongParams参数，不设置requestUrl和service，只用设置onlyDownload 为true。并且传入downloadUrl和需要显示的信息
+
 
  ```
   //如果仅使用下载功能，downloadUrl是必须的
