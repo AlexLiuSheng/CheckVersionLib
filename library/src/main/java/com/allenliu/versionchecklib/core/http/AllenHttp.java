@@ -1,13 +1,22 @@
 package com.allenliu.versionchecklib.core.http;
 
-import com.allenliu.versionchecklib.core.AllenChecker;
 import com.allenliu.versionchecklib.core.VersionParams;
 import com.allenliu.versionchecklib.utils.ALog;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.security.SecureRandom;
+import java.security.cert.CertificateException;
+import java.security.cert.X509Certificate;
 import java.util.Map;
+
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSession;
+import javax.net.ssl.SSLSocketFactory;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
 
 import okhttp3.FormBody;
 import okhttp3.MediaType;
@@ -23,10 +32,52 @@ public class AllenHttp {
     private static OkHttpClient client;
 
     public static OkHttpClient getHttpClient() {
-        if (client == null)
-            client = new OkHttpClient();
+        if (client == null) {
+            OkHttpClient.Builder builder = new OkHttpClient.Builder();
+            builder.sslSocketFactory(createSSLSocketFactory());
+            builder.hostnameVerifier(new TrustAllHostnameVerifier());
+            client=builder.build();
+        }
+
         return client;
     }
+
+    private static class TrustAllHostnameVerifier implements HostnameVerifier {
+        @Override
+        public boolean verify(String hostname, SSLSession session) {
+            return true;
+        }
+    }
+
+    private static SSLSocketFactory createSSLSocketFactory() {
+        SSLSocketFactory ssfFactory = null;
+
+        try {
+            SSLContext sc = SSLContext.getInstance("TLS");
+            sc.init(null, new TrustManager[]{new TrustAllCerts()}, new SecureRandom());
+
+            ssfFactory = sc.getSocketFactory();
+        } catch (Exception e) {
+        }
+
+        return ssfFactory;
+    }
+
+    private static class TrustAllCerts implements X509TrustManager {
+        @Override
+        public void checkClientTrusted(X509Certificate[] chain, String authType) throws CertificateException {
+        }
+
+        @Override
+        public void checkServerTrusted(X509Certificate[] chain, String authType) throws CertificateException {
+        }
+
+        @Override
+        public X509Certificate[] getAcceptedIssuers() {
+            return new X509Certificate[0];
+        }
+    }
+
 
     private static <T extends Request.Builder> T assembleHeader(T builder, VersionParams versionParams) {
         com.allenliu.versionchecklib.core.http.HttpHeaders headers = versionParams.getHttpHeaders();
@@ -35,7 +86,7 @@ public class AllenHttp {
             for (Map.Entry<String, String> stringStringEntry : headers.entrySet()) {
                 String key = stringStringEntry.getKey();
                 String value = stringStringEntry.getValue();
-                ALog.e(key+"="+value+"\n");
+                ALog.e(key + "=" + value + "\n");
                 builder.addHeader(key, value);
             }
         }
@@ -54,7 +105,7 @@ public class AllenHttp {
             }
             url = urlBuilder.substring(0, urlBuilder.length() - 1);
         }
-        ALog.e("url:"+url);
+        ALog.e("url:" + url);
         return url;
     }
 
@@ -89,12 +140,12 @@ public class AllenHttp {
         HttpParams params = versionParams.getRequestParams();
         for (Map.Entry<String, Object> entry : params.entrySet()) {
             builder.add(entry.getKey(), entry.getValue() + "");
-            ALog.e("params key:"+entry.getKey()+"-----value:"+entry.getValue());
+            ALog.e("params key:" + entry.getKey() + "-----value:" + entry.getValue());
         }
         return builder.build();
     }
 
-    private  static String getRequestParamsJson(HttpParams params) {
+    private static String getRequestParamsJson(HttpParams params) {
         String json;
         JSONObject jsonObject = new JSONObject();
         for (Map.Entry<String, Object> entry : params.entrySet()) {
@@ -106,7 +157,7 @@ public class AllenHttp {
         }
 
         json = jsonObject.toString();
-        ALog.e("json:"+json);
+        ALog.e("json:" + json);
         return json;
     }
 }
