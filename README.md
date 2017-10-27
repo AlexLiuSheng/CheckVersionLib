@@ -32,7 +32,7 @@
 
 
 ### 如何使用
-#### 使用请求版本接口+下载apk
+#### 1.请求版本接口 + 下载模块
 1.自定义service，service继承 `AVersionService `，实现其中的 `onResponses(AVersionService service, String response)`抽象方法.
 
 该方法主要是请求版本接口的回调，由于不同的使用者版本检测接口返回数据类型不一致，所以你需要自己解析数据，判断版本号之后调用升级对话框，如果使用库默认的界面直接调用如下方法: `service.showVersionDialog(downloadUrl,title,updateMsg )`
@@ -60,7 +60,7 @@
          AllenChecker.startVersionCheck(this, builder.build());
       ```
 	
-#### 只使用下载模块
+#### 2.只使用下载模块
 
 
     只使用下载模块不用定义第一步的service，正常传入versiongParams参数，不设置requestUrl和service，只用设置onlyDownload 为true。并且传入downloadUrl和需要显示的信息
