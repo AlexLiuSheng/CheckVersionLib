@@ -1,6 +1,6 @@
 # CheckVersionLib[ ![Download](https://api.bintray.com/packages/zkxy/maven/VersionCheckLib/images/download.svg) ](https://bintray.com/zkxy/maven/VersionCheckLib/_latestVersion)
 
-
+[English Doc](https://github.com/AlexLiuSheng/CheckVersionLib/blob/master/README_EN.md)
 ## 特点
 - [x] 任何地方都可以检测（可设置定时检测）
 
@@ -28,7 +28,7 @@
  
 ## 使用步骤
 ### android studio导入
-`compile 'com.allenliu.versionchecklib:library:1.7.4'`
+`compile 'com.allenliu.versionchecklib:library:1.7.5'`
 
 
 ### 如何使用
