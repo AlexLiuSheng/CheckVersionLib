@@ -137,7 +137,7 @@ public class VersionDialogActivity extends Activity implements DownloadListener,
     }
 
     protected void showVersionDialog() {
-        if(!isDestroy) {
+        if (!isDestroy) {
             versionDialog = new AlertDialog.Builder(this).setTitle(title).setMessage(updateMsg).setPositiveButton(getString(R.string.versionchecklib_confirm), new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
@@ -163,30 +163,30 @@ public class VersionDialogActivity extends Activity implements DownloadListener,
 
     public void showLoadingDialog(int currentProgress) {
         ALog.e("show default downloading dialog");
-    if(!isDestroy) {
-        if (loadingDialog == null) {
-            loadingView = LayoutInflater.from(this).inflate(R.layout.downloading_layout, null);
-            loadingDialog = new AlertDialog.Builder(this).setTitle("").setView(loadingView).create();
-            loadingDialog.setCancelable(false);
-            loadingDialog.setCanceledOnTouchOutside(false);
-            loadingDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
-                @Override
-                public void onCancel(DialogInterface dialog) {
-                    finish();
-                }
-            });
+        if (!isDestroy) {
+            if (loadingDialog == null) {
+                loadingView = LayoutInflater.from(this).inflate(R.layout.downloading_layout, null);
+                loadingDialog = new AlertDialog.Builder(this).setTitle("").setView(loadingView).create();
+                loadingDialog.setCancelable(false);
+                loadingDialog.setCanceledOnTouchOutside(false);
+                loadingDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+                    @Override
+                    public void onCancel(DialogInterface dialog) {
+                        finish();
+                    }
+                });
 //            loadingDialog.setOnDismissListener(dismissListener);
+            }
+            ProgressBar pb = (ProgressBar) loadingView.findViewById(R.id.pb);
+            TextView tvProgress = (TextView) loadingView.findViewById(R.id.tv_progress);
+            tvProgress.setText(String.format(getString(R.string.versionchecklib_progress), currentProgress));
+            pb.setProgress(currentProgress);
+            loadingDialog.show();
         }
-        ProgressBar pb = (ProgressBar) loadingView.findViewById(R.id.pb);
-        TextView tvProgress = (TextView) loadingView.findViewById(R.id.tv_progress);
-        tvProgress.setText(String.format(getString(R.string.versionchecklib_progress), currentProgress));
-        pb.setProgress(currentProgress);
-        loadingDialog.show();
-    }
     }
 
     public void showFailDialog() {
-        if(!isDestroy) {
+        if (!isDestroy) {
             if (failDialog == null) {
                 failDialog = new AlertDialog.Builder(this).setMessage(getString(R.string.versionchecklib_download_fail_retry)).setPositiveButton(getString(R.string.versionchecklib_confirm), new DialogInterface.OnClickListener() {
                     @Override
@@ -245,7 +245,8 @@ public class VersionDialogActivity extends Activity implements DownloadListener,
             AppUtils.installApk(VersionDialogActivity.this, new File(downloadPath));
             finish();
         } else {
-            showLoadingDialog(0);
+            if (versionParams.isShowDownloadingDialog())
+                showLoadingDialog(0);
             requestPermissionAndDownloadFile();
 
         }
@@ -254,7 +255,8 @@ public class VersionDialogActivity extends Activity implements DownloadListener,
 
     protected void downloadFile() {
         //提前让loadingDialog实例化
-        showLoadingDialog(0);
+        if (versionParams.isShowDownloadingDialog())
+            showLoadingDialog(0);
         DownloadManager.downloadAPK(this, downloadUrl, versionParams, this);
     }
 
@@ -325,8 +327,9 @@ public class VersionDialogActivity extends Activity implements DownloadListener,
     public void onCheckerDownloading(int progress) {
         if (versionParams.isShowDownloadingDialog()) {
             showLoadingDialog(progress);
-        }else{
-            if(loadingDialog!=null)
+        }
+        else {
+            if (loadingDialog != null)
                 loadingDialog.dismiss();
             finish();
         }
@@ -350,6 +353,13 @@ public class VersionDialogActivity extends Activity implements DownloadListener,
         dismissAllDialog();
         showFailDialog();
 
+    }
+
+    @Override
+    public void onCheckerStartDownload() {
+        if (!versionParams.isShowDownloadingDialog()) {
+            finish();
+        }
     }
 
     boolean isDestroy = false;

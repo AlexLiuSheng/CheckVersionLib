@@ -10,4 +10,5 @@ public interface DownloadListener {
     void onCheckerDownloading(int progress);
     void onCheckerDownloadSuccess(File file);
     void onCheckerDownloadFail();
+    void onCheckerStartDownload();
 }

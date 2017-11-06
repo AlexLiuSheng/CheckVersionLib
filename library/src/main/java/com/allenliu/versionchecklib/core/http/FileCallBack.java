@@ -50,6 +50,7 @@ public abstract class FileCallBack implements Callback {
         if (!pathFile.exists()) {
             pathFile.mkdirs();
         }
+
         try {
             is = response.body().byteStream();
             long total = response.body().contentLength();

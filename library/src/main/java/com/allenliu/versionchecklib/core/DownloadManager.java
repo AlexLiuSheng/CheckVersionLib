@@ -57,6 +57,8 @@ public class DownloadManager {
                 return;
             }
         }
+        if (listener != null)
+            listener.onCheckerStartDownload();
         NotificationCompat.Builder builder = null;
         NotificationManager manager = null;
         if (versionParams.isShowNotification()) {
@@ -151,6 +153,8 @@ public class DownloadManager {
 
     private static void silentDownloadAPK(final Context context, String url, final VersionParams versionParams, final DownloadListener listener) {
         Request request = new Request.Builder().url(url).build();
+        if (listener != null)
+            listener.onCheckerStartDownload();
         AllenHttp.getHttpClient().newCall(request).enqueue(new FileCallBack(versionParams.getDownloadAPKPath(), context.getString(R.string.versionchecklib_download_apkname, context.getPackageName())) {
 
 

@@ -28,7 +28,7 @@
  
 ## 使用步骤
 ### android studio导入
-`compile 'com.allenliu.versionchecklib:library:1.7.2'`
+`compile 'com.allenliu.versionchecklib:library:1.7.4'`
 
 
 ### 如何使用
@@ -185,6 +185,8 @@
 更详细的使用请看demo
 `欢迎star和提issue`
 ## 更新日志
+- V1.7.4
+   - solve [issues#59](https://github.com/AlexLiuSheng/CheckVersionLib/issues/59)
 - V1.7.2
    - support https request
 - V1.7.1

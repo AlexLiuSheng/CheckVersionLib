@@ -167,6 +167,11 @@ public abstract class AVersionService extends Service implements DownloadListene
     }
 
     @Override
+    public void onCheckerStartDownload() {
+
+    }
+
+    @Override
     public void onCheckerDownloadSuccess(File file) {
         goToVersionDialog();
     }

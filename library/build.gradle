@@ -1,7 +1,7 @@
 apply plugin: 'com.android.library'
 apply plugin: 'com.github.dcendents.android-maven'
 apply plugin: 'com.jfrog.bintray'
-version = "1.7.2"
+version = "1.7.4"
 android {
     compileSdkVersion 24
     buildToolsVersion "24.0.2"
@@ -27,9 +27,6 @@ android {
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
-
-
-
     compile 'com.android.support:appcompat-v7:24.2.0'
     compile 'com.squareup.okhttp3:okhttp:3.8.1'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
