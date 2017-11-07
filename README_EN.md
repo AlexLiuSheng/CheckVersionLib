@@ -75,7 +75,7 @@ This is a library that can help you update your app intelligently.library contai
     AllenChecker.startVersionCheck(this, builder.build());
   ```
  	
-    `VersionParams` Attribute：
+   `VersionParams` Attribute：
   
     | Attribute Nmae        | Necessary           | default value |explain|
     | ------------- |:-------------|:-------------|:-------------:|
@@ -96,6 +96,7 @@ This is a library that can help you update your app intelligently.library contai
     |paramBundle|N|null|extra params，can use when custimization UI|
     |isShowDownloadingDialog|N|true|Whether showing downloading dialog|
     |isShowNotification|N|true|Whether showing notification when downloading|
+    
   
  3.Start or close log
  
@@ -147,7 +148,7 @@ This is a library that can help you update your app intelligently.library contai
     
   - force update function。Closing application in method of`dialogDismiss` and `onDownloadSuccess`，see demo for detail
     
-  - except for above method,you can also add some listenter
+  - except for above methods,you can also add some listener
     
     
                   setApkDownloadListener(this);
@@ -170,7 +171,7 @@ This is a library that can help you update your app intelligently.library contai
  If you want to relpaced the downloading notification icon,you should copy your icon to override icon named `ic_launcher`，
  replaced the notification name just need  override the attribute of `app_name` int strings.xml,there are some other attributes ，as following table:
  
- | 属性名        | 属性值           | 
+ | Attribute Name        | Attribute Value           | 
  | ------------- |:-------------:|
  | versionchecklib_confirm    | Commit |
  | versionchecklib_cancel   | Cancel      |   
