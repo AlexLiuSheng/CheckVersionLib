@@ -77,25 +77,25 @@ This is a library that can help you update your app intelligently.library contai
  	
    `VersionParams` Attribute：
   
-    | Attribute Nmae        | Necessary           | default value |explain|
-    | ------------- |:-------------|:-------------|:-------------:|
-    | requestUrl   | Y/N  |-|the url of  version api |
-    | service   | Y/N |-|should appoint your service except for only using download module |
-    |downloadAPKPath|N|/storage/emulated/0/AllenVersionPath/|APK download path|
-    | httpHeaders   | N |NULL|HTTP HEADER|
-    | pauseRequestTime   | N |1000*30|the time between this request and next request|
-    | requestMethod   | N |GET|Http request method|
-    | requestParams   | N |NULL|http request params|
-    | customDownloadActivityClass   | N |VersionDialogActivity.class|Customize dialog's activity,No Need for default|
-    | isForceRedownload   | N |false|whether foceing downloading app even if there is cache|
-    | isSilentDownload   | N |false|the switch of silent downloading|
-    | onlyDownload  |N|false|whether only using donwloading module|
-    |title|N|null|the title of update dialog when using downloading module|
-    |updateMsg|N|null|the content of update dialog when using downloading module|
-    |downloadUrl|Y for downlading module|-|the apk download address when using downloading module |
-    |paramBundle|N|null|extra params，can use when custimization UI|
-    |isShowDownloadingDialog|N|true|Whether showing downloading dialog|
-    |isShowNotification|N|true|Whether showing notification when downloading|
+  | Attribute Nmae        | Necessary           | default value | explain |
+  | ------------- |:-------------|:-------------|:-------------:|
+  | requestUrl   | Y/N  |-|the url of  version api |
+  | service   | Y/N |-|should appoint your service except for only using download module |
+  |downloadAPKPath|N|/storage/emulated/0/AllenVersionPath/|APK download path|
+  | httpHeaders   | N |NULL|HTTP HEADER|
+  | pauseRequestTime   | N |1000*30|the time between this request and next request|
+  | requestMethod   | N |GET|Http request method|
+  | requestParams   | N |NULL|http request params|
+  | customDownloadActivityClass   | N |VersionDialogActivity.class|Customize dialog's activity,No Need for default|
+  | isForceRedownload   | N |false|whether foceing downloading app even if there is cache|
+  | isSilentDownload   | N |false|the switch of silent downloading|
+  | onlyDownload  |N|false|whether only using donwloading module|
+  |title|N|null|the title of update dialog when using downloading module|
+  |updateMsg|N|null|the content of update dialog when using downloading module|
+  |downloadUrl|Y for downlading module|-|the apk download address when using downloading module |
+  |paramBundle|N|null|extra params，can use when custimization UI|
+  |isShowDownloadingDialog|N|true|Whether showing downloading dialog|
+  |isShowNotification|N|true|Whether showing notification when downloading|
     
   
  3.Start or close log
