@@ -42,11 +42,12 @@ public class VersionDialogActivity extends Activity implements DownloadListener,
     private VersionParams versionParams;
     private String title;
     private String updateMsg;
-//    private Bundle paramBundle;
-
+    //    private Bundle paramBundle;
     private CommitClickListener commitListener;
     private DialogDismissListener cancelListener;
     private APKDownloadListener apkDownloadListener;
+    private View loadingView;
+    public static VersionDialogActivity instance;
 
     public static void setTransparent(Activity activity) {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
@@ -88,6 +89,7 @@ public class VersionDialogActivity extends Activity implements DownloadListener,
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        instance = this;
         setTransparent(this);
         boolean isRetry = getIntent().getBooleanExtra("isRetry", false);
         Log.e("isRetry", isRetry + "");
@@ -159,7 +161,6 @@ public class VersionDialogActivity extends Activity implements DownloadListener,
         }
     }
 
-    View loadingView;
 
     public void showLoadingDialog(int currentProgress) {
         ALog.e("show default downloading dialog");
@@ -167,12 +168,12 @@ public class VersionDialogActivity extends Activity implements DownloadListener,
             if (loadingDialog == null) {
                 loadingView = LayoutInflater.from(this).inflate(R.layout.downloading_layout, null);
                 loadingDialog = new AlertDialog.Builder(this).setTitle("").setView(loadingView).create();
-                loadingDialog.setCancelable(false);
+                loadingDialog.setCancelable(true);
                 loadingDialog.setCanceledOnTouchOutside(false);
                 loadingDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
                     @Override
                     public void onCancel(DialogInterface dialog) {
-                        finish();
+                        AllenChecker.cancelMission();
                     }
                 });
 //            loadingDialog.setOnDismissListener(dismissListener);
@@ -327,8 +328,7 @@ public class VersionDialogActivity extends Activity implements DownloadListener,
     public void onCheckerDownloading(int progress) {
         if (versionParams.isShowDownloadingDialog()) {
             showLoadingDialog(progress);
-        }
-        else {
+        } else {
             if (loadingDialog != null)
                 loadingDialog.dismiss();
             finish();
@@ -367,6 +367,7 @@ public class VersionDialogActivity extends Activity implements DownloadListener,
     @Override
     protected void onDestroy() {
         isDestroy = true;
+        instance = null;
         super.onDestroy();
     }
 
@@ -395,4 +396,5 @@ public class VersionDialogActivity extends Activity implements DownloadListener,
             }
         }
     }
+
 }

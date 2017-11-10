@@ -144,6 +144,10 @@ public class MainActivity extends AppCompatActivity {
                 AllenChecker.startVersionCheck(this, builder.build());
                 break;
 
+            case R.id.cancelBtn:
+                AllenChecker.cancelMission();
+                break;
+
         }
 
     }

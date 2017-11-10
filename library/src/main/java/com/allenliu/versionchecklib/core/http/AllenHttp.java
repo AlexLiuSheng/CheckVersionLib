@@ -38,7 +38,6 @@ public class AllenHttp {
             builder.hostnameVerifier(new TrustAllHostnameVerifier());
             client=builder.build();
         }
-
         return client;
     }
 

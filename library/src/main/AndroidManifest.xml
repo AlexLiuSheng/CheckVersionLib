@@ -27,8 +27,6 @@
                 android:resource="@xml/versionchecklib_file_paths" />
         </provider>
 
-
-
         <activity
             android:name=".core.PermissionDialogActivity"
             android:launchMode="singleTask"

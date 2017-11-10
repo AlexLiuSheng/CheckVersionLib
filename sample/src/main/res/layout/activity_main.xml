@@ -241,6 +241,13 @@
             android:layout_marginTop="5dp"
             android:onClick="onClick"
             android:text="发起请求" />
+        <Button
+            android:id="@+id/cancelBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:onClick="onClick"
+            android:text="取消请求" />
 
     </LinearLayout>
 </android.support.v4.widget.NestedScrollView>

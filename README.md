@@ -28,7 +28,7 @@
  
 ## 使用步骤
 ### android studio导入
-`compile 'com.allenliu.versionchecklib:library:1.7.5'`
+`compile 'com.allenliu.versionchecklib:library:1.7.6'`
 
 
 ### 如何使用
@@ -99,9 +99,15 @@
    |isShowDownloadingDialog|否|true|是否显示下载对话框|
    |isShowNotification|否|true|是否显示下载的通知栏|
  
-3.开启和关闭log
+#### 3.开启和关闭log
 
  `AllenChecker.init(true)`
+ 
+#### 4.取消请求
+
+   取消全部请求
+   
+ `AllenChecker.cancelMission();`
 	  
 ### **自定义界面** 
    如果想自定义界面，只需创建一个继承自`VersionDialogActivity`的Activity,Activity设置Theme为透明：
@@ -185,6 +191,10 @@
 更详细的使用请看demo
 `欢迎star和提issue`
 ## 更新日志
+- V1.7.6
+   - support cancel all the task
+- V1.7.5
+   - support multiple language mode
 - V1.7.4
    - solve [issues#59](https://github.com/AlexLiuSheng/CheckVersionLib/issues/59)
 - V1.7.2

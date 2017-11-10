@@ -29,7 +29,7 @@ This is a library that can help you update your app intelligently.library contai
  
  
  ### include 
-    `compile 'com.allenliu.versionchecklib:library:1.7.5'`
+    `compile 'com.allenliu.versionchecklib:library:1.7.6'`
  ### How to use
  
  #### 1.use request version api module and  downloading module
@@ -98,9 +98,13 @@ This is a library that can help you update your app intelligently.library contai
   |isShowNotification|N|true|Whether showing notification when downloading|
     
   
- 3.Start or close log
+ #### 3.Start or close log
  
   `AllenChecker.init(true)`
+  
+ #### 4.cancel all the request
+     
+   `AllenChecker.cancelMission();`
  	  
  ### **Customize UI** 
     if you want to customize dialog ui,you should create an activity that extends `VersionDialogActivity`,and set activty theme：

@@ -85,4 +85,6 @@ public class PermissionDialogActivity extends AppCompatActivity {
             // permissions this app might request
         }
     }
+
+
 }
