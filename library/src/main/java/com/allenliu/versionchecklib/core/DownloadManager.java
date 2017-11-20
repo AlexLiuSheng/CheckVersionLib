@@ -39,15 +39,23 @@ public class DownloadManager {
         if (url == null || url.isEmpty()) {
             return;
         }
+        String downloadPath = versionParams.getDownloadAPKPath() + context.getString(R.string.versionchecklib_download_apkname, context.getPackageName());
+        //静默下载也判断本地是否有缓存
         if (versionParams.isSilentDownload()) {
-            silentDownloadAPK(context, url, versionParams, listener);
+            if (!versionParams.isForceRedownload()) {
+                //判断本地文件是否存在
+                if (checkAPKIsExists(context, downloadPath)) {
+                    if (listener != null)
+                        listener.onCheckerDownloadSuccess(new File(downloadPath));
+                    return;
+                }
+            } else
+                silentDownloadAPK(context, url, versionParams, listener);
             return;
         }
-        lastProgress = 0;
-//        ApkBroadCastReceiver.downloadApkPath = versionParams.getDownloadAPKPath();
+
         if (!versionParams.isForceRedownload()) {
             //判断本地文件是否存在
-            String downloadPath = versionParams.getDownloadAPKPath() + context.getString(R.string.versionchecklib_download_apkname, context.getPackageName());
             if (checkAPKIsExists(context, downloadPath)) {
                 if (listener != null)
                     listener.onCheckerDownloadSuccess(new File(downloadPath));
@@ -55,8 +63,10 @@ public class DownloadManager {
                 if (context instanceof Activity)
                     ((Activity) context).finish();
                 return;
+
             }
         }
+        lastProgress = 0;
         if (listener != null)
             listener.onCheckerStartDownload();
         NotificationCompat.Builder builder = null;

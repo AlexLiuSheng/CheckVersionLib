@@ -1,9 +1,16 @@
 apply plugin: 'com.android.application'
 
 android {
+    signingConfigs {
+        config {
+            keyAlias 'key0'
+            keyPassword '12345678'
+            storeFile file('/Users/allenliu/Desktop/testkey.jks')
+            storePassword '12345678'
+        }
+    }
     compileSdkVersion 24
     buildToolsVersion "24.0.2"
-
     defaultConfig {
         applicationId "com.allenliu.sample"
         minSdkVersion 14
@@ -26,5 +33,6 @@ dependencies {
     compile 'com.android.support:appcompat-v7:25.1.0'
     testCompile 'junit:junit:4.12'
     compile project(':library')
+    //    compile 'com.allenliu.versionchecklib:library:1.7.6'
     //compile files('libs/library.jar')
 }

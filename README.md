@@ -28,7 +28,7 @@
  
 ## 使用步骤
 ### android studio导入
-`compile 'com.allenliu.versionchecklib:library:1.7.6'`
+`compile 'com.allenliu.versionchecklib:library:1.7.7'`
 
 
 ### 如何使用
@@ -191,6 +191,10 @@
 更详细的使用请看demo
 `欢迎star和提issue`
 ## 更新日志
+- V1.7.7
+   - fix [issue](https://github.com/AlexLiuSheng/CheckVersionLib/issues/64)
+   - fix re downloading apk when app have cache of apk
+   - fix [issue](https://github.com/AlexLiuSheng/CheckVersionLib/issues/63)
 - V1.7.6
    - support cancel all the task
 - V1.7.5

@@ -126,7 +126,7 @@ public class MainActivity extends AppCompatActivity {
                 if (onlyDownloadCheckBox.isChecked()) {
                     //如果仅使用下载功能，downloadUrl是必须的
                     builder.setOnlyDownload(true)
-                            .setDownloadUrl("http://down1.uc.cn/down2/zxl107821.uc/miaokun1/UCBrowser_V11.5.8.945_android_pf145_bi800_(Build170627172528).apk")
+                            .setDownloadUrl("http://test-1251233192.coscd.myqcloud.com/1_1.apk")
                             .setTitle("检测到新版本")
                             .setUpdateMsg(getString(R.string.updatecontent));
                 } else
