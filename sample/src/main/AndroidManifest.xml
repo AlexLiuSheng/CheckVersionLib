@@ -23,6 +23,7 @@
 
         <activity
             android:name="com.allenliu.sample.CustomVersionDialogActivity"
+            android:launchMode="singleTask"
             android:theme="@style/versionCheckLibvtransparentTheme" />
 
     </application>

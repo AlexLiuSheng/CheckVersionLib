@@ -4,6 +4,8 @@ package com.allenliu.versionchecklib.core.http;
 import android.os.Handler;
 import android.os.Looper;
 
+import com.allenliu.versionchecklib.utils.ALog;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -54,6 +56,8 @@ public abstract class FileCallBack implements Callback {
         try {
             is = response.body().byteStream();
             long total = response.body().contentLength();
+
+
             final File file = new File(path, name);
             if (file.exists()) {
                 file.delete();
@@ -63,9 +67,11 @@ public abstract class FileCallBack implements Callback {
             fos = new FileOutputStream(file);
             long sum = 0;
             while ((len = is.read(buf)) != -1) {
+                total = response.body().contentLength();
+//                ALog.e("file total size:"+total);
                 fos.write(buf, 0, len);
                 sum += len;
-                final int progress = (int) (sum * 1.0f / total * 100);
+                final int progress = (int) (((double)sum / total) * 100);
                 // 下载中
                 handler.post(new Runnable() {
                     @Override

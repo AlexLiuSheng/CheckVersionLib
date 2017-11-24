@@ -28,7 +28,7 @@
  
 ## 使用步骤
 ### android studio导入
-`compile 'com.allenliu.versionchecklib:library:1.7.8'`
+`compile 'com.allenliu.versionchecklib:library:1.8.1'`
 
 
 ### 如何使用
@@ -110,9 +110,14 @@
  `AllenChecker.cancelMission();`
 	  
 ### **自定义界面** 
-   如果想自定义界面，只需创建一个继承自`VersionDialogActivity`的Activity,Activity设置Theme为透明：
+   如果想自定义界面，只需创建一个继承自`VersionDialogActivity`的Activity,
+   Activity设置Theme为透明：
 
  ` android:theme="@style/versionCheckLibvtransparentTheme"`
+   
+   设置launchMode为SingleTask
+   
+   ` android:launchMode="singleTask"`
  
    记住将自定义的Activity传入VersionParams
    
@@ -191,6 +196,9 @@
 更详细的使用请看demo
 `欢迎star和提issue`
 ## 更新日志
+V 1.8.0
+   - fix bugs of force update
+   -fix [issue](https://github.com/AlexLiuSheng/CheckVersionLib/issues/68)
 - V1.7.7
    - fix [issue](https://github.com/AlexLiuSheng/CheckVersionLib/issues/64)
    - fix re downloading apk when app have cache of apk

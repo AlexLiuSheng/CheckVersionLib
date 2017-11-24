@@ -35,7 +35,9 @@ import static android.content.Context.NOTIFICATION_SERVICE;
 public class DownloadManager {
     private static int lastProgress = 0;
 
+    //   private static final int TASK=Intent.FLAG_ACTIVITY_CLEAR_TOP;
     public static void downloadAPK(final Context context, final String url, final VersionParams versionParams, final DownloadListener listener) {
+        lastProgress = 0;
         if (url == null || url.isEmpty()) {
             return;
         }
@@ -66,7 +68,6 @@ public class DownloadManager {
 
             }
         }
-        lastProgress = 0;
         if (listener != null)
             listener.onCheckerStartDownload();
         NotificationCompat.Builder builder = null;
@@ -74,10 +75,12 @@ public class DownloadManager {
         if (versionParams.isShowNotification()) {
             manager = (NotificationManager) context.getSystemService(NOTIFICATION_SERVICE);
             builder = new NotificationCompat.Builder(context);
-            Intent intent = new Intent(context, versionParams.getCustomDownloadActivityClass());
-            intent.putExtra("isRetry", false);
-            PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
-            builder.setContentIntent(pendingIntent);
+
+//            Intent intent = new Intent(context, versionParams.getCustomDownloadActivityClass());
+//            intent.putExtra("isRetry", false);
+//            PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
+//            builder.setContentIntent(pendingIntent);
+            builder.setAutoCancel(true);
             builder.setSmallIcon(R.mipmap.ic_launcher);
             builder.setContentTitle(context.getString(R.string.app_name));
             builder.setTicker(context.getString(R.string.versionchecklib_downloading));
@@ -113,7 +116,9 @@ public class DownloadManager {
                     finalBuilder.setContentIntent(pendingIntent);
                     finalBuilder.setContentText(context.getString(R.string.versionchecklib_download_finish));
                     finalBuilder.setProgress(100, 100, false);
+                    finalManager.cancelAll();
                     finalManager.notify(0, finalBuilder.build());
+
                 }
 
                 AppUtils.installApk(context, file);
@@ -131,6 +136,7 @@ public class DownloadManager {
                 if (currentProgress - lastProgress >= 5) {
                     lastProgress = currentProgress;
                     if (versionParams.isShowNotification()) {
+                        finalBuilder.setContentIntent(null);
                         finalBuilder.setContentText(String.format(context.getString(R.string.versionchecklib_download_progress), lastProgress));
                         finalBuilder.setProgress(100, lastProgress, false);
                         finalManager.notify(0, finalBuilder.build());
