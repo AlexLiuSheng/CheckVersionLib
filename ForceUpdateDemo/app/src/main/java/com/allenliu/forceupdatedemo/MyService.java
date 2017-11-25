@@ -23,6 +23,6 @@ public class MyService extends AVersionService {
         boolean isForceUpdate=true;
         Bundle bundle=new Bundle();
         bundle.putBoolean("isForceUpdate",isForceUpdate);
-        showVersionDialog("downloadUrl","test","test",bundle);
+        showVersionDialog("http://down1.uc.cn/down2/zxl107821.uc/miaokun1/UCBrowser_V11.5.8.945_android_pf145_bi800_(Build170627172528).apk","test","test",bundle);
     }
 }
