@@ -213,9 +213,13 @@ public abstract class AVersionService extends Service implements DownloadListene
         @Override
         public void onReceive(Context context, Intent intent) {
             if (intent.getAction().equals(PERMISSION_ACTION)) {
+
+
                 boolean result = intent.getBooleanExtra("result", false);
-                if (result)
+                if (result){
                     silentDownload();
+
+                }
                 unregisterReceiver(this);
             }
         }

@@ -44,6 +44,7 @@ public class DownloadManager {
         String downloadPath = versionParams.getDownloadAPKPath() + context.getString(R.string.versionchecklib_download_apkname, context.getPackageName());
         //静默下载也判断本地是否有缓存
         if (versionParams.isSilentDownload()) {
+
             if (!versionParams.isForceRedownload()) {
                 //判断本地文件是否存在
                 if (checkAPKIsExists(context, downloadPath)) {
@@ -51,6 +52,8 @@ public class DownloadManager {
                         listener.onCheckerDownloadSuccess(new File(downloadPath));
                     return;
                 }
+                silentDownloadAPK(context, url, versionParams, listener);
+
             } else
                 silentDownloadAPK(context, url, versionParams, listener);
             return;

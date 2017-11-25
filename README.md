@@ -28,7 +28,7 @@
  
 ## 使用步骤
 ### android studio导入
-`compile 'com.allenliu.versionchecklib:library:1.8.1'`
+`compile 'com.allenliu.versionchecklib:library:1.8.2'`
 
 
 ### 如何使用
@@ -196,6 +196,8 @@
 更详细的使用请看demo
 `欢迎star和提issue`
 ## 更新日志
+V 1.8.2
+   - fix bug of silent downloading 
 V 1.8.0
    - fix bugs of force update
    -fix [issue](https://github.com/AlexLiuSheng/CheckVersionLib/issues/68)

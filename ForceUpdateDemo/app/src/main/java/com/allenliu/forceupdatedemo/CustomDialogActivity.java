@@ -24,6 +24,7 @@ public class CustomDialogActivity extends VersionDialogActivity implements APKDo
     public void onDownloading(int progress) {
 
     }
+
     @Override
     public void onDownloadFail() {
 
@@ -37,13 +38,11 @@ public class CustomDialogActivity extends VersionDialogActivity implements APKDo
         forceUpdate();
     }
 
-
-
-
     @Override
     public void dialogDismiss(DialogInterface dialog) {
         forceUpdate();
     }
+
     private void forceUpdate() {
         //获取传过来的ebundle
         Bundle bundle = getVersionParamBundle();
