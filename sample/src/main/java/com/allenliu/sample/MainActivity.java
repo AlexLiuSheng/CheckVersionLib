@@ -146,6 +146,13 @@ public class MainActivity extends AppCompatActivity {
 
             case R.id.cancelBtn:
                 AllenChecker.cancelMission();
+//                VersionParams.Builder builder2 = new VersionParams.Builder();
+//                builder2.setOnlyDownload(true)
+//                        .setDownloadUrl("http://test-1251233192.coscd.myqcloud.com/1_1.apk")
+//                        .setTitle("检测到新版本")
+//                        .setForceRedownload(true)
+//                        .setUpdateMsg(getString(R.string.updatecontent));
+//                AllenChecker.startVersionCheck(this, builder2.build());
                 break;
 
         }

@@ -28,7 +28,7 @@
  
 ## 使用步骤
 ### android studio导入
-`compile 'com.allenliu.versionchecklib:library:1.8.2'`
+`compile 'com.allenliu.versionchecklib:library:1.8.3'`
 
 
 ### 如何使用
@@ -196,11 +196,16 @@
 更详细的使用请看demo
 `欢迎star和提issue`
 ## 更新日志
+V 1.8.3 
+   - fix [issue73](https://github.com/AlexLiuSheng/CheckVersionLib/issues/73)
+   - fix [issue75](https://github.com/AlexLiuSheng/CheckVersionLib/issues/75)
+
 V 1.8.2
    - fix bug of silent downloading 
+  
 V 1.8.0
    - fix bugs of force update
-   -fix [issue](https://github.com/AlexLiuSheng/CheckVersionLib/issues/68)
+   - fix [issue](https://github.com/AlexLiuSheng/CheckVersionLib/issues/68)
 - V1.7.7
    - fix [issue](https://github.com/AlexLiuSheng/CheckVersionLib/issues/64)
    - fix re downloading apk when app have cache of apk

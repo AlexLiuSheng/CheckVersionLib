@@ -9,12 +9,12 @@ android {
             storePassword '12345678'
         }
     }
-    compileSdkVersion 24
-    buildToolsVersion "24.0.2"
+    compileSdkVersion 27
+    buildToolsVersion "27.0.0"
     defaultConfig {
         applicationId "com.allenliu.sample"
         minSdkVersion 14
-        targetSdkVersion 24
+        targetSdkVersion 27
         versionCode 1
         versionName "1.0"
 
@@ -30,9 +30,11 @@ android {
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile 'com.android.support:appcompat-v7:25.1.0'
+//    compile 'com.android.support:appcompat-v7:25.1.0'
     testCompile 'junit:junit:4.12'
     compile project(':library')
+//    compile 'com.allenliu.versionchecklib:library:1.8.2'
+    compile 'com.android.support:appcompat-v7:27.0.0'
     //    compile 'com.allenliu.versionchecklib:library:1.7.6'
     //compile files('libs/library.jar')
 }
