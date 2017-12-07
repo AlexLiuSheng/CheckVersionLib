@@ -2,15 +2,18 @@ package com.allenliu.versionchecklib.core;
 
 import android.app.Activity;
 import android.app.Notification;
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.support.v4.app.NotificationCompat;
+//import android.support.v4.app.NotificationCompat;
 //import android.support.v7.app.NotificationCompat;
 
 import com.allenliu.versionchecklib.R;
@@ -35,10 +38,12 @@ import static android.content.Context.NOTIFICATION_SERVICE;
 
 public class DownloadManager {
     private static int lastProgress = 0;
+    private static boolean isDownloadSuccess = false;
 
     //   private static final int TASK=Intent.FLAG_ACTIVITY_CLEAR_TOP;
     public static void downloadAPK(final Context context, final String url, final VersionParams versionParams, final DownloadListener listener) {
         lastProgress = 0;
+        isDownloadSuccess = false;
         if (url == null || url.isEmpty()) {
             return;
         }
@@ -78,23 +83,9 @@ public class DownloadManager {
         NotificationManager manager = null;
         if (versionParams.isShowNotification()) {
             manager = (NotificationManager) context.getSystemService(NOTIFICATION_SERVICE);
-            builder = new NotificationCompat.Builder(context);
-
-//            Intent intent = new Intent(context, versionParams.getCustomDownloadActivityClass());
-//            intent.putExtra("isRetry", false);
-//            PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
-//            builder.setContentIntent(pendingIntent);
-            builder.setAutoCancel(true);
-            builder.setSmallIcon(R.mipmap.ic_launcher);
-            builder.setContentTitle(context.getString(R.string.app_name));
-            builder.setTicker(context.getString(R.string.versionchecklib_downloading));
-            builder.setContentText(String.format(context.getString(R.string.versionchecklib_download_progress), 0));
-            Notification notification = builder.build();
-            notification.vibrate = new long[]{500, 500};
-            notification.defaults = Notification.DEFAULT_VIBRATE | Notification.DEFAULT_SOUND;
-            manager.notify(0, notification);
+            builder = createNotification(context);
+            manager.notify(0, builder.build());
         }
-
         final NotificationCompat.Builder finalBuilder = builder;
         final NotificationManager finalManager = manager;
         Request request = new Request.Builder().url(url).build();
@@ -102,6 +93,7 @@ public class DownloadManager {
             @Override
             public void onSuccess(File file, Call call, Response response) {
                 listener.onCheckerDownloadSuccess(file);
+                isDownloadSuccess = true;
                 if (versionParams.isShowNotification()) {
                     Intent i = new Intent(Intent.ACTION_VIEW);
                     Uri uri;
@@ -138,7 +130,7 @@ public class DownloadManager {
                 listener.onCheckerDownloading(currentProgress);
                 if (currentProgress - lastProgress >= 5) {
                     lastProgress = currentProgress;
-                    if (versionParams.isShowNotification()) {
+                    if (versionParams.isShowNotification() && !isDownloadSuccess) {
                         finalBuilder.setContentIntent(null);
                         finalBuilder.setContentText(String.format(context.getString(R.string.versionchecklib_download_progress), lastProgress));
                         finalBuilder.setProgress(100, lastProgress, false);
@@ -222,5 +214,27 @@ public class DownloadManager {
         }
         return result;
 
+    }
+
+    private static NotificationCompat.Builder createNotification(Context context) {
+        final String CHANNEL_ID = "0", CHANNEL_NAME = "ALLEN_NOTIFICATION";
+        NotificationCompat.Builder builder = null;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            NotificationChannel notificationChannel = new NotificationChannel(CHANNEL_ID, CHANNEL_NAME, NotificationManager.IMPORTANCE_HIGH);
+            notificationChannel.enableLights(true);
+            notificationChannel.setLightColor(Color.RED);
+            notificationChannel.enableVibration(true);
+            NotificationManager manager = (NotificationManager) context.getSystemService(NOTIFICATION_SERVICE);
+            manager.createNotificationChannel(notificationChannel);
+        }
+        builder = new NotificationCompat.Builder(context, CHANNEL_ID);
+        builder.setAutoCancel(true);
+        builder.setSmallIcon(R.mipmap.ic_launcher);
+        builder.setContentTitle(context.getString(R.string.app_name));
+        builder.setTicker(context.getString(R.string.versionchecklib_downloading));
+        builder.setContentText(String.format(context.getString(R.string.versionchecklib_download_progress), 0));
+        builder.setVibrate(new long[]{500, 500});
+        builder.setDefaults(Notification.DEFAULT_VIBRATE | Notification.DEFAULT_SOUND);
+        return builder;
     }
 }

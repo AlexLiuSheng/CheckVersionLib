@@ -20,6 +20,8 @@
 
 - [x] 使用okhttp请求，不与第三方请求框架冲突
 
+- [x] 适配到Android O
+
 ## 效果
  
  
@@ -28,7 +30,7 @@
  
 ## 使用步骤
 ### android studio导入
-`compile 'com.allenliu.versionchecklib:library:1.8.3'`
+`compile 'com.allenliu.versionchecklib:library:1.8.4'`
 
 
 ### 如何使用
@@ -196,6 +198,8 @@
 更详细的使用请看demo
 `欢迎star和提issue`
 ## 更新日志
+V1.8.4
+   - support android 8
 V 1.8.3 
    - fix [issue73](https://github.com/AlexLiuSheng/CheckVersionLib/issues/73)
    - fix [issue75](https://github.com/AlexLiuSheng/CheckVersionLib/issues/75)
