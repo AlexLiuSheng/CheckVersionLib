@@ -142,6 +142,7 @@ public class MainActivity extends AppCompatActivity {
                 } else
                     builder.setShowDownloadingDialog(false);
 
+                builder.setShowDownLoadFailDialog(false);
                 AllenChecker.startVersionCheck(this, builder.build());
                 break;
 

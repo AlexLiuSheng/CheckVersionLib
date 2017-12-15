@@ -30,7 +30,7 @@
  
 ## 使用步骤
 ### android studio导入
-`compile 'com.allenliu.versionchecklib:library:1.8.4'`
+`compile 'com.allenliu.versionchecklib:library:1.8.6'`
 
 
 ### 如何使用
@@ -100,6 +100,7 @@
    |paramBundle|否|null|额外的一些参数可以放里面，可以在versiongDialogActivity里面使用|
    |isShowDownloadingDialog|否|true|是否显示下载对话框|
    |isShowNotification|否|true|是否显示下载的通知栏|
+   |isShowDownloadFailDialog|否|true|是否显示下载失败对话框|
  
 #### 3.开启和关闭log
 
@@ -183,7 +184,7 @@
 具体查看[ForceUpdate](https://github.com/AlexLiuSheng/CheckVersionLib/tree/master/ForceUpdateDemo)
  
 ### 下载通知栏图标和文字替换
-需要自定义图标只需在mimap文件下建立`ic_launcher`图标，替换标题只需在项目xml定义`app_name`属性,还有其他一些属性替换，如下表:
+需要自定义图标只需在mimap文件下建立`ic_launcher`图标，替换标题只需在项目xml定义`app_name`属性,还有其他一些属性替换（[仍然被替换？](https://github.com/AlexLiuSheng/CheckVersionLib/issues/83)），如下表:
 
 | 属性名        | 属性值           | 
 | ------------- |:-------------:|
@@ -198,8 +199,11 @@
 更详细的使用请看demo
 `欢迎star和提issue`
 ## 更新日志
-V1.8.4
+V 1.8.6
+   - fix [issue80](https://github.com/AlexLiuSheng/CheckVersionLib/issues/80)
+V 1.8.4
    - support android 8
+   
 V 1.8.3 
    - fix [issue73](https://github.com/AlexLiuSheng/CheckVersionLib/issues/73)
    - fix [issue75](https://github.com/AlexLiuSheng/CheckVersionLib/issues/75)

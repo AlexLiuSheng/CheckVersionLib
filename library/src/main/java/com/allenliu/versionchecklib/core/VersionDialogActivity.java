@@ -189,20 +189,24 @@ public class VersionDialogActivity extends Activity implements DownloadListener,
 
     public void showFailDialog() {
         if (!isDestroy) {
-            if (failDialog == null) {
-                failDialog = new AlertDialog.Builder(this).setMessage(getString(R.string.versionchecklib_download_fail_retry)).setPositiveButton(getString(R.string.versionchecklib_confirm), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        if (commitListener != null)
-                            commitListener.onCommitClick();
-                        dealAPK();
-                    }
-                }).setNegativeButton(getString(R.string.versionchecklib_cancel), null).create();
-                failDialog.setOnDismissListener(this);
-                failDialog.setCanceledOnTouchOutside(false);
-                failDialog.setCancelable(false);
+            if (versionParams != null && versionParams.isShowDownloadFailDialog()) {
+                if (failDialog == null) {
+                    failDialog = new AlertDialog.Builder(this).setMessage(getString(R.string.versionchecklib_download_fail_retry)).setPositiveButton(getString(R.string.versionchecklib_confirm), new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            if (commitListener != null)
+                                commitListener.onCommitClick();
+                            dealAPK();
+                        }
+                    }).setNegativeButton(getString(R.string.versionchecklib_cancel), null).create();
+                    failDialog.setOnDismissListener(this);
+                    failDialog.setCanceledOnTouchOutside(false);
+                    failDialog.setCancelable(false);
+                }
+                failDialog.show();
+            } else {
+                onDismiss(null);
             }
-            failDialog.show();
         }
     }
 

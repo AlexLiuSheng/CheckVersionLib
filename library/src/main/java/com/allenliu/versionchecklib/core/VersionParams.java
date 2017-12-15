@@ -33,9 +33,14 @@ public class VersionParams implements Parcelable {
     private Bundle paramBundle;
     private boolean isShowDownloadingDialog;
     private boolean isShowNotification;
+    private boolean isShowDownloadFailDialog;
 
     public boolean isShowDownloadingDialog() {
         return isShowDownloadingDialog;
+    }
+
+    public boolean isShowDownloadFailDialog() {
+        return isShowDownloadFailDialog;
     }
 
     public boolean isShowNotification() {
@@ -169,6 +174,7 @@ public class VersionParams implements Parcelable {
             params.isForceRedownload = false;
             params.isSilentDownload = false;
             params.onlyDownload = false;
+            params.isShowDownloadFailDialog = true;
             params.service = MyService.class;
             params.isShowNotification = true;
             params.isShowDownloadingDialog = true;
@@ -264,6 +270,11 @@ public class VersionParams implements Parcelable {
             return this;
         }
 
+        public Builder setShowDownLoadFailDialog(boolean showDownLoadFailDialog) {
+            params.isShowDownloadFailDialog = showDownLoadFailDialog;
+            return this;
+        }
+
         public VersionParams build() {
             return params;
         }
@@ -294,6 +305,7 @@ public class VersionParams implements Parcelable {
         dest.writeBundle(this.paramBundle);
         dest.writeByte(this.isShowDownloadingDialog ? (byte) 1 : (byte) 0);
         dest.writeByte(this.isShowNotification ? (byte) 1 : (byte) 0);
+        dest.writeByte(this.isShowDownloadFailDialog ? (byte) 1 : (byte) 0);
     }
 
     protected VersionParams(Parcel in) {
@@ -315,6 +327,7 @@ public class VersionParams implements Parcelable {
         this.paramBundle = in.readBundle();
         this.isShowDownloadingDialog = in.readByte() != 0;
         this.isShowNotification = in.readByte() != 0;
+        this.isShowDownloadFailDialog = in.readByte() != 0;
     }
 
     public static final Creator<VersionParams> CREATOR = new Creator<VersionParams>() {

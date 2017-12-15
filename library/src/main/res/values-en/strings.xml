@@ -1,5 +1,4 @@
 <resources>
-    <string name="app_name">VersionCheckLib</string>
     <string name="versionchecklib_confirm">Commit</string>
     <string name="versionchecklib_cancel">Cancel</string>
     <string name="versionchecklib_retry">Retry</string>

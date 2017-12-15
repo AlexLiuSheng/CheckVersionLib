@@ -10,6 +10,8 @@ import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.media.Ringtone;
+import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
 import android.support.v4.app.NotificationCompat;
@@ -81,10 +83,12 @@ public class DownloadManager {
             listener.onCheckerStartDownload();
         NotificationCompat.Builder builder = null;
         NotificationManager manager = null;
+        Notification notification;
         if (versionParams.isShowNotification()) {
             manager = (NotificationManager) context.getSystemService(NOTIFICATION_SERVICE);
             builder = createNotification(context);
             manager.notify(0, builder.build());
+
         }
         final NotificationCompat.Builder finalBuilder = builder;
         final NotificationManager finalManager = manager;
@@ -134,6 +138,7 @@ public class DownloadManager {
                         finalBuilder.setContentIntent(null);
                         finalBuilder.setContentText(String.format(context.getString(R.string.versionchecklib_download_progress), lastProgress));
                         finalBuilder.setProgress(100, lastProgress, false);
+                        finalBuilder.setDefaults(0);
                         finalManager.notify(0, finalBuilder.build());
                     }
                 }
@@ -226,15 +231,20 @@ public class DownloadManager {
             notificationChannel.enableVibration(true);
             NotificationManager manager = (NotificationManager) context.getSystemService(NOTIFICATION_SERVICE);
             manager.createNotificationChannel(notificationChannel);
+
+
         }
         builder = new NotificationCompat.Builder(context, CHANNEL_ID);
+
         builder.setAutoCancel(true);
         builder.setSmallIcon(R.mipmap.ic_launcher);
         builder.setContentTitle(context.getString(R.string.app_name));
         builder.setTicker(context.getString(R.string.versionchecklib_downloading));
         builder.setContentText(String.format(context.getString(R.string.versionchecklib_download_progress), 0));
-        builder.setVibrate(new long[]{500, 500});
-        builder.setDefaults(Notification.DEFAULT_VIBRATE | Notification.DEFAULT_SOUND);
+
+        Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+        Ringtone r = RingtoneManager.getRingtone(context, notification);
+        r.play();
         return builder;
     }
 }
