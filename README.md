@@ -30,7 +30,7 @@
  
 ## 使用步骤
 ### android studio导入
-`compile 'com.allenliu.versionchecklib:library:1.8.6'`
+`compile 'com.allenliu.versionchecklib:library:1.8.7'`
 
 
 ### 如何使用

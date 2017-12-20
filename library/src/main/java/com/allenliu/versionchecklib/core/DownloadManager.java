@@ -138,7 +138,7 @@ public class DownloadManager {
                         finalBuilder.setContentIntent(null);
                         finalBuilder.setContentText(String.format(context.getString(R.string.versionchecklib_download_progress), lastProgress));
                         finalBuilder.setProgress(100, lastProgress, false);
-                        finalBuilder.setDefaults(0);
+//                        finalBuilder.setDefaults(0);
                         finalManager.notify(0, finalBuilder.build());
                     }
                 }
@@ -225,26 +225,29 @@ public class DownloadManager {
         final String CHANNEL_ID = "0", CHANNEL_NAME = "ALLEN_NOTIFICATION";
         NotificationCompat.Builder builder = null;
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-            NotificationChannel notificationChannel = new NotificationChannel(CHANNEL_ID, CHANNEL_NAME, NotificationManager.IMPORTANCE_HIGH);
-            notificationChannel.enableLights(true);
+            NotificationChannel notificationChannel = new NotificationChannel(CHANNEL_ID, CHANNEL_NAME, NotificationManager.IMPORTANCE_LOW);
+            notificationChannel.enableLights(false);
             notificationChannel.setLightColor(Color.RED);
-            notificationChannel.enableVibration(true);
+            notificationChannel.enableVibration(false);
             NotificationManager manager = (NotificationManager) context.getSystemService(NOTIFICATION_SERVICE);
             manager.createNotificationChannel(notificationChannel);
 
 
         }
         builder = new NotificationCompat.Builder(context, CHANNEL_ID);
-
         builder.setAutoCancel(true);
         builder.setSmallIcon(R.mipmap.ic_launcher);
+//        builder.setOnlyAlertOnce(true);
         builder.setContentTitle(context.getString(R.string.app_name));
+//        builder.setSound(null);
+
         builder.setTicker(context.getString(R.string.versionchecklib_downloading));
         builder.setContentText(String.format(context.getString(R.string.versionchecklib_download_progress), 0));
 
         Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         Ringtone r = RingtoneManager.getRingtone(context, notification);
         r.play();
+
         return builder;
     }
 }

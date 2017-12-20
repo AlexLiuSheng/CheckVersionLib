@@ -29,7 +29,7 @@ This is a library that can help you update your app intelligently.library contai
  
  
  ### include 
-    `compile 'com.allenliu.versionchecklib:library:1.8.6'`
+    `compile 'com.allenliu.versionchecklib:library:1.8.7'`
  ### How to use
  
  #### 1.use request version api module and  downloading module
