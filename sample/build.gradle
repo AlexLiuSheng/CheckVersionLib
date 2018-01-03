@@ -29,4 +29,5 @@ dependencies {
     compile 'com.android.support:appcompat-v7:27.0.0'
     //    compile 'com.allenliu.versionchecklib:library:1.7.6'
     //compile files('libs/library.jar')
+    debugCompile 'com.squareup.leakcanary:leakcanary-android:1.5.4'
 }

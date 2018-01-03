@@ -19,6 +19,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 
+import com.allenliu.versionchecklib.core.AllenChecker;
 import com.allenliu.versionchecklib.core.VersionFileProvider;
 
 import java.io.File;
@@ -49,6 +50,7 @@ public final class AppUtils {
         intent.setDataAndType(uri,
                 "application/vnd.android.package-archive");
         context.startActivity(intent);
+        AllenChecker.cancelMission();
     }
 
 

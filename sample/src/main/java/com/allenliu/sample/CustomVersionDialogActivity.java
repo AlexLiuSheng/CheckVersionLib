@@ -15,6 +15,7 @@ import com.allenliu.versionchecklib.core.VersionDialogActivity;
 import com.allenliu.versionchecklib.callback.APKDownloadListener;
 import com.allenliu.versionchecklib.callback.DialogDismissListener;
 import com.allenliu.versionchecklib.callback.CommitClickListener;
+import com.allenliu.versionchecklib.core.http.AllenHttp;
 
 import java.io.File;
 
@@ -178,12 +179,12 @@ public class CustomVersionDialogActivity extends VersionDialogActivity implement
             if (loadingDialog == null) {
                 loadingView = LayoutInflater.from(this).inflate(R.layout.custom_download_layout, null);
                 loadingDialog = new AlertDialog.Builder(this).setTitle("").setView(loadingView).create();
-                loadingDialog.setCancelable(false);
+                loadingDialog.setCancelable(true);
                 loadingDialog.setCanceledOnTouchOutside(false);
                 loadingDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
                     @Override
                     public void onCancel(DialogInterface dialog) {
-                        finish();
+                        AllenHttp.getHttpClient().dispatcher().cancelAll();
                     }
                 });
             }

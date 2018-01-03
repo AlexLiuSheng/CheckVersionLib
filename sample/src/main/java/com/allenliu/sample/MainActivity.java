@@ -56,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
 //                .setHttpHeaders(headers)
 //                .setRequestMethod(requestMethod)
 //                .setRequestParams(httpParams)
-                .setRequestUrl("http://www.baidu.com")
+                .setRequestUrl("https://www.baidu.com")
 //                .setDownloadAPKPath(getApplicationContext().getFilesDir()+"/")
                 .setService(DemoService.class);
 
@@ -142,8 +142,9 @@ public class MainActivity extends AppCompatActivity {
                 } else
                     builder.setShowDownloadingDialog(false);
 
-                builder.setShowDownLoadFailDialog(false);
-                AllenChecker.startVersionCheck(this, builder.build());
+//                builder.setShowDownLoadFailDialog(false);
+//                builder.setDownloadAPKPath("/storage/emulated/0/AllenVersionPath2/");
+                AllenChecker.startVersionCheck(getApplication(), builder.build());
                 break;
 
             case R.id.cancelBtn:

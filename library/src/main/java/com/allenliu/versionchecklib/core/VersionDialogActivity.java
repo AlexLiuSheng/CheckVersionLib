@@ -258,7 +258,7 @@ public class VersionDialogActivity extends Activity implements DownloadListener,
         //提前让loadingDialog实例化
         if (versionParams.isShowDownloadingDialog())
             showLoadingDialog(0);
-        DownloadManager.downloadAPK(this, downloadUrl, versionParams, this);
+        DownloadManager.downloadAPK( downloadUrl, versionParams, this);
     }
 
 
@@ -353,6 +353,7 @@ public class VersionDialogActivity extends Activity implements DownloadListener,
         dismissAllDialog();
         showFailDialog();
 
+
     }
 
     @Override
@@ -387,7 +388,6 @@ public class VersionDialogActivity extends Activity implements DownloadListener,
 
     @Override
     public void onDismiss(DialogInterface dialogInterface) {
-
         //通过loadingdialog是否显示来判断是取消还是继续加载
         if (versionParams.isSilentDownload()
                 || (!versionParams.isSilentDownload() && loadingDialog == null && versionParams.isShowDownloadingDialog())
@@ -396,8 +396,8 @@ public class VersionDialogActivity extends Activity implements DownloadListener,
                 cancelListener.dialogDismiss(dialogInterface);
             }
             finish();
+            AllenChecker.cancelMission();
         }
-
     }
 
 }

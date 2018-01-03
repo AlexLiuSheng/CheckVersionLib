@@ -30,7 +30,7 @@
  
 ## 使用步骤
 ### android studio导入
-`compile 'com.allenliu.versionchecklib:library:1.8.7'`
+`compile 'com.allenliu.versionchecklib:library:1.8.8'`
 
 
 ### 如何使用
@@ -199,8 +199,12 @@
 更详细的使用请看demo
 `欢迎star和提issue`
 ## 更新日志
+V 1.8.8
+   - fix the oom of static context
 V 1.8.6
+
    - fix [issue80](https://github.com/AlexLiuSheng/CheckVersionLib/issues/80)
+   
 V 1.8.4
    - support android 8
    

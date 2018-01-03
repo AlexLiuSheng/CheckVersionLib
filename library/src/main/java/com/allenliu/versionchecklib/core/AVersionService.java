@@ -163,7 +163,7 @@ public abstract class AVersionService extends Service implements DownloadListene
     }
 
     private void silentDownload() {
-        DownloadManager.downloadAPK(getApplicationContext(), downloadUrl, versionParams, this);
+        DownloadManager.downloadAPK(downloadUrl, versionParams, this);
     }
 
     @Override
