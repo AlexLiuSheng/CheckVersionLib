@@ -6,8 +6,9 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
-    <uses-permission android:name="android.permission.VIBRATE"/>
-    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES"/>
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
 
     <application
         android:allowBackup="true"
@@ -35,7 +36,23 @@
         <service
             android:name=".core.MyService"
             android:enabled="true"
-            android:exported="true"></service>
+            android:exported="true" />
+        <service
+            android:name=".v2.ui.VersionService"
+            android:exported="false" />
+
+        <activity
+            android:name=".v2.ui.UIActivity"
+            android:launchMode="singleTask"
+            android:theme="@style/versionCheckLibvtransparentTheme" />
+        <activity
+            android:name=".v2.ui.DownloadingActivity"
+            android:launchMode="singleTask"
+            android:theme="@style/versionCheckLibvtransparentTheme" />
+        <activity
+            android:name=".v2.ui.DownloadFailedActivity"
+            android:launchMode="singleTask"
+            android:theme="@style/versionCheckLibvtransparentTheme"></activity>
     </application>
 
 </manifest>

@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">Sample</string>
     <string name="updatecontent">1.修复BUG\n2.优化界面\n3.向天空大声的呼喊说声妈卖批\n4.欢迎大家Star和提issue\n5.github:<a href='http://github.com/alexliusheng'>http://github.com/alexliusheng</a></string>
+    <string name="custom_content_text">自定义通知栏进度:%d%%/100%%</string>
 </resources>

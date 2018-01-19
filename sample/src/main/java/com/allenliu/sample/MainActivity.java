@@ -1,15 +1,22 @@
 package com.allenliu.sample;
 
-import android.app.NotificationManager;
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.RadioGroup;
 
+import com.allenliu.versionchecklib.v2.builder.NotificationBuilder;
+import com.allenliu.versionchecklib.v2.builder.UIData;
+import com.allenliu.versionchecklib.v2.callback.CustomVersionDialogListener;
+import com.allenliu.versionchecklib.v2.callback.ForceUpdateListener;
+import com.allenliu.versionchecklib.v2.callback.RequestVersionListener;
 import com.allenliu.versionchecklib.core.AllenChecker;
+import com.allenliu.versionchecklib.v2.AllenVersionChecker;
 import com.allenliu.versionchecklib.core.VersionDialogActivity;
 import com.allenliu.versionchecklib.core.VersionParams;
 
@@ -42,6 +49,42 @@ public class MainActivity extends AppCompatActivity {
         showNotificationCheckBox = (CheckBox) findViewById(R.id.checkbox5);
         showDownloadingCheckBox = (CheckBox) findViewById(R.id.checkbox6);
         mainActivity = this;
+        AllenVersionChecker
+                .getInstance()
+                .requestVersion()
+                .setRequestUrl("https://www.baidu.com")
+                .request(new RequestVersionListener() {
+                    @Nullable
+                    @Override
+                    public UIData onRequestVersionSuccess(String result) {
+                        UIData uiData = new UIData();
+                        uiData.setTitle("ceshi");
+                        uiData.setContent("haha");
+                        return uiData;
+                    }
+
+                    @Override
+                    public void onRequestVersionFailure(String message) {
+
+                    }
+                })
+                .setForceUpdateListener(new ForceUpdateListener() {
+                    @Override
+                    public void onShouldForceUpdate() {
+                        finish();
+                    }
+                })
+                .setNotificationBuilder(
+                        new NotificationBuilder()
+                                .setRingtone(true)
+                                .setIcon(R.mipmap.dialog4)
+                                .setContentText(getString(R.string.custom_content_text))
+                )
+                .setForceRedownload(true)
+                .setSilentDownload(false)
+                .setDownloadUrl("http://test-1251233192.coscd.myqcloud.com/1_1.apk")
+                .excuteMission(this);
+
 
     }
 
@@ -142,7 +185,7 @@ public class MainActivity extends AppCompatActivity {
                 } else
                     builder.setShowDownloadingDialog(false);
 
-//                builder.setShowDownLoadFailDialog(false);
+                builder.setShowDownLoadFailDialog(false);
 //                builder.setDownloadAPKPath("/storage/emulated/0/AllenVersionPath2/");
                 AllenChecker.startVersionCheck(getApplication(), builder.build());
                 break;

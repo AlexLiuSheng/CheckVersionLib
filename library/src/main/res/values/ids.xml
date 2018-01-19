@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="versionchecklib_version_dialog_commit" type="id">0x66</item>
+    <item name="versionchecklib_failed_dialog_retry" type="id">0x67</item>
+    <item name="versionchecklib_failed_dialog_cancel" type="id">0x68</item>
+    <item name="versionchecklib_version_dialog_cancel" type="id">0x69</item>
+    <item name="versionchecklib_loading_dialog_cancel" type="id">0x70</item>
+</resources>

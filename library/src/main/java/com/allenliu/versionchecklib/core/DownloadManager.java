@@ -52,7 +52,6 @@ public class DownloadManager {
         String downloadPath = versionParams.getDownloadAPKPath() + AllenChecker.getGlobalContext().getString(R.string.versionchecklib_download_apkname, AllenChecker.getGlobalContext().getPackageName());
         //静默下载也判断本地是否有缓存
         if (versionParams.isSilentDownload()) {
-
             if (!versionParams.isForceRedownload()) {
                 //判断本地文件是否存在
                 if (checkAPKIsExists(AllenChecker.getGlobalContext(), downloadPath)) {
