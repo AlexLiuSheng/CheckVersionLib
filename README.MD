@@ -4,8 +4,7 @@
 老规矩先看V2效果，这个版本最大的特点就是使用非常简单，相对于1.+版本
 
 ### 效果
- <img src="https://github.com/AlexLiuSheng/CheckVersionLib/blob/master/gif/v2.png" width=200/>
- <img src="https://github.com/AlexLiuSheng/CheckVersionLib/blob/master/gif/V2.gif" width=200/>
+ <img src="https://github.com/AlexLiuSheng/CheckVersionLib/blob/master/gif/v2.png" width=200/><img src="https://github.com/AlexLiuSheng/CheckVersionLib/blob/master/gif/V2.gif" width=200/>
  
 ### 特点
 - [x] 任何地方都可以调用
@@ -286,7 +285,7 @@ eg.
 
 ***
 
- - 更全面的使用请看demo
+ - 更全面的使用请看 [demo](https://github.com/AlexLiuSheng/CheckVersionLib/blob/master/sample/src/main/java/com/allenliu/sample/v2/V2Activity.java)
  
  - 感谢各位对本库的支持
  
