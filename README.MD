@@ -222,7 +222,7 @@ builder.setShowNotification(false);  默认true
    设置`CustomVersionDialogListener`
    
 
-- 定义此界面**必须**有一个确定下载的按钮，按钮id必须为`@versionchecklib_version_dialog_commit`
+- 定义此界面**必须**有一个确定下载的按钮，按钮id必须为`@id/versionchecklib_version_dialog_commit`
 
 - 如果有取消按钮（没有忽略本条要求），则按钮id必须为`@id/versionchecklib_version_dialog_cancel`
 
