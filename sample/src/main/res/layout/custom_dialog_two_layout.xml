@@ -29,7 +29,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="10dp"
-                android:text="检测到新版本是否更新?"
+                android:text="@string/update_title"
                 android:textColor="@android:color/black"
                 android:textSize="13sp" />
 
@@ -44,7 +44,7 @@
 
             <Button
                 android:layout_marginTop="10dp"
-                android:id="@+id/btn_update"
+                android:id="@id/versionchecklib_version_dialog_commit"
                 android:layout_width="match_parent"
                 android:layout_height="35dp"
                 android:background="@drawable/shape_corner"

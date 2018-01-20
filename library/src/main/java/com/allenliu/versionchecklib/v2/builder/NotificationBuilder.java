@@ -13,7 +13,11 @@ public class NotificationBuilder {
     private String contentText;
     private boolean isRingtone;
 
-    public NotificationBuilder() {
+    public static NotificationBuilder create(){
+        return new NotificationBuilder();
+    }
+
+    private NotificationBuilder() {
         icon = R.mipmap.ic_launcher;
         isRingtone = true;
     }

@@ -3,30 +3,33 @@
     package="com.allenliu.sample">
 
     <application
+        android:name=".MyApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
-        android:name=".MyApplication"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name="com.allenliu.sample.MainActivity">
+        <activity android:name=".v1.V1Activity">
+
+        </activity>
+
+        <service
+            android:name=".v1.DemoService"
+            android:enabled="true"
+            android:exported="true" />
+
+        <activity
+            android:name=".v1.CustomVersionDialogActivity"
+            android:launchMode="singleTask"
+            android:theme="@style/versionCheckLibvtransparentTheme" />
+        <activity android:name=".v2.V2Activity" />
+        <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <service
-            android:name="com.allenliu.sample.DemoService"
-            android:enabled="true"
-            android:exported="true" />
-
-        <activity
-            android:name="com.allenliu.sample.CustomVersionDialogActivity"
-            android:launchMode="singleTask"
-            android:theme="@style/versionCheckLibvtransparentTheme" />
-
     </application>
 
 </manifest>

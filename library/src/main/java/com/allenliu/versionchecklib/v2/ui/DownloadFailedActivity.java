@@ -42,7 +42,7 @@ public class DownloadFailedActivity extends AllenBaseActivity implements DialogI
 
     @Override
     public void showCustomDialog() {
-        downloadFailedDialog = getVersionBuilder().getCustomDownloadFailedListener().getCustomDownloadFailed(getVersionBuilder().getVersionBundle());
+        downloadFailedDialog = getVersionBuilder().getCustomDownloadFailedListener().getCustomDownloadFailed(this,getVersionBuilder().getVersionBundle());
         View retryView = downloadFailedDialog.findViewById(R.id.versionchecklib_failed_dialog_retry);
         if (retryView != null) {
             retryView.setOnClickListener(new View.OnClickListener() {
@@ -65,9 +65,12 @@ public class DownloadFailedActivity extends AllenBaseActivity implements DialogI
     }
 
     private void showDowloadFailedDialog() {
+
         if (getVersionBuilder().getCustomDownloadFailedListener() != null) {
+            ALog.e("show customization failed dialog");
             showCustomDialog();
         } else {
+            ALog.e("show default failed dialog");
             showDefaultDialog();
         }
         downloadFailedDialog.setOnCancelListener(this);
@@ -87,4 +90,11 @@ public class DownloadFailedActivity extends AllenBaseActivity implements DialogI
         finish();
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if(downloadFailedDialog!=null)
+            downloadFailedDialog.dismiss();
+        finish();
+    }
 }

@@ -61,6 +61,11 @@ public class RequestVersionBuilder {
         return requestVersionListener;
     }
 
+    /**
+     *
+     * @param requestVersionListener requestVersionResultListener
+     * @return download builder setting
+     */
     public DownloadBuilder request(RequestVersionListener requestVersionListener) {
         this.requestVersionListener = requestVersionListener;
         return new DownloadBuilder(this, null);

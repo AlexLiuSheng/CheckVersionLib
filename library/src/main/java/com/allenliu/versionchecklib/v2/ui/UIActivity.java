@@ -6,15 +6,18 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.os.Build;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.TextView;
 
 import com.allenliu.versionchecklib.R;
 import com.allenliu.versionchecklib.callback.DialogDismissListener;
 import com.allenliu.versionchecklib.core.AVersionService;
 import com.allenliu.versionchecklib.core.VersionDialogActivity;
+import com.allenliu.versionchecklib.utils.ALog;
 import com.allenliu.versionchecklib.utils.AllenEventBusUtil;
 import com.allenliu.versionchecklib.utils.AppUtils;
 import com.allenliu.versionchecklib.v2.AllenVersionChecker;
@@ -36,11 +39,13 @@ public class UIActivity extends AllenBaseActivity implements DialogInterface.OnC
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         showVersionDialog();
+
     }
 
     @Override
     protected void onDestroy() {
         isDestroy = true;
+        ALog.e("version activity destroy");
         super.onDestroy();
     }
 
@@ -89,17 +94,22 @@ public class UIActivity extends AllenBaseActivity implements DialogInterface.OnC
 
     @Override
     public void showCustomDialog() {
-        versionDialog = getVersionBuilder().getCustomVersionDialogListener().getCustomVersionDialog(VersionService.builder.getVersionBundle());
+        ALog.e("show customization dialog");
+        versionDialog = getVersionBuilder().getCustomVersionDialogListener().getCustomVersionDialog(this,VersionService.builder.getVersionBundle());
         try {
             //自定义dialog，commit button 必须存在
-            View view = versionDialog.findViewById(R.id.versionchecklib_version_dialog_commit);
+            final View view = versionDialog.findViewById(R.id.versionchecklib_version_dialog_commit);
             if (view != null) {
+                ALog.e("view not null");
+
                 view.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
+                        ALog.e("click");
                         dealVersionDialogCommit();
                     }
                 });
+
             } else {
                 throwWrongIdsException();
             }
@@ -114,6 +124,7 @@ public class UIActivity extends AllenBaseActivity implements DialogInterface.OnC
                 });
             }
         } catch (Exception e) {
+            e.printStackTrace();
             throwWrongIdsException();
         }
         versionDialog.show();
@@ -128,7 +139,12 @@ public class UIActivity extends AllenBaseActivity implements DialogInterface.OnC
         versionDialog.setOnCancelListener(this);
     }
 
-
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (versionDialog != null && versionDialog.isShowing())
+            versionDialog.dismiss();
+    }
 
 
     private void dealVersionDialogCommit() {
@@ -151,6 +167,5 @@ public class UIActivity extends AllenBaseActivity implements DialogInterface.OnC
         AllenVersionChecker.getInstance().cancelAllMission(this);
         finish();
     }
-
 
 }

@@ -3,4 +3,7 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
+    <color name="fooyo_tint_red">#ef5d6a</color>
+    <color name="fooyo_mid_green">#50b848</color>
+    <color name="fooyo_azure">#00aeef</color>
 </resources>

@@ -7,7 +7,7 @@
     <LinearLayout
         android:layout_width="300dp"
         android:orientation="vertical"
-        android:background="@color/colorPrimaryDark"
+        android:background="@color/fooyo_azure"
 
         android:layout_height="wrap_content">
         <TextView
@@ -17,7 +17,7 @@
             android:textSize="18sp"
             android:textColor="@android:color/white"
             android:layout_gravity="center"
-            android:text="检测到新版本"
+            android:text="@string/update_title"
             android:layout_height="wrap_content" />
         <View
             android:layout_width="match_parent"
@@ -27,6 +27,7 @@
             android:paddingTop="10dp"
             android:paddingBottom="10dp"
             android:paddingLeft="5dp"
+            android:id="@+id/tv_msg"
             android:layout_width="match_parent"
             android:textColor="@android:color/white"
             android:text="@string/updatecontent"
@@ -46,7 +47,7 @@
                 android:layout_weight="1"
                 android:gravity="center"
                 android:text="取消"
-                android:id="@+id/tv_cancel"
+                android:id="@id/versionchecklib_version_dialog_cancel"
                 android:textColor="@android:color/white"
                 android:textSize="15sp"
                 android:layout_height="wrap_content" />
@@ -55,10 +56,12 @@
                 android:layout_weight="1"
                 android:gravity="center"
                 android:text="立即升级"
-                android:id="@+id/tv_update"
-                android:textColor="@android:color/holo_green_light"
+                android:id="@id/versionchecklib_version_dialog_commit"
+                android:textColor="@color/fooyo_tint_red"
                 android:textSize="15sp"
                 android:layout_height="wrap_content" />
+
+
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>

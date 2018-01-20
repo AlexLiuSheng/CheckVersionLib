@@ -12,8 +12,9 @@ import com.allenliu.versionchecklib.utils.FileHelper;
 
 /**
  * Created by allenliu on 2017/8/15.
+ *
  */
-
+@Deprecated
 public class VersionParams implements Parcelable {
     private String requestUrl;
     private String downloadAPKPath;

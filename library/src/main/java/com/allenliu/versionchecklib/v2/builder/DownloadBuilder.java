@@ -28,7 +28,7 @@ public class DownloadBuilder {
     private boolean isShowDownloadFailDialog;
     private NotificationBuilder notificationBuilder;
     private APKDownloadListener apkDownloadListener;
-    private DialogDismissListener dialogDismissListener;
+
     private CustomDownloadFailedListener customDownloadFailedListener;
     private CustomDownloadingDialogListener customDownloadingDialogListener;
     private CustomVersionDialogListener customVersionDialogListener;
@@ -46,7 +46,7 @@ public class DownloadBuilder {
         isShowDownloadingDialog = true;
         isShowNotification = true;
         isShowDownloadFailDialog = true;
-        notificationBuilder=new NotificationBuilder();
+        notificationBuilder=NotificationBuilder.create();
     }
 
     public DownloadBuilder(RequestVersionBuilder requestVersionBuilder, UIData versionBundle) {
@@ -130,10 +130,7 @@ public class DownloadBuilder {
         return this;
     }
 
-    public DownloadBuilder setDialogDismissListener(DialogDismissListener dialogDismissListener) {
-        this.dialogDismissListener = dialogDismissListener;
-        return this;
-    }
+
 
 
     public boolean isSilentDownload() {
@@ -168,9 +165,7 @@ public class DownloadBuilder {
         return apkDownloadListener;
     }
 
-    public DialogDismissListener getDialogDismissListener() {
-        return dialogDismissListener;
-    }
+
 
     public CustomDownloadFailedListener getCustomDownloadFailedListener() {
         return customDownloadFailedListener;

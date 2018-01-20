@@ -1,6 +1,5 @@
 package com.allenliu.versionchecklib.v2.ui;
 
-import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -14,7 +13,6 @@ import android.os.Build;
 import android.support.v4.app.NotificationCompat;
 
 import com.allenliu.versionchecklib.R;
-import com.allenliu.versionchecklib.core.AllenChecker;
 import com.allenliu.versionchecklib.core.PermissionDialogActivity;
 import com.allenliu.versionchecklib.core.VersionFileProvider;
 import com.allenliu.versionchecklib.utils.ALog;
@@ -35,10 +33,10 @@ public class NotificationHelper {
     private Context context;
     NotificationCompat.Builder notificationBuilder = null;
     NotificationManager manager = null;
-    private boolean isDownloadSuccess=false;
+    private boolean isDownloadSuccess=false,isFailed=false;
     private int currentProgress = 0;
     private String contentText;
-
+    private  final int NOTIFICATION_ID=0;
     public NotificationHelper(Context context, DownloadBuilder builder) {
         this.context = context;
         this.versionBuilder = builder;
@@ -52,11 +50,11 @@ public class NotificationHelper {
      */
     public void updateNotification(int progress) {
         if (versionBuilder.isShowNotification()) {
-            if ((progress - currentProgress) > 5&&!isDownloadSuccess) {
+            if ((progress - currentProgress) > 5&&!isDownloadSuccess&&!isFailed) {
                 notificationBuilder.setContentIntent(null);
                 notificationBuilder.setContentText(String.format(contentText, progress));
                 notificationBuilder.setProgress(100, progress, false);
-                manager.notify(0, notificationBuilder.build());
+                manager.notify(NOTIFICATION_ID, notificationBuilder.build());
                 currentProgress = progress;
             }
         }
@@ -67,10 +65,11 @@ public class NotificationHelper {
      */
     public void showNotification() {
         isDownloadSuccess=false;
+        isFailed=false;
         if (versionBuilder.isShowNotification()) {
             manager = (NotificationManager) context.getSystemService(NOTIFICATION_SERVICE);
             notificationBuilder = createNotification();
-            manager.notify(0, notificationBuilder.build());
+            manager.notify(NOTIFICATION_ID, notificationBuilder.build());
         }
     }
 
@@ -78,7 +77,7 @@ public class NotificationHelper {
      * show download success notification
      */
     public void showDownloadCompleteNotifcation(File file) {
-        isDownloadSuccess=false;
+        isDownloadSuccess=true;
         if (!versionBuilder.isShowNotification())
             return;
         Intent i = new Intent(Intent.ACTION_VIEW);
@@ -98,11 +97,12 @@ public class NotificationHelper {
         notificationBuilder.setContentText(context.getString(R.string.versionchecklib_download_finish));
         notificationBuilder.setProgress(100, 100, false);
         manager.cancelAll();
-        manager.notify(0, notificationBuilder.build());
+        manager.notify(NOTIFICATION_ID, notificationBuilder.build());
     }
 
     public void showDownloadFailedNotification() {
         isDownloadSuccess=false;
+        isFailed=true;
         if (versionBuilder.isShowNotification()) {
             Intent intent = new Intent(context, PermissionDialogActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -110,7 +110,7 @@ public class NotificationHelper {
             notificationBuilder.setContentIntent(pendingIntent);
             notificationBuilder.setContentText(context.getString(R.string.versionchecklib_download_fail));
             notificationBuilder.setProgress(100, 0, false);
-            manager.notify(0, notificationBuilder.build());
+            manager.notify(NOTIFICATION_ID, notificationBuilder.build());
         }
     }
 
@@ -152,5 +152,10 @@ public class NotificationHelper {
         }
 
         return builder;
+    }
+
+    public void onDestroy() {
+        if(manager!=null)
+        manager.cancel(NOTIFICATION_ID);
     }
 }

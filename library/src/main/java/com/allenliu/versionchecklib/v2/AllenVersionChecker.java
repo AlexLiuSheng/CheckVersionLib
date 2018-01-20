@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 
+import com.allenliu.versionchecklib.core.http.AllenHttp;
 import com.allenliu.versionchecklib.v2.builder.DownloadBuilder;
 import com.allenliu.versionchecklib.v2.builder.RequestVersionBuilder;
 import com.allenliu.versionchecklib.v2.builder.UIData;
@@ -44,6 +45,10 @@ public class AllenVersionChecker {
         return new DownloadBuilder(null, versionBundle);
     }
 
+    /**
+     * use request version function
+     * @return requestVersionBuilder
+     */
     public RequestVersionBuilder requestVersion() {
         return new RequestVersionBuilder();
     }

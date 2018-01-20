@@ -4,7 +4,9 @@ import android.app.IntentService;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Handler;
 import android.os.IBinder;
+import android.os.Looper;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.WorkerThread;
@@ -51,6 +53,7 @@ public class VersionService extends Service {
     public static DownloadBuilder builder;
     private BuilderHelper builderHelper;
     private NotificationHelper notificationHelper;
+    private boolean isServiceAlive = false;
 
     @Override
     public void onCreate() {
@@ -58,6 +61,10 @@ public class VersionService extends Service {
         if (!EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().register(this);
         }
+        ALog.e("version service create");
+        if (builder == null)
+            return;
+        isServiceAlive = true;
         builderHelper = new BuilderHelper(getApplicationContext(), builder);
         notificationHelper = new NotificationHelper(getApplicationContext(), builder);
         new Thread() {
@@ -70,10 +77,14 @@ public class VersionService extends Service {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        ALog.e("service destroy");
+        ALog.e("version service destroy");
         builder = null;
         builderHelper = null;
+        if (notificationHelper != null)
+            notificationHelper.onDestroy();
         notificationHelper = null;
+        isServiceAlive = false;
+        AllenHttp.getHttpClient().dispatcher().cancelAll();
         if (EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().unregister(this);
         }
@@ -85,10 +96,24 @@ public class VersionService extends Service {
         return null;
     }
 
-    public static void enqueueWork(Context context, DownloadBuilder downloadBuilder) {
-        builder = downloadBuilder;
-        Intent intent = new Intent(context, VersionService.class);
-        context.startService(intent);
+    public static void enqueueWork(final Context context, final DownloadBuilder downloadBuilder) {
+        //清除之前的任务，如果有
+        AllenVersionChecker.getInstance().cancelAllMission(context);
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (builder == null)
+                    ALog.e("a1builder==null");
+                builder = downloadBuilder;
+                if (builder == null)
+                    ALog.e("a2builder==null");
+                Intent intent = new Intent(context, VersionService.class);
+                context.startService(intent);
+            }
+        }, 500);
+
+
 //        enqueueWork(context, VersionService.class, JOB_ID, new Intent());
     }
 
@@ -120,29 +145,51 @@ public class VersionService extends Service {
                 request = AllenHttp.postJson(requestVersionBuilder).build();
                 break;
         }
-        RequestVersionListener requestVersionListener = requestVersionBuilder.getRequestVersionListener();
+        final RequestVersionListener requestVersionListener = requestVersionBuilder.getRequestVersionListener();
+        Handler handler = new Handler(Looper.getMainLooper());
         if (requestVersionListener != null) {
             try {
-                Response response = client.newCall(request).execute();
+                final Response response = client.newCall(request).execute();
                 if (response.isSuccessful()) {
-                    String result = response.body().string();
-                    UIData versionBundle = requestVersionListener.onRequestVersionSuccess(result);
-                    builder.setVersionBundle(versionBundle);
-                    downloadAPK();
+                    final String result = response.body().string();
+                    handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            UIData versionBundle = requestVersionListener.onRequestVersionSuccess(result);
+                            builder.setVersionBundle(versionBundle);
+                            downloadAPK();
+                        }
+                    });
+
                 } else {
-                    AllenVersionChecker.getInstance().cancelAllMission(getApplicationContext());
-                    requestVersionListener.onRequestVersionFailure(response.message());
+                    if (!isServiceAlive)
+                        return;
+                    handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            AllenVersionChecker.getInstance().cancelAllMission(getApplicationContext());
+                            requestVersionListener.onRequestVersionFailure(response.message());
+                        }
+                    });
                 }
-            } catch (IOException e) {
+            } catch (final IOException e) {
                 e.printStackTrace();
-                AllenVersionChecker.getInstance().cancelAllMission(getApplicationContext());
-                requestVersionListener.onRequestVersionFailure(e.getMessage());
+                if (!isServiceAlive)
+                    return;
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        AllenVersionChecker.getInstance().cancelAllMission(getApplicationContext());
+                        requestVersionListener.onRequestVersionFailure(e.getMessage());
+                    }
+                });
 
             }
         } else {
             throw new RuntimeException("using request version function,you must set a requestVersionListener");
         }
     }
+
 
     private boolean checkWhetherNeedRequestVersion() {
         if (builder.getRequestVersionBuilder() != null)
@@ -172,11 +219,11 @@ public class VersionService extends Service {
     private void showDownloadingDialog() {
         if (builder.isShowDownloadingDialog()) {
             Intent intent = new Intent(this, DownloadingActivity.class);
-//            intent.putExtra(DownloadingActivity.PROGRESS, progress);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
         }
     }
+
     private void updateDownloadingDialogProgress(int progress) {
         CommonEvent commonEvent = new CommonEvent();
         commonEvent.setEventType(AllenEventType.UPDATE_DOWNLOADING_PROGRESS);
@@ -184,16 +231,19 @@ public class VersionService extends Service {
         commonEvent.setSuccessful(true);
         EventBus.getDefault().post(commonEvent);
     }
+
     private void showDownloadFailedDialog() {
         Intent intent = new Intent(this, DownloadFailedActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
     }
+
     private void requestPermissionAndDownload() {
         Intent intent = new Intent(this, PermissionDialogActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
     }
+
     private void install() {
         AllenEventBusUtil.sendEventBus(AllenEventType.DOWNLOAD_COMPLETE);
         final String downloadPath = builder.getDownloadAPKPath() + getString(R.string.versionchecklib_download_apkname, getPackageName());
@@ -215,32 +265,63 @@ public class VersionService extends Service {
             return;
         }
         builderHelper.checkAndDeleteAPK();
-        DownloadMangerV2.download(builder.getDownloadUrl(), builder.getDownloadAPKPath(), getString(R.string.versionchecklib_download_apkname, getPackageName()), new DownloadListener() {
+        String downloadUrl = builder.getDownloadUrl();
+        if (downloadUrl == null && builder.getVersionBundle() != null) {
+            downloadUrl = builder.getVersionBundle().getDownloadUrl();
+        }
+        if (downloadUrl == null) {
+            AllenVersionChecker.getInstance().cancelAllMission(getApplicationContext());
+            throw new RuntimeException("you must set a download url for download function using");
+        }
+        DownloadMangerV2.download(downloadUrl, builder.getDownloadAPKPath(), getString(R.string.versionchecklib_download_apkname, getPackageName()), new DownloadListener() {
             @Override
             public void onCheckerDownloading(int progress) {
-                notificationHelper.updateNotification(progress);
-                updateDownloadingDialogProgress(progress);
+                if (isServiceAlive) {
+                    if (!builder.isSilentDownload()) {
+                        notificationHelper.updateNotification(progress);
+                        updateDownloadingDialogProgress(progress);
+                    }
+                    if (builder.getApkDownloadListener() != null)
+                        builder.getApkDownloadListener().onDownloading(progress);
+                }
             }
 
             @Override
             public void onCheckerDownloadSuccess(File file) {
-                notificationHelper.showDownloadCompleteNotifcation(file);
-                install();
+                if (isServiceAlive) {
+                    if (!builder.isSilentDownload())
+                        notificationHelper.showDownloadCompleteNotifcation(file);
+                    if (builder.getApkDownloadListener() != null)
+                        builder.getApkDownloadListener().onDownloadSuccess(file);
+                    install();
+                }
             }
 
             @Override
             public void onCheckerDownloadFail() {
-                if (!builder.isSilentDownload() && builder.isShowDownloadFailDialog()) {
-                    showDownloadFailedDialog();
+                if (!isServiceAlive)
+                    return;
+                if (builder.getApkDownloadListener() != null)
+                    builder.getApkDownloadListener().onDownloadFail();
+                if (!builder.isSilentDownload()) {
+                    AllenEventBusUtil.sendEventBus(AllenEventType.CLOSE_DOWNLOADING_ACTIVITY);
+                    if (builder.isShowDownloadFailDialog()) {
+                        showDownloadFailedDialog();
+                    }
+                    notificationHelper.showDownloadFailedNotification();
+                } else {
+                    AllenVersionChecker.getInstance().cancelAllMission(getApplicationContext());
                 }
-                notificationHelper.showDownloadFailedNotification();
+
             }
 
             @Override
             public void onCheckerStartDownload() {
                 ALog.e("start download apk");
-                notificationHelper.showNotification();
-                showDownloadingDialog();
+                if (!builder.isSilentDownload()) {
+                    notificationHelper.showNotification();
+                    showDownloadingDialog();
+                }
             }
         });
     }

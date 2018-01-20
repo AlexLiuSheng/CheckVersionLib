@@ -8,8 +8,9 @@ import com.allenliu.versionchecklib.core.http.AllenHttp;
 
 /**
  * Created by allenliu on 2017/8/15.
+ *{@link com.allenliu.versionchecklib.v2.AllenVersionChecker} use AllenVersionChecker of v2
  */
-
+@Deprecated
 public class AllenChecker {
     private static boolean isDebug = true;
     private static Context globalContext;

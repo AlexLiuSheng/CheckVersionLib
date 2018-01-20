@@ -46,14 +46,12 @@ public class DownloadingActivity extends AllenBaseActivity implements DialogInte
         switch (commonEvent.getEventType()) {
             case AllenEventType.UPDATE_DOWNLOADING_PROGRESS:
                 int progress = (int) commonEvent.getData();
-                if ((progress - currentProgress) > 5) {
-
-                }
                 currentProgress = progress;
                 updateProgress();
                 break;
             case AllenEventType.DOWNLOAD_COMPLETE:
-                finish();
+            case AllenEventType.CLOSE_DOWNLOADING_ACTIVITY:
+                destroy();
                 break;
         }
     }
@@ -77,7 +75,7 @@ public class DownloadingActivity extends AllenBaseActivity implements DialogInte
 
     @Override
     public void showCustomDialog() {
-        downloadingDialog = getVersionBuilder().getCustomDownloadingDialogListener().getCustomDownloadingDialog(currentProgress, getVersionBuilder().getVersionBundle());
+        downloadingDialog = getVersionBuilder().getCustomDownloadingDialogListener().getCustomDownloadingDialog(this, currentProgress, getVersionBuilder().getVersionBundle());
         View cancelView = downloadingDialog.findViewById(R.id.versionchecklib_loading_dialog_cancel);
         if (cancelView != null) {
             cancelView.setOnClickListener(new View.OnClickListener() {
@@ -93,17 +91,21 @@ public class DownloadingActivity extends AllenBaseActivity implements DialogInte
     @Override
     protected void onPause() {
         super.onPause();
+        destroy();
+        isDestroy = true;
+    }
+
+    private void destroy() {
         if (downloadingDialog != null) {
             downloadingDialog.dismiss();
-            finish();
         }
-        isDestroy = true;
+        finish();
     }
 
     private void updateProgress() {
         if (!isDestroy) {
             if (getVersionBuilder().getCustomDownloadingDialogListener() != null) {
-                getVersionBuilder().getCustomDownloadingDialogListener().getCustomDownloadingDialog(currentProgress, getVersionBuilder().getVersionBundle());
+                getVersionBuilder().getCustomDownloadingDialogListener().updateUI(downloadingDialog, currentProgress, getVersionBuilder().getVersionBundle());
             } else {
                 ProgressBar pb = downloadingDialog.findViewById(R.id.pb);
                 pb.setProgress(currentProgress);

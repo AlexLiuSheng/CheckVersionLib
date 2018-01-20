@@ -13,12 +13,13 @@ import com.allenliu.versionchecklib.R;
 import com.allenliu.versionchecklib.utils.AllenEventBusUtil;
 import com.allenliu.versionchecklib.v2.eventbus.AllenEventType;
 import com.allenliu.versionchecklib.v2.eventbus.CommonEvent;
+import com.allenliu.versionchecklib.v2.ui.AllenBaseActivity;
 
 import org.greenrobot.eventbus.EventBus;
 
 import static com.allenliu.versionchecklib.core.VersionDialogActivity.MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE;
 
-public class PermissionDialogActivity extends AppCompatActivity {
+public class PermissionDialogActivity extends AllenBaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +55,16 @@ public class PermissionDialogActivity extends AppCompatActivity {
         } else {
             sendBroadcast(true);
         }
+    }
+
+    @Override
+    public void showDefaultDialog() {
+
+    }
+
+    @Override
+    public void showCustomDialog() {
+
     }
 
     private void sendBroadcast(boolean result) {

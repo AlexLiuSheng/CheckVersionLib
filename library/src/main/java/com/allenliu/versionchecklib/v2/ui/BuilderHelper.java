@@ -6,6 +6,7 @@ import android.content.Intent;
 import com.allenliu.versionchecklib.R;
 import com.allenliu.versionchecklib.core.DownloadManager;
 import com.allenliu.versionchecklib.utils.ALog;
+import com.allenliu.versionchecklib.v2.AllenVersionChecker;
 import com.allenliu.versionchecklib.v2.builder.DownloadBuilder;
 
 import java.io.File;
@@ -42,8 +43,7 @@ public class BuilderHelper {
     public void checkForceUpdate() {
         if (builder.getForceUpdateListener() != null) {
             builder.getForceUpdateListener().onShouldForceUpdate();
-            Intent intent = new Intent(context, VersionService.class);
-            context.stopService(intent);
+            AllenVersionChecker.getInstance().cancelAllMission(context);
         }
     }
 }
