@@ -1,6 +1,6 @@
 # CheckVersionLib[ ![Download](https://api.bintray.com/packages/zkxy/maven/VersionCheckLib/images/download.svg) ](https://bintray.com/zkxy/maven/VersionCheckLib/_latestVersion)
 
-#  [V2版来袭](https://github.com/AlexLiuSheng/CheckVersionLib/blob/master/README_EN.md)
+#  [V2版来袭](https://github.com/AlexLiuSheng/CheckVersionLib/blob/master/README.MD)
 [English Doc](https://github.com/AlexLiuSheng/CheckVersionLib/blob/master/README_EN.md)
 ## 特点
 - [x] 任何地方都可以检测（可设置定时检测）
