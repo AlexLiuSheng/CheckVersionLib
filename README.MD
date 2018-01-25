@@ -26,7 +26,7 @@
 ### 导入
 
 ```
-compile 'com.allenliu.versionchecklib:library:2.0.0'
+compile 'com.allenliu.versionchecklib:library:2.0.1'
 ```
 
 ### 使用
@@ -64,6 +64,7 @@ compile 'com.allenliu.versionchecklib:library:2.0.0'
                     public UIData onRequestVersionSuccess(String result) {
                         //拿到服务器返回的数据，解析，拿到downloadUrl和一些其他的UI数据
                         ...
+                        //如果是最新版本直接return null
                         return UIData.create().setDownloadUrl(downloadUrl);
                     }
 

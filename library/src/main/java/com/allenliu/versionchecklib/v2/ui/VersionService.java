@@ -199,10 +199,14 @@ public class VersionService extends Service {
     }
 
     private void downloadAPK() {
-        if (builder.isSilentDownload()) {
-            requestPermissionAndDownload();
+        if (builder.getVersionBundle() != null) {
+            if (builder.isSilentDownload()) {
+                requestPermissionAndDownload();
+            } else {
+                showVersionDialog();
+            }
         } else {
-            showVersionDialog();
+            AllenVersionChecker.getInstance().cancelAllMission(getApplicationContext());
         }
     }
 
