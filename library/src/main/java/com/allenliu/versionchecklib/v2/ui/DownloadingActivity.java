@@ -91,8 +91,21 @@ public class DownloadingActivity extends AllenBaseActivity implements DialogInte
     @Override
     protected void onPause() {
         super.onPause();
-        destroy();
+        destroyWithOutDismiss();
         isDestroy = true;
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (downloadingDialog != null&&!downloadingDialog.isShowing())
+            downloadingDialog.show();
+    }
+
+    private void destroyWithOutDismiss() {
+        if (downloadingDialog != null&&downloadingDialog.isShowing()) {
+            downloadingDialog.dismiss();
+        }
     }
 
     private void destroy() {

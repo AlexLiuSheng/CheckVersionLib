@@ -146,6 +146,12 @@ public class UIActivity extends AllenBaseActivity implements DialogInterface.OnC
             versionDialog.dismiss();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (versionDialog != null && !versionDialog.isShowing())
+            versionDialog.show();
+    }
 
     private void dealVersionDialogCommit() {
         //如果是静默下载直接安装

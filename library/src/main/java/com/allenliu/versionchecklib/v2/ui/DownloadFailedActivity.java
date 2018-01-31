@@ -93,8 +93,15 @@ public class DownloadFailedActivity extends AllenBaseActivity implements DialogI
     @Override
     protected void onPause() {
         super.onPause();
-        if(downloadFailedDialog!=null)
+        if(downloadFailedDialog!=null&&downloadFailedDialog.isShowing())
             downloadFailedDialog.dismiss();
-        finish();
+//        finish();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if(downloadFailedDialog!=null&&!downloadFailedDialog.isShowing())
+            downloadFailedDialog.show();
     }
 }
