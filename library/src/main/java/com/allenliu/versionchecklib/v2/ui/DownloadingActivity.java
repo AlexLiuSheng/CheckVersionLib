@@ -29,6 +29,8 @@ public class DownloadingActivity extends AllenBaseActivity implements DialogInte
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ALog.e("loading activity create");
+
         showLoadingDialog();
     }
 
@@ -109,6 +111,8 @@ public class DownloadingActivity extends AllenBaseActivity implements DialogInte
     }
 
     private void destroy() {
+        ALog.e("loading activity destroy");
+
         if (downloadingDialog != null) {
             downloadingDialog.dismiss();
         }
@@ -131,6 +135,7 @@ public class DownloadingActivity extends AllenBaseActivity implements DialogInte
     }
 
     private void showLoadingDialog() {
+        ALog.e("show loading");
         if (!isDestroy) {
             if (getVersionBuilder().getCustomDownloadingDialogListener() != null) {
                 showCustomDialog();

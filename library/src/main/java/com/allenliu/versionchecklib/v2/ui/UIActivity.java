@@ -38,6 +38,8 @@ public class UIActivity extends AllenBaseActivity implements DialogInterface.OnC
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ALog.e("version activity create");
+
         showVersionDialog();
 
     }

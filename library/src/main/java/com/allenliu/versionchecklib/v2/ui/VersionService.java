@@ -303,10 +303,12 @@ public class VersionService extends Service {
 
             @Override
             public void onCheckerDownloadFail() {
+
                 if (!isServiceAlive)
                     return;
                 if (builder.getApkDownloadListener() != null)
                     builder.getApkDownloadListener().onDownloadFail();
+
                 if (!builder.isSilentDownload()) {
                     AllenEventBusUtil.sendEventBus(AllenEventType.CLOSE_DOWNLOADING_ACTIVITY);
                     if (builder.isShowDownloadFailDialog()) {

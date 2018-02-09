@@ -89,7 +89,7 @@ public abstract class AllenBaseActivity extends AppCompatActivity {
         return VersionService.builder;
     }
     protected void checkForceUpdate() {
-        if (getVersionBuilder().getForceUpdateListener() != null) {
+        if (getVersionBuilder()!=null&&getVersionBuilder().getForceUpdateListener() != null) {
             getVersionBuilder().getForceUpdateListener().onShouldForceUpdate();
             finish();
         }
