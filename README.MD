@@ -4,7 +4,7 @@
 老规矩先看V2效果，这个版本最大的特点就是使用非常简单，相对于1.+版本
 
 ### 效果
- <img src="https://github.com/AlexLiuSheng/CheckVersionLib/blob/master/gif/v2.png" width=200/><img src="https://github.com/AlexLiuSheng/CheckVersionLib/blob/master/gif/V2.gif" width=200/>
+ <img src="https://github.com/AlexLiuSheng/CheckVersionLib/blob/master/gif/v2.jpg" width=200/><img src="https://github.com/AlexLiuSheng/CheckVersionLib/blob/master/gif/V2.gif" width=200/>
  
 ### 特点
 - [x] 任何地方都可以调用
@@ -26,7 +26,7 @@
 ### 导入
 
 ```
-compile 'com.allenliu.versionchecklib:library:2.0.3'
+compile 'com.allenliu.versionchecklib:library:2.0.5'
 ```
 
 ### 使用
@@ -209,7 +209,20 @@ builder.setShowNotification(false);  默认true
              }
          });
 ```
+> 设置取消监听
+```
 
+ builder.setOnCancelListener(() -> {
+            Toast.makeText(V2Activity.this,"Cancel Hanlde",Toast.LENGTH_SHORT).show();
+        });
+```
+> 静默下载+直接安装（不会弹出升级对话框）
+```
+    builder.setDirectDownload(true);
+           builder.setShowNotification(false);
+           builder.setShowDownloadingDialog(false);
+           builder.setShowDownloadFailDialog(false);
+```
 ### 自定义界面
 
 自定义界面使用回调方式，开发者需要返回自己定义的Dialog（父类android.app）

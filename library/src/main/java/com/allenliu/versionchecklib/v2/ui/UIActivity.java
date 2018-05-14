@@ -87,7 +87,7 @@ public class UIActivity extends AllenBaseActivity implements DialogInterface.OnC
 
 
         } else {
-            alertBuilder.setCancelable(true);
+            alertBuilder.setCancelable(false);
         }
         versionDialog = alertBuilder.create();
         versionDialog.setCanceledOnTouchOutside(false);
@@ -171,6 +171,7 @@ public class UIActivity extends AllenBaseActivity implements DialogInterface.OnC
 
     @Override
     public void onCancel(DialogInterface dialogInterface) {
+        cancelHandler();
         checkForceUpdate();
         AllenVersionChecker.getInstance().cancelAllMission(this);
         finish();

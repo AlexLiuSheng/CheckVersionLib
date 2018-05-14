@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 
 import com.allenliu.versionchecklib.callback.APKDownloadListener;
 import com.allenliu.versionchecklib.callback.DialogDismissListener;
+import com.allenliu.versionchecklib.callback.OnCancelListener;
 import com.allenliu.versionchecklib.utils.FileHelper;
 import com.allenliu.versionchecklib.v2.callback.CustomDownloadFailedListener;
 import com.allenliu.versionchecklib.v2.callback.CustomDownloadingDialogListener;
@@ -26,12 +27,14 @@ public class DownloadBuilder {
     private boolean isShowDownloadingDialog;
     private boolean isShowNotification;
     private boolean isShowDownloadFailDialog;
+    private boolean isDirectDownload;
     private NotificationBuilder notificationBuilder;
     private APKDownloadListener apkDownloadListener;
 
     private CustomDownloadFailedListener customDownloadFailedListener;
     private CustomDownloadingDialogListener customDownloadingDialogListener;
     private CustomVersionDialogListener customVersionDialogListener;
+    private OnCancelListener onCancelListener;
     private ForceUpdateListener forceUpdateListener;
     private UIData versionBundle;
 
@@ -45,6 +48,7 @@ public class DownloadBuilder {
         isForceRedownload = false;
         isShowDownloadingDialog = true;
         isShowNotification = true;
+        isDirectDownload=false;
         isShowDownloadFailDialog = true;
         notificationBuilder=NotificationBuilder.create();
     }
@@ -72,6 +76,11 @@ public class DownloadBuilder {
 
     public UIData getVersionBundle() {
         return versionBundle;
+    }
+
+    public DownloadBuilder setOnCancelListener(OnCancelListener cancelListener){
+        this.onCancelListener=cancelListener;
+        return this;
     }
 
     public DownloadBuilder setCustomDownloadFailedListener(CustomDownloadFailedListener customDownloadFailedListener) {
@@ -171,6 +180,10 @@ public class DownloadBuilder {
         return customDownloadFailedListener;
     }
 
+    public OnCancelListener getOnCancelListener() {
+        return onCancelListener;
+    }
+
     public CustomDownloadingDialogListener getCustomDownloadingDialogListener() {
         return customDownloadingDialogListener;
     }
@@ -189,6 +202,15 @@ public class DownloadBuilder {
 
     public DownloadBuilder setNotificationBuilder(NotificationBuilder notificationBuilder) {
         this.notificationBuilder = notificationBuilder;
+        return this;
+    }
+
+    public boolean isDirectDownload() {
+        return isDirectDownload;
+    }
+
+    public DownloadBuilder setDirectDownload(boolean directDownload) {
+        isDirectDownload = directDownload;
         return this;
     }
 

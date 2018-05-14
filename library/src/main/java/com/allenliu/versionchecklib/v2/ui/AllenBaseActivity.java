@@ -94,6 +94,12 @@ public abstract class AllenBaseActivity extends AppCompatActivity {
             finish();
         }
     }
+    protected  void cancelHandler(){
+        if (getVersionBuilder()!=null&&getVersionBuilder().getOnCancelListener() != null) {
+            getVersionBuilder().getOnCancelListener().onCancel();
+
+        }
+    }
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void receiveEvent(CommonEvent commonEvent) {
     }

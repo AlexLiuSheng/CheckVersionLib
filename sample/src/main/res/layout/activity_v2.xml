@@ -126,7 +126,18 @@
 
         <LinearLayout
             android:layout_width="match_parent"
+            android:orientation="vertical"
             android:layout_height="wrap_content">
+            <CheckBox
+                android:id="@+id/checkbox20"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"
+                android:layout_marginTop="5dp"
+                android:checked="false"
+                android:text="静默下载+直接安装"
+                android:textColor="@android:color/black"
+                android:textSize="12sp" />
 
             <CheckBox
                 android:id="@+id/checkbox2"
@@ -135,7 +146,7 @@
                 android:layout_gravity="left"
                 android:layout_marginTop="5dp"
                 android:checked="false"
-                android:text="静默下载"
+                android:text="静默下载+下载完成弹升级框"
                 android:textColor="@android:color/black"
                 android:textSize="12sp" />
 

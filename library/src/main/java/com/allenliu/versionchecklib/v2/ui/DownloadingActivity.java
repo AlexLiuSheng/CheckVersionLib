@@ -39,6 +39,7 @@ public class DownloadingActivity extends AllenBaseActivity implements DialogInte
     public void onCancel(DialogInterface dialogInterface) {
 
         AllenHttp.getHttpClient().dispatcher().cancelAll();
+        cancelHandler();
         checkForceUpdate();
         finish();
     }
@@ -100,6 +101,7 @@ public class DownloadingActivity extends AllenBaseActivity implements DialogInte
     @Override
     protected void onResume() {
         super.onResume();
+        isDestroy=false;
         if (downloadingDialog != null&&!downloadingDialog.isShowing())
             downloadingDialog.show();
     }

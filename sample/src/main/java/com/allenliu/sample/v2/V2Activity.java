@@ -3,6 +3,7 @@ package com.allenliu.sample.v2;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Environment;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -24,6 +25,7 @@ import com.allenliu.versionchecklib.core.VersionDialogActivity;
 import com.allenliu.versionchecklib.core.VersionParams;
 import com.allenliu.versionchecklib.core.http.HttpRequestMethod;
 import com.allenliu.versionchecklib.utils.ALog;
+import com.allenliu.versionchecklib.utils.FileHelper;
 import com.allenliu.versionchecklib.v2.AllenVersionChecker;
 import com.allenliu.versionchecklib.v2.builder.DownloadBuilder;
 import com.allenliu.versionchecklib.v2.builder.NotificationBuilder;
@@ -43,6 +45,8 @@ public class V2Activity extends AppCompatActivity {
     private RadioGroup radioGroup;
     private CheckBox forceUpdateCheckBox;
     private CheckBox silentDownloadCheckBox;
+    private CheckBox silentDownloadCheckBoxAndInstall;
+
     private CheckBox forceDownloadCheckBox;
     private CheckBox onlyDownloadCheckBox;
     private CheckBox showNotificationCheckBox;
@@ -74,6 +78,7 @@ public class V2Activity extends AppCompatActivity {
         showDownloadingCheckBox = findViewById(R.id.checkbox6);
         customNotificationCheckBox = findViewById(R.id.checkbox7);
         showDownloadFailedCheckBox = findViewById(R.id.checkbox8);
+        silentDownloadCheckBoxAndInstall=findViewById(R.id.checkbox20);
 
     }
 
@@ -132,6 +137,13 @@ public class V2Activity extends AppCompatActivity {
             builder.setNotificationBuilder(createCustomNotification());
         if (!showDownloadFailedCheckBox.isChecked())
             builder.setShowDownloadFailDialog(false);
+        if(silentDownloadCheckBoxAndInstall.isChecked()) {
+            builder.setDirectDownload(true);
+           builder.setShowNotification(false);
+           builder.setShowDownloadingDialog(false);
+           builder.setShowDownloadFailDialog(false);
+        }
+
 
         //更新界面选择
         switch (radioGroup.getCheckedRadioButtonId()) {
@@ -162,11 +174,15 @@ public class V2Activity extends AppCompatActivity {
                 break;
         }
         //自定义下载路径
+//        builder.setDownloadAPKPath(Environment.getExternalStorageDirectory() + "/ALLEN/AllenVersionPath2/");
         String address = etAddress.getText().toString();
         if (address != null && !"".equals(address))
             builder.setDownloadAPKPath(address);
 
 
+        builder.setOnCancelListener(() -> {
+            Toast.makeText(V2Activity.this,"Cancel Hanlde",Toast.LENGTH_SHORT).show();
+        });
         builder.excuteMission(this);
     }
 

@@ -200,10 +200,14 @@ public class VersionService extends Service {
 
     private void downloadAPK() {
         if (builder.getVersionBundle() != null) {
-            if (builder.isSilentDownload()) {
-                requestPermissionAndDownload();
+            if (builder.isDirectDownload()) {
+                AllenEventBusUtil.sendEventBus(AllenEventType.START_DOWNLOAD_APK);
             } else {
-                showVersionDialog();
+                if (builder.isSilentDownload()) {
+                    requestPermissionAndDownload();
+                } else {
+                    showVersionDialog();
+                }
             }
         } else {
             AllenVersionChecker.getInstance().cancelAllMission(getApplicationContext());
@@ -277,6 +281,8 @@ public class VersionService extends Service {
             AllenVersionChecker.getInstance().cancelAllMission(getApplicationContext());
             throw new RuntimeException("you must set a download url for download function using");
         }
+        ALog.e("downloadPath:"+downloadPath);
+
         DownloadMangerV2.download(downloadUrl, builder.getDownloadAPKPath(), getString(R.string.versionchecklib_download_apkname, getPackageName()), new DownloadListener() {
             @Override
             public void onCheckerDownloading(int progress) {
