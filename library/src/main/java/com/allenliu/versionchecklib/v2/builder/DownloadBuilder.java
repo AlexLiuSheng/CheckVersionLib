@@ -37,6 +37,8 @@ public class DownloadBuilder {
     private OnCancelListener onCancelListener;
     private ForceUpdateListener forceUpdateListener;
     private UIData versionBundle;
+    private Integer newestVersionCode;
+
 
     public DownloadBuilder() {
         throw new RuntimeException("can not be instantiated from outside");
@@ -69,7 +71,7 @@ public class DownloadBuilder {
         return this;
     }
 
-    public DownloadBuilder setVersionBundle(UIData versionBundle) {
+    public DownloadBuilder setVersionBundle(@NonNull UIData versionBundle) {
         this.versionBundle = versionBundle;
         return this;
     }
@@ -101,6 +103,15 @@ public class DownloadBuilder {
 
     public DownloadBuilder setSilentDownload(boolean silentDownload) {
         isSilentDownload = silentDownload;
+        return this;
+    }
+
+    public Integer getNewestVersionCode() {
+        return newestVersionCode;
+    }
+
+    public DownloadBuilder setNewestVersionCode(Integer newestVersionCode) {
+        this.newestVersionCode = newestVersionCode;
         return this;
     }
 

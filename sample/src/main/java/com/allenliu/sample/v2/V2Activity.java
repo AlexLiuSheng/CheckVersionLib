@@ -20,6 +20,7 @@ import com.allenliu.sample.v1.BaseDialog;
 import com.allenliu.sample.v1.CustomVersionDialogActivity;
 import com.allenliu.sample.v1.DemoService;
 import com.allenliu.versionchecklib.callback.APKDownloadListener;
+import com.allenliu.versionchecklib.callback.OnCancelListener;
 import com.allenliu.versionchecklib.core.AllenChecker;
 import com.allenliu.versionchecklib.core.VersionDialogActivity;
 import com.allenliu.versionchecklib.core.VersionParams;
@@ -144,6 +145,12 @@ public class V2Activity extends AppCompatActivity {
            builder.setShowDownloadFailDialog(false);
         }
 
+        builder.setOnCancelListener(new OnCancelListener() {
+            @Override
+            public void onCancel() {
+                Toast.makeText(V2Activity.this,"cancel",Toast.LENGTH_SHORT).show();
+            }
+        });
 
         //更新界面选择
         switch (radioGroup.getCheckedRadioButtonId()) {

@@ -267,7 +267,7 @@ public class VersionService extends Service {
     private void startDownloadApk() {
         //判断是否缓存并且是否强制重新下载
         final String downloadPath = builder.getDownloadAPKPath() + getString(R.string.versionchecklib_download_apkname, getPackageName());
-        if (DownloadManager.checkAPKIsExists(getApplicationContext(), downloadPath) && !builder.isForceRedownload()) {
+        if (DownloadManager.checkAPKIsExists(getApplicationContext(), downloadPath,builder.getNewestVersionCode()) && !builder.isForceRedownload()) {
             ALog.e("using cache");
             install();
             return;

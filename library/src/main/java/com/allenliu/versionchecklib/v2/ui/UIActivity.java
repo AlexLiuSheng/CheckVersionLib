@@ -133,7 +133,7 @@ public class UIActivity extends AllenBaseActivity implements DialogInterface.OnC
     }
 
     private void showVersionDialog() {
-        if (getVersionBuilder().getCustomVersionDialogListener() != null) {
+        if (getVersionBuilder()!=null&&getVersionBuilder().getCustomVersionDialogListener() != null) {
             showCustomDialog();
         } else {
             showDefaultDialog();

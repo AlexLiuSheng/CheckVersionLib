@@ -44,6 +44,7 @@ public abstract class AllenBaseActivity extends AppCompatActivity {
 
         if (EventBus.getDefault().isRegistered(this))
             EventBus.getDefault().unregister(this);
+        overridePendingTransition(0, 0);
     }
 
     /**

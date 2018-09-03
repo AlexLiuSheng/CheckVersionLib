@@ -67,7 +67,7 @@ public class DownloadFailedActivity extends AllenBaseActivity implements DialogI
     private void showDowloadFailedDialog() {
         AllenEventBusUtil.sendEventBus(AllenEventType.CLOSE_DOWNLOADING_ACTIVITY);
 
-        if (getVersionBuilder().getCustomDownloadFailedListener() != null) {
+        if (getVersionBuilder()!=null&&getVersionBuilder().getCustomDownloadFailedListener() != null) {
             ALog.e("show customization failed dialog");
             showCustomDialog();
         } else {

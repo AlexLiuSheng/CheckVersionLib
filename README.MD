@@ -26,7 +26,7 @@
 ### 导入
 
 ```
-compile 'com.allenliu.versionchecklib:library:2.0.5'
+compile 'com.allenliu.versionchecklib:library:2.0.6'
 ```
 
 ### 使用
@@ -142,7 +142,14 @@ compile 'com.allenliu.versionchecklib:library:2.0.5'
   ```
    builder.setSilentDownload(true); 默认false
   ```
-
+> 设置当前服务器最新的版本号，供库判断是否使用缓存
+ 
+  - 缓存策略：如果本地有安装包，首先判断与当前运行的程序的versionCode是否不一致，然后判断是否有传入最新的
+    versionCode，如果传入的versionCode大于本地的，重新从服务器下载，否则使用缓存
+  
+  ```
+   builder.setNewestVersionCode(int); 默认null
+  ```
 > 强制更新
 
   设置此listener即代表需要强制更新，会在用户想要取消下载的时候回调
@@ -294,6 +301,16 @@ eg.
         });
 ```
 ***
+
+###  混淆配置
+```
+   -keepattributes Annotation
+   -keepclassmembers class * {    @org.greenrobot.eventbus.Subscribe ;}
+   -keep enum org.greenrobot.eventbus.ThreadMode { *; }
+   -keepclassmembers class * extends org.greenrobot.eventbus.util.ThrowableFailureEvent {    (java.lang.Throwable);}
+   -keep class com.allenliu.versionchecklib.**{*;}
+```
+
 
 ### 最后
 
