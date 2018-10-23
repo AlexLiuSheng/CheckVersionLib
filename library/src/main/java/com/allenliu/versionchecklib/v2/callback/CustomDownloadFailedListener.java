@@ -12,4 +12,5 @@ import com.allenliu.versionchecklib.v2.builder.UIData;
 
 public interface CustomDownloadFailedListener {
     Dialog getCustomDownloadFailed(Context context,UIData versionBundle);
+
 }

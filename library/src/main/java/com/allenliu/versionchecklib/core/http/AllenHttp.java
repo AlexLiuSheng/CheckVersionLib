@@ -36,6 +36,7 @@ public class AllenHttp {
         if (client == null) {
             OkHttpClient.Builder builder = new OkHttpClient.Builder();
             builder.sslSocketFactory(createSSLSocketFactory());
+
             builder.hostnameVerifier(new TrustAllHostnameVerifier());
             client=builder.build();
         }

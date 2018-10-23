@@ -38,6 +38,7 @@ public class DownloadBuilder {
     private ForceUpdateListener forceUpdateListener;
     private UIData versionBundle;
     private Integer newestVersionCode;
+    private String apkName;
 
 
     public DownloadBuilder() {
@@ -50,9 +51,9 @@ public class DownloadBuilder {
         isForceRedownload = false;
         isShowDownloadingDialog = true;
         isShowNotification = true;
-        isDirectDownload=false;
+        isDirectDownload = false;
         isShowDownloadFailDialog = true;
-        notificationBuilder=NotificationBuilder.create();
+        notificationBuilder = NotificationBuilder.create();
     }
 
     public DownloadBuilder(RequestVersionBuilder requestVersionBuilder, UIData versionBundle) {
@@ -71,6 +72,11 @@ public class DownloadBuilder {
         return this;
     }
 
+    public DownloadBuilder setApkName(String apkName) {
+        this.apkName = apkName;
+        return this;
+    }
+
     public DownloadBuilder setVersionBundle(@NonNull UIData versionBundle) {
         this.versionBundle = versionBundle;
         return this;
@@ -80,8 +86,8 @@ public class DownloadBuilder {
         return versionBundle;
     }
 
-    public DownloadBuilder setOnCancelListener(OnCancelListener cancelListener){
-        this.onCancelListener=cancelListener;
+    public DownloadBuilder setOnCancelListener(OnCancelListener cancelListener) {
+        this.onCancelListener = cancelListener;
         return this;
     }
 
@@ -151,8 +157,6 @@ public class DownloadBuilder {
     }
 
 
-
-
     public boolean isSilentDownload() {
         return isSilentDownload;
     }
@@ -186,7 +190,6 @@ public class DownloadBuilder {
     }
 
 
-
     public CustomDownloadFailedListener getCustomDownloadFailedListener() {
         return customDownloadFailedListener;
     }
@@ -216,6 +219,10 @@ public class DownloadBuilder {
         return this;
     }
 
+    public String getApkName() {
+        return apkName;
+    }
+
     public boolean isDirectDownload() {
         return isDirectDownload;
     }
@@ -225,7 +232,11 @@ public class DownloadBuilder {
         return this;
     }
 
-    public void excuteMission(Context context) {
+    public void executeMission(Context context) {
+        if (apkName == null) {
+            apkName = context.getPackageName();
+        }
         VersionService.enqueueWork(context, this);
     }
+
 }

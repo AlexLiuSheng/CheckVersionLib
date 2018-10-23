@@ -30,7 +30,7 @@ dependencies {
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     testCompile 'junit:junit:4.12'
     compile project(':library')
-//    compile 'com.allenliu.versionchecklib:library:2.0.0'
+//    compile 'com.allenliu.versionchecklib:library:2.0.9'
     compile 'com.android.support:appcompat-v7:27.0.0'
     //    compile 'com.allenliu.versionchecklib:library:1.7.6'
     //compile files('libs/library.jar')

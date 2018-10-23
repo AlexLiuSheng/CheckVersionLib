@@ -42,26 +42,28 @@ public class DownloadFailedActivity extends AllenBaseActivity implements DialogI
 
     @Override
     public void showCustomDialog() {
-        downloadFailedDialog = getVersionBuilder().getCustomDownloadFailedListener().getCustomDownloadFailed(this,getVersionBuilder().getVersionBundle());
-        View retryView = downloadFailedDialog.findViewById(R.id.versionchecklib_failed_dialog_retry);
-        if (retryView != null) {
-            retryView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    retryDownload();
-                }
-            });
+        if(getVersionBuilder()!=null) {
+            downloadFailedDialog = getVersionBuilder().getCustomDownloadFailedListener().getCustomDownloadFailed(this, getVersionBuilder().getVersionBundle());
+            View retryView = downloadFailedDialog.findViewById(R.id.versionchecklib_failed_dialog_retry);
+            if (retryView != null) {
+                retryView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        retryDownload();
+                    }
+                });
+            }
+            View cancelView = downloadFailedDialog.findViewById(R.id.versionchecklib_failed_dialog_cancel);
+            if (cancelView != null) {
+                cancelView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        onCancel(downloadFailedDialog);
+                    }
+                });
+            }
+            downloadFailedDialog.show();
         }
-        View cancelView = downloadFailedDialog.findViewById(R.id.versionchecklib_failed_dialog_cancel);
-        if (cancelView != null) {
-            cancelView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    onCancel(downloadFailedDialog);
-                }
-            });
-        }
-        downloadFailedDialog.show();
     }
 
     private void showDowloadFailedDialog() {

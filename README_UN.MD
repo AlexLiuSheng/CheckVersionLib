@@ -26,7 +26,7 @@
 ### 导入
 
 ```
-compile 'com.allenliu.versionchecklib:library:2.0.8'
+compile 'com.allenliu.versionchecklib:library:2.1.1'
 ```
 
 ### 使用
@@ -166,6 +166,7 @@ compile 'com.allenliu.versionchecklib:library:2.0.8'
 ```
  builder.setForceRedownload(true); 默认false
 ``` 
+
 > 是否显示下载对话框
 ```
 builder.setShowDownloadingDialog(false); 默认true
@@ -195,6 +196,10 @@ builder.setShowNotification(false);  默认true
 
 ```
   builder.setDownloadAPKPath(address); 默认：/storage/emulated/0/AllenVersionPath/
+```
+> 自定义下载文件名
+```
+  builder.setApkName(apkName); 默认：getPackageName()
 ```
 > 可以设置下载监听
 

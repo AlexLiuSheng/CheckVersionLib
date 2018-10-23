@@ -2,8 +2,6 @@ package com.allenliu.sample.v2;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.content.Intent;
-import android.os.Environment;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -17,16 +15,7 @@ import android.widget.Toast;
 
 import com.allenliu.sample.R;
 import com.allenliu.sample.v1.BaseDialog;
-import com.allenliu.sample.v1.CustomVersionDialogActivity;
-import com.allenliu.sample.v1.DemoService;
-import com.allenliu.versionchecklib.callback.APKDownloadListener;
 import com.allenliu.versionchecklib.callback.OnCancelListener;
-import com.allenliu.versionchecklib.core.AllenChecker;
-import com.allenliu.versionchecklib.core.VersionDialogActivity;
-import com.allenliu.versionchecklib.core.VersionParams;
-import com.allenliu.versionchecklib.core.http.HttpRequestMethod;
-import com.allenliu.versionchecklib.utils.ALog;
-import com.allenliu.versionchecklib.utils.FileHelper;
 import com.allenliu.versionchecklib.v2.AllenVersionChecker;
 import com.allenliu.versionchecklib.v2.builder.DownloadBuilder;
 import com.allenliu.versionchecklib.v2.builder.NotificationBuilder;
@@ -34,11 +23,7 @@ import com.allenliu.versionchecklib.v2.builder.UIData;
 import com.allenliu.versionchecklib.v2.callback.CustomDownloadFailedListener;
 import com.allenliu.versionchecklib.v2.callback.CustomDownloadingDialogListener;
 import com.allenliu.versionchecklib.v2.callback.CustomVersionDialogListener;
-import com.allenliu.versionchecklib.v2.callback.ForceUpdateListener;
 import com.allenliu.versionchecklib.v2.callback.RequestVersionListener;
-import com.allenliu.versionchecklib.v2.ui.UIActivity;
-
-import java.io.File;
 
 public class V2Activity extends AppCompatActivity {
 
@@ -79,7 +64,7 @@ public class V2Activity extends AppCompatActivity {
         showDownloadingCheckBox = findViewById(R.id.checkbox6);
         customNotificationCheckBox = findViewById(R.id.checkbox7);
         showDownloadFailedCheckBox = findViewById(R.id.checkbox8);
-        silentDownloadCheckBoxAndInstall=findViewById(R.id.checkbox20);
+        silentDownloadCheckBoxAndInstall = findViewById(R.id.checkbox20);
 
     }
 
@@ -138,17 +123,17 @@ public class V2Activity extends AppCompatActivity {
             builder.setNotificationBuilder(createCustomNotification());
         if (!showDownloadFailedCheckBox.isChecked())
             builder.setShowDownloadFailDialog(false);
-        if(silentDownloadCheckBoxAndInstall.isChecked()) {
+        if (silentDownloadCheckBoxAndInstall.isChecked()) {
             builder.setDirectDownload(true);
-           builder.setShowNotification(false);
-           builder.setShowDownloadingDialog(false);
-           builder.setShowDownloadFailDialog(false);
+            builder.setShowNotification(false);
+            builder.setShowDownloadingDialog(false);
+            builder.setShowDownloadFailDialog(false);
         }
 
         builder.setOnCancelListener(new OnCancelListener() {
             @Override
             public void onCancel() {
-                Toast.makeText(V2Activity.this,"cancel",Toast.LENGTH_SHORT).show();
+                Toast.makeText(V2Activity.this, "cancel", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -186,11 +171,12 @@ public class V2Activity extends AppCompatActivity {
         if (address != null && !"".equals(address))
             builder.setDownloadAPKPath(address);
 
-
+//        builder.setApkName("HAHA");
+//builder.setNewestVersionCode(10);
         builder.setOnCancelListener(() -> {
-            Toast.makeText(V2Activity.this,"Cancel Hanlde",Toast.LENGTH_SHORT).show();
+            Toast.makeText(V2Activity.this, "Cancel Hanlde", Toast.LENGTH_SHORT).show();
         });
-        builder.excuteMission(this);
+        builder.executeMission(this);
     }
 
     /**

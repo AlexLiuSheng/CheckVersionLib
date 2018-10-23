@@ -85,17 +85,19 @@ public class DownloadingActivity extends AllenBaseActivity implements DialogInte
 
     @Override
     public void showCustomDialog() {
-        downloadingDialog = getVersionBuilder().getCustomDownloadingDialogListener().getCustomDownloadingDialog(this, currentProgress, getVersionBuilder().getVersionBundle());
-        View cancelView = downloadingDialog.findViewById(R.id.versionchecklib_loading_dialog_cancel);
-        if (cancelView != null) {
-            cancelView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    onCancel(false);
-                }
-            });
+        if(getVersionBuilder()!=null) {
+            downloadingDialog = getVersionBuilder().getCustomDownloadingDialogListener().getCustomDownloadingDialog(this, currentProgress, getVersionBuilder().getVersionBundle());
+            View cancelView = downloadingDialog.findViewById(R.id.versionchecklib_loading_dialog_cancel);
+            if (cancelView != null) {
+                cancelView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        onCancel(false);
+                    }
+                });
+            }
+            downloadingDialog.show();
         }
-        downloadingDialog.show();
     }
 
     @Override

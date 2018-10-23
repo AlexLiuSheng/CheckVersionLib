@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 
 import com.allenliu.versionchecklib.v2.builder.DownloadBuilder;
+import com.allenliu.versionchecklib.v2.builder.UIData;
 import com.allenliu.versionchecklib.v2.eventbus.AllenEventType;
 import com.allenliu.versionchecklib.v2.eventbus.CommonEvent;
 
@@ -41,10 +42,8 @@ public abstract class AllenBaseActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-
         if (EventBus.getDefault().isRegistered(this))
             EventBus.getDefault().unregister(this);
-        overridePendingTransition(0, 0);
     }
 
     /**
@@ -83,28 +82,44 @@ public abstract class AllenBaseActivity extends AppCompatActivity {
         transparentStatusBar(activity);
         setRootView(activity);
     }
+
     protected void throwWrongIdsException() {
         throw new RuntimeException("customize dialog must use the specify id that lib gives");
     }
-    protected DownloadBuilder getVersionBuilder(){
+
+    protected DownloadBuilder getVersionBuilder() {
+        if (VersionService.builder == null)
+            finish();
         return VersionService.builder;
+
+
     }
+
     protected void checkForceUpdate() {
-        if (getVersionBuilder()!=null&&getVersionBuilder().getForceUpdateListener() != null) {
+        if (getVersionBuilder() != null && getVersionBuilder().getForceUpdateListener() != null) {
             getVersionBuilder().getForceUpdateListener().onShouldForceUpdate();
             finish();
         }
     }
-    protected  void cancelHandler(){
-        if (getVersionBuilder()!=null&&getVersionBuilder().getOnCancelListener() != null) {
+
+    protected void cancelHandler() {
+        if (getVersionBuilder() != null && getVersionBuilder().getOnCancelListener() != null) {
             getVersionBuilder().getOnCancelListener().onCancel();
 
         }
     }
+
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void receiveEvent(CommonEvent commonEvent) {
     }
 
     public abstract void showDefaultDialog();
+
     public abstract void showCustomDialog();
+
+    @Override
+    public void finish() {
+        super.finish();
+        overridePendingTransition(0, 0);
+    }
 }

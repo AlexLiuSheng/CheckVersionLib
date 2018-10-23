@@ -51,27 +51,31 @@ import okhttp3.Response;
 public class VersionService extends Service {
     private static final int JOB_ID = 100011;
     public static DownloadBuilder builder;
+    private static DownloadBuilder tempBuilder;
+
     private BuilderHelper builderHelper;
     private NotificationHelper notificationHelper;
     private boolean isServiceAlive = false;
 
+
     @Override
-    public void onCreate() {
-        super.onCreate();
+    public int onStartCommand(Intent intent, int flags, int startId) {
         if (!EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().register(this);
         }
         ALog.e("version service create");
-        if (builder == null)
-            return;
-        isServiceAlive = true;
-        builderHelper = new BuilderHelper(getApplicationContext(), builder);
-        notificationHelper = new NotificationHelper(getApplicationContext(), builder);
-        new Thread() {
-            public void run() {
-                onHandleWork();
-            }
-        }.start();
+        builder = tempBuilder;
+        if (builder != null) {
+            isServiceAlive = true;
+            builderHelper = new BuilderHelper(getApplicationContext(), builder);
+            notificationHelper = new NotificationHelper(getApplicationContext(), builder);
+            new Thread() {
+                public void run() {
+                    onHandleWork();
+                }
+            }.start();
+        }
+        return super.onStartCommand(intent, flags, startId);
     }
 
     @Override
@@ -99,19 +103,14 @@ public class VersionService extends Service {
     public static void enqueueWork(final Context context, final DownloadBuilder downloadBuilder) {
         //清除之前的任务，如果有
         AllenVersionChecker.getInstance().cancelAllMission(context);
-
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                if (builder == null)
-                    ALog.e("a1builder==null");
-                builder = downloadBuilder;
-                if (builder == null)
-                    ALog.e("a2builder==null");
-                Intent intent = new Intent(context, VersionService.class);
-                context.startService(intent);
-            }
-        }, 500);
+        tempBuilder = downloadBuilder;
+//        new Handler().postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+        Intent intent = new Intent(context, VersionService.class);
+        context.startService(intent);
+//            }
+//        }, 500);
 
 
 //        enqueueWork(context, VersionService.class, JOB_ID, new Intent());
@@ -254,7 +253,7 @@ public class VersionService extends Service {
 
     private void install() {
         AllenEventBusUtil.sendEventBus(AllenEventType.DOWNLOAD_COMPLETE);
-        final String downloadPath = builder.getDownloadAPKPath() + getString(R.string.versionchecklib_download_apkname, getPackageName());
+        final String downloadPath = getDownloadFilePath();
         if (builder.isSilentDownload()) {
             showVersionDialog();
         } else {
@@ -263,11 +262,15 @@ public class VersionService extends Service {
         }
     }
 
+    private String getDownloadFilePath() {
+        return builder.getDownloadAPKPath() + getString(R.string.versionchecklib_download_apkname, builder.getApkName() != null ? builder.getApkName() : getPackageName());
+    }
+
     @WorkerThread
     private void startDownloadApk() {
         //判断是否缓存并且是否强制重新下载
-        final String downloadPath = builder.getDownloadAPKPath() + getString(R.string.versionchecklib_download_apkname, getPackageName());
-        if (DownloadManager.checkAPKIsExists(getApplicationContext(), downloadPath,builder.getNewestVersionCode()) && !builder.isForceRedownload()) {
+        final String downloadPath = getDownloadFilePath();
+        if (DownloadManager.checkAPKIsExists(getApplicationContext(), downloadPath, builder.getNewestVersionCode()) && !builder.isForceRedownload()) {
             ALog.e("using cache");
             install();
             return;
@@ -281,9 +284,9 @@ public class VersionService extends Service {
             AllenVersionChecker.getInstance().cancelAllMission(getApplicationContext());
             throw new RuntimeException("you must set a download url for download function using");
         }
-        ALog.e("downloadPath:"+downloadPath);
+        ALog.e("downloadPath:" + downloadPath);
 
-        DownloadMangerV2.download(downloadUrl, builder.getDownloadAPKPath(), getString(R.string.versionchecklib_download_apkname, getPackageName()), new DownloadListener() {
+        DownloadMangerV2.download(downloadUrl, builder.getDownloadAPKPath(), getString(R.string.versionchecklib_download_apkname, builder.getApkName() != null ? builder.getApkName() : getPackageName()), new DownloadListener() {
             @Override
             public void onCheckerDownloading(int progress) {
                 if (isServiceAlive) {
