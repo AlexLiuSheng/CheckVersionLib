@@ -2,7 +2,7 @@
 ## V2 Version has been born with shocking, strong functions,chain programing, easy to integrate,strong extension
 [中文文档](https://github.com/AlexLiuSheng/CheckVersionLib/blob/master/README_UN.MD)
 
-The strongest feature is more easy to integrate than version  of V1.+
+The strongest feature is easier to integrate than version  of V1.+
 
 ### Effect
  <img src="https://github.com/AlexLiuSheng/CheckVersionLib/blob/master/gif/v2.jpg" width=200/><img src="https://github.com/AlexLiuSheng/CheckVersionLib/blob/master/gif/V2.gif" width=200/>
@@ -36,7 +36,7 @@ compile 'com.allenliu.versionchecklib:library:2.1.1'
 
 > Only use download mode
 
-easiest way to use
+the easiest way to use
 
 ```
         AllenVersionChecker
@@ -53,7 +53,7 @@ easiest way to use
 
 > Request Version + Download mode
 
-easiest way to call 
+the easiest way to call 
 ```
    AllenVersionChecker
                 .getInstance()
@@ -142,14 +142,14 @@ first of all,the builder of follow is called `DownloadBuilder`
 > silent download
   
   ```
-   builder.setSilentDownload(true); 默认false
+   builder.setSilentDownload(true); false for default
   ```
 > set the newest version code of your server returned，it is used to verify if use file cache.
  
   - Cache category：first check running app's versionCode whether equal with the installation package.Then check developer whether pass the newest VersionCode ,if so, check the 
    VersionCode is greater than local,if it is truth ,download apk from server, otherwise use cache.
   ```
-   builder.setNewestVersionCode(int); 默认null
+   builder.setNewestVersionCode(int); null for default 
   ```
 > Force Update
 
@@ -199,7 +199,7 @@ builder.setShowNotification(false);  true for default
 ```
 > customize download apk name
 ```
-  builder.setApkName(apkName); 默认：getPackageName()
+  builder.setApkName(apkName); default：getPackageName()
 ```
 > set download listener
 
