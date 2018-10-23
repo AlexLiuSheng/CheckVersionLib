@@ -1,6 +1,7 @@
 ## CheckVersionLib[ ![Download](https://api.bintray.com/packages/zkxy/maven/VersionCheckLib/images/download.svg) ](https://bintray.com/zkxy/maven/VersionCheckLib/_latestVersion)
 ## V2 Version has been born with shocking, strong functions,chain programing, easy to integrate,strong extension
-[中文文档](https://github.com/AlexLiuSheng/CheckVersionLib/blob/master/README_UN.md)
+[中文文档](https://github.com/AlexLiuSheng/CheckVersionLib/blob/master/README_UN.MD)
+
 The strongest feature is more easy to integrate than version  of V1.+
 
 ### Effect
@@ -323,7 +324,7 @@ setCustomDownloadFailedListener
 
  - download the  [demo](https://github.com/AlexLiuSheng/CheckVersionLib/blob/master/sample/src/main/java/com/allenliu/sample/v2/V2Activity.java) to view  more functions
  
- - thanks all for the support library感谢各位对本库的支持
+ - thanks all for the support library
  
  - star/issue is welcome
  
