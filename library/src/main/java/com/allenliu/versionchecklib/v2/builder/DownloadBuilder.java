@@ -1,5 +1,6 @@
 package com.allenliu.versionchecklib.v2.builder;
 
+import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
@@ -13,6 +14,8 @@ import com.allenliu.versionchecklib.v2.callback.CustomDownloadingDialogListener;
 import com.allenliu.versionchecklib.v2.callback.CustomVersionDialogListener;
 import com.allenliu.versionchecklib.v2.callback.ForceUpdateListener;
 import com.allenliu.versionchecklib.v2.ui.VersionService;
+
+import org.greenrobot.eventbus.EventBus;
 
 /**
  * Created by allenliu on 2018/1/12.
@@ -234,9 +237,11 @@ public class DownloadBuilder {
 
     public void executeMission(Context context) {
         if (apkName == null) {
-            apkName = context.getPackageName();
+            apkName = context.getApplicationContext().getPackageName();
         }
-        VersionService.enqueueWork(context, this);
+        EventBus.getDefault().postSticky(this);
+        VersionService.enqueueWork(context.getApplicationContext());
     }
+
 
 }

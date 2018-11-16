@@ -1,5 +1,6 @@
 package com.allenliu.versionchecklib.v2.ui;
 
+import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -36,7 +37,7 @@ public class NotificationHelper {
     private boolean isDownloadSuccess=false,isFailed=false;
     private int currentProgress = 0;
     private String contentText;
-    private  final int NOTIFICATION_ID=0;
+    private  final int NOTIFICATION_ID=1;
     public NotificationHelper(Context context, DownloadBuilder builder) {
         this.context = context;
         this.versionBuilder = builder;
@@ -157,5 +158,35 @@ public class NotificationHelper {
     public void onDestroy() {
         if(manager!=null)
         manager.cancel(NOTIFICATION_ID);
+    }
+    public Notification getServiceNotification() {
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            String channelid = "version_service_id";
+            NotificationCompat.Builder notifcationBuilder = new NotificationCompat.Builder(context, channelid)
+                    .setContentTitle(context.getString(R.string.app_name))
+                    .setContentText(context.getString(R.string.versionchecklib_version_service_runing))
+                    .setSmallIcon(versionBuilder.getNotificationBuilder().getIcon())
+                    .setAutoCancel(false);
+
+            NotificationChannel notificationChannel = new NotificationChannel(channelid, "version_service_name", NotificationManager.IMPORTANCE_LOW);
+            notificationChannel.enableLights(false);
+//            notificationChannel.setLightColor(getColor(R.color.versionchecklib_theme_color));
+            notificationChannel.enableVibration(false);
+            NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+            manager.createNotificationChannel(notificationChannel);
+
+            return notifcationBuilder.build();
+        } else {
+            NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(context)
+                    .setContentTitle(context.getString(R.string.app_name))
+                    .setContentText(context.getString(R.string.versionchecklib_version_service_runing))
+                    .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                    .setSmallIcon(versionBuilder.getNotificationBuilder().getIcon())
+                    .setAutoCancel(false);
+            return notificationBuilder.build();
+
+        }
+
+
     }
 }

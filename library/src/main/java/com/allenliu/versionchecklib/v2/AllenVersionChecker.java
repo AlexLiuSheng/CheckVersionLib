@@ -34,7 +34,7 @@ public class AllenVersionChecker {
 
     public void cancelAllMission(Context context) {
         Intent intent = new Intent(context, VersionService.class);
-        context.stopService(intent);
+        context.getApplicationContext().stopService(intent);
     }
 
     /**

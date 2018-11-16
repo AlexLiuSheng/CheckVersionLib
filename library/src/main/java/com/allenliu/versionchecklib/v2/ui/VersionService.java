@@ -53,46 +53,14 @@ import okhttp3.Response;
  * helper methods.
  */
 public class VersionService extends Service {
-    private static final int JOB_ID = 100011;
     public static DownloadBuilder builder;
-    private static DownloadBuilder tempBuilder;
+//    private static DownloadBuilder tempBuilder;
 
     private BuilderHelper builderHelper;
     private NotificationHelper notificationHelper;
     private boolean isServiceAlive = false;
 
-    private Notification getServiceNotification()
 
-    {
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-            String channelid = "version_service_id";
-            NotificationCompat.Builder notifcationBuilder = new NotificationCompat.Builder(this, channelid)
-                    .setContentTitle(getString(R.string.app_name))
-                    .setContentText(getString(R.string.versionchecklib_version_service_runing))
-                    .setSmallIcon(builder.getNotificationBuilder().getIcon())
-                    .setAutoCancel(false);
-
-            NotificationChannel notificationChannel = new NotificationChannel(channelid, "version_service_name", NotificationManager.IMPORTANCE_LOW);
-            notificationChannel.enableLights(false);
-//            notificationChannel.setLightColor(getColor(R.color.versionchecklib_theme_color));
-            notificationChannel.enableVibration(false);
-            NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-            manager.createNotificationChannel(notificationChannel);
-
-            return notifcationBuilder.build();
-        } else {
-            NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
-                    .setContentTitle(getString(R.string.app_name))
-                    .setContentText(getString(R.string.versionchecklib_version_service_runing))
-                    .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-                    .setSmallIcon(builder.getNotificationBuilder().getIcon())
-                    .setAutoCancel(false);
-            return notificationBuilder.build();
-
-        }
-
-
-    }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
@@ -100,18 +68,7 @@ public class VersionService extends Service {
             EventBus.getDefault().register(this);
         }
         ALog.e("version service create");
-        builder = tempBuilder;
-        if (builder != null) {
-            startForeground(1111, getServiceNotification());
-            isServiceAlive = true;
-            builderHelper = new BuilderHelper(getApplicationContext(), builder);
-            notificationHelper = new NotificationHelper(getApplicationContext(), builder);
-            new Thread() {
-                public void run() {
-                    onHandleWork();
-                }
-            }.start();
-        }
+//        builder = tempBuilder;
         return super.onStartCommand(intent, flags, startId);
     }
 
@@ -138,20 +95,12 @@ public class VersionService extends Service {
         return null;
     }
 
-    public static void enqueueWork(final Context context, final DownloadBuilder downloadBuilder) {
+    public static void enqueueWork(final Context context) {
         //清除之前的任务，如果有
         AllenVersionChecker.getInstance().cancelAllMission(context);
-        tempBuilder = downloadBuilder;
-//        new Handler().postDelayed(new Runnable() {
-//            @Override
-//            public void run() {
         Intent intent = new Intent(context, VersionService.class);
         context.startService(intent);
-//            }
-//        }, 500);
 
-
-//        enqueueWork(context, VersionService.class, JOB_ID, new Intent());
     }
 
 
@@ -395,5 +344,23 @@ public class VersionService extends Service {
                 break;
         }
 
+    }
+
+    @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
+    public void onReceiveDownloadBuilder(DownloadBuilder downloadBuilder) {
+        builder = downloadBuilder;
+        if (builder != null) {
+            isServiceAlive = true;
+            builderHelper = new BuilderHelper(getApplicationContext(), builder);
+            notificationHelper = new NotificationHelper(getApplicationContext(), builder);
+            startForeground(1, notificationHelper.getServiceNotification());
+
+            new Thread() {
+                public void run() {
+                    onHandleWork();
+                }
+            }.start();
+        }
+        EventBus.getDefault().removeStickyEvent(downloadBuilder);
     }
 }

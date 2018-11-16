@@ -9,10 +9,12 @@
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
     <application
         android:allowBackup="true"
-        android:supportsRtl="true">
+        android:supportsRtl="true"
+        android:usesCleartextTraffic="true">
         <activity
             android:name=".core.VersionDialogActivity"
             android:launchMode="singleTask"
@@ -40,8 +42,8 @@
             android:exported="true" />
         <service
             android:name=".v2.ui.VersionService"
-            android:priority="1000"
-            android:exported="false" />
+            android:exported="false"
+            android:priority="1000" />
 
         <activity
             android:name=".v2.ui.UIActivity"

@@ -23,7 +23,6 @@ import okhttp3.Response;
 public class DownloadMangerV2 {
     public static void download(final String url, final String downloadApkPath, final String fileName, final DownloadListener listener) {
         if (url != null && !url.isEmpty()) {
-
             Request request = new Request.Builder().url(url).build();
             new Handler(Looper.getMainLooper()).post(new Runnable() {
                 @Override

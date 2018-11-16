@@ -272,4 +272,9 @@ public class V2Activity extends AppCompatActivity {
         return uiData;
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        AllenVersionChecker.getInstance().cancelAllMission(this);
+    }
 }
