@@ -40,6 +40,7 @@
             android:exported="true" />
         <service
             android:name=".v2.ui.VersionService"
+            android:priority="1000"
             android:exported="false" />
 
         <activity

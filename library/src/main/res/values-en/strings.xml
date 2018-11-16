@@ -11,4 +11,6 @@
     <string name="versionchecklib_progress">%d/100</string>
     <string name="versionchecklib_write_permission_deny">Download apk needs write permission。</string>
     <string name="versionchecklib_download_apkname">%s.apk</string>
+    <string name="versionchecklib_version_service_runing">application update service is running</string>
+
 </resources>

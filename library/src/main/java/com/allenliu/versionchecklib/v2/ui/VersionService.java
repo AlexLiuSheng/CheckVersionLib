@@ -1,6 +1,9 @@
 package com.allenliu.versionchecklib.v2.ui;
 
 import android.app.IntentService;
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
@@ -11,6 +14,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.WorkerThread;
 import android.support.v4.app.JobIntentService;
+import android.support.v4.app.NotificationCompat;
 
 import com.allenliu.versionchecklib.R;
 import com.allenliu.versionchecklib.callback.DownloadListener;
@@ -57,6 +61,38 @@ public class VersionService extends Service {
     private NotificationHelper notificationHelper;
     private boolean isServiceAlive = false;
 
+    private Notification getServiceNotification()
+
+    {
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            String channelid = "version_service_id";
+            NotificationCompat.Builder notifcationBuilder = new NotificationCompat.Builder(this, channelid)
+                    .setContentTitle(getString(R.string.app_name))
+                    .setContentText(getString(R.string.versionchecklib_version_service_runing))
+                    .setSmallIcon(builder.getNotificationBuilder().getIcon())
+                    .setAutoCancel(false);
+
+            NotificationChannel notificationChannel = new NotificationChannel(channelid, "version_service_name", NotificationManager.IMPORTANCE_LOW);
+            notificationChannel.enableLights(false);
+//            notificationChannel.setLightColor(getColor(R.color.versionchecklib_theme_color));
+            notificationChannel.enableVibration(false);
+            NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+            manager.createNotificationChannel(notificationChannel);
+
+            return notifcationBuilder.build();
+        } else {
+            NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
+                    .setContentTitle(getString(R.string.app_name))
+                    .setContentText(getString(R.string.versionchecklib_version_service_runing))
+                    .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                    .setSmallIcon(builder.getNotificationBuilder().getIcon())
+                    .setAutoCancel(false);
+            return notificationBuilder.build();
+
+        }
+
+
+    }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
@@ -66,6 +102,7 @@ public class VersionService extends Service {
         ALog.e("version service create");
         builder = tempBuilder;
         if (builder != null) {
+            startForeground(1111, getServiceNotification());
             isServiceAlive = true;
             builderHelper = new BuilderHelper(getApplicationContext(), builder);
             notificationHelper = new NotificationHelper(getApplicationContext(), builder);
@@ -88,6 +125,7 @@ public class VersionService extends Service {
             notificationHelper.onDestroy();
         notificationHelper = null;
         isServiceAlive = false;
+        stopForeground(true);
         AllenHttp.getHttpClient().dispatcher().cancelAll();
         if (EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().unregister(this);

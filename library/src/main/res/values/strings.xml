@@ -12,4 +12,5 @@
     <string name="versionchecklib_progress">%d/100</string>
     <string name="versionchecklib_write_permission_deny">下载安装包需要读写文件权限。</string>
     <string name="versionchecklib_download_apkname">%s.apk</string>
+    <string name="versionchecklib_version_service_runing">更新服务正在运行</string>
 </resources>
