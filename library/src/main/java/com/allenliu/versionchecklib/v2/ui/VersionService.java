@@ -1,20 +1,14 @@
 package com.allenliu.versionchecklib.v2.ui;
 
 import android.app.IntentService;
-import android.app.Notification;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Looper;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.WorkerThread;
-import android.support.v4.app.JobIntentService;
-import android.support.v4.app.NotificationCompat;
 
 import com.allenliu.versionchecklib.R;
 import com.allenliu.versionchecklib.callback.DownloadListener;
@@ -40,6 +34,8 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -59,8 +55,7 @@ public class VersionService extends Service {
     private BuilderHelper builderHelper;
     private NotificationHelper notificationHelper;
     private boolean isServiceAlive = false;
-
-
+    private ExecutorService executors;
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
@@ -82,6 +77,8 @@ public class VersionService extends Service {
             notificationHelper.onDestroy();
         notificationHelper = null;
         isServiceAlive = false;
+        if(executors!=null)
+        executors.shutdown();
         stopForeground(true);
         AllenHttp.getHttpClient().dispatcher().cancelAll();
         if (EventBus.getDefault().isRegistered(this)) {
@@ -97,7 +94,7 @@ public class VersionService extends Service {
 
     public static void enqueueWork(final Context context) {
         //清除之前的任务，如果有
-        AllenVersionChecker.getInstance().cancelAllMission(context);
+//        AllenVersionChecker.getInstance().cancelAllMission(context);
         Intent intent = new Intent(context, VersionService.class);
         context.startService(intent);
 
@@ -137,7 +134,10 @@ public class VersionService extends Service {
             try {
                 final Response response = client.newCall(request).execute();
                 if (response.isSuccessful()) {
+                    if (!isServiceAlive)
+                        return;
                     final String result = response.body().string();
+
                     handler.post(new Runnable() {
                         @Override
                         public void run() {
@@ -205,13 +205,15 @@ public class VersionService extends Service {
      * 开启UI展示界面
      */
     private void showVersionDialog() {
-        Intent intent = new Intent(this, UIActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(intent);
+        if (builder != null) {
+            Intent intent = new Intent(this, UIActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+        }
     }
 
     private void showDownloadingDialog() {
-        if (builder.isShowDownloadingDialog()) {
+        if (builder != null && builder.isShowDownloadingDialog()) {
             Intent intent = new Intent(this, DownloadingActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
@@ -227,15 +229,19 @@ public class VersionService extends Service {
     }
 
     private void showDownloadFailedDialog() {
-        Intent intent = new Intent(this, DownloadFailedActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(intent);
+        if (builder != null) {
+            Intent intent = new Intent(this, DownloadFailedActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+        }
     }
 
     private void requestPermissionAndDownload() {
-        Intent intent = new Intent(this, PermissionDialogActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(intent);
+        if (builder != null) {
+            Intent intent = new Intent(this, PermissionDialogActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+        }
     }
 
     private void install() {
@@ -347,20 +353,24 @@ public class VersionService extends Service {
     }
 
     @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
-    public void onReceiveDownloadBuilder(DownloadBuilder downloadBuilder) {
+    public synchronized void onReceiveDownloadBuilder(DownloadBuilder downloadBuilder) {
         builder = downloadBuilder;
         if (builder != null) {
             isServiceAlive = true;
             builderHelper = new BuilderHelper(getApplicationContext(), builder);
             notificationHelper = new NotificationHelper(getApplicationContext(), builder);
             startForeground(1, notificationHelper.getServiceNotification());
-
-            new Thread() {
+            executors = Executors.newSingleThreadExecutor();
+            executors.submit(new Runnable() {
+                @Override
                 public void run() {
                     onHandleWork();
                 }
-            }.start();
+            });
+
         }
         EventBus.getDefault().removeStickyEvent(downloadBuilder);
     }
+
+
 }

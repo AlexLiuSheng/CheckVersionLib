@@ -1,22 +1,12 @@
 package com.allenliu.versionchecklib.v2.ui;
 
 import android.app.Dialog;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.IntentFilter;
-import android.os.Build;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.view.View;
-import android.widget.TextView;
 
 import com.allenliu.versionchecklib.R;
-import com.allenliu.versionchecklib.callback.DialogDismissListener;
-import com.allenliu.versionchecklib.core.AVersionService;
-import com.allenliu.versionchecklib.core.VersionDialogActivity;
 import com.allenliu.versionchecklib.utils.ALog;
 import com.allenliu.versionchecklib.utils.AllenEventBusUtil;
 import com.allenliu.versionchecklib.utils.AppUtils;
@@ -24,10 +14,6 @@ import com.allenliu.versionchecklib.v2.AllenVersionChecker;
 import com.allenliu.versionchecklib.v2.builder.UIData;
 import com.allenliu.versionchecklib.v2.eventbus.AllenEventType;
 import com.allenliu.versionchecklib.v2.eventbus.CommonEvent;
-
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.File;
 
