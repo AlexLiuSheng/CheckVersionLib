@@ -49,9 +49,9 @@ public class UIActivity extends AllenBaseActivity implements DialogInterface.OnC
 
     @Override
     public void showDefaultDialog() {
-        if(getVersionBuilder()!=null) {
+        if (getVersionBuilder() != null) {
             UIData uiData = getVersionBuilder().getVersionBundle();
-            String title = "", content = "";
+            String title = "提示", content = "检测到新版本";
             if (uiData != null) {
                 title = uiData.getTitle();
                 content = uiData.getContent();
@@ -84,7 +84,7 @@ public class UIActivity extends AllenBaseActivity implements DialogInterface.OnC
 
     @Override
     public void showCustomDialog() {
-        if(getVersionBuilder()!=null) {
+        if (getVersionBuilder() != null) {
             ALog.e("show customization dialog");
             versionDialog = getVersionBuilder().getCustomVersionDialogListener().getCustomVersionDialog(this, getVersionBuilder().getVersionBundle());
             try {
@@ -128,7 +128,8 @@ public class UIActivity extends AllenBaseActivity implements DialogInterface.OnC
         } else {
             showDefaultDialog();
         }
-        versionDialog.setOnCancelListener(this);
+        if (versionDialog != null)
+            versionDialog.setOnCancelListener(this);
     }
 
     @Override
@@ -146,7 +147,7 @@ public class UIActivity extends AllenBaseActivity implements DialogInterface.OnC
     }
 
     private void dealVersionDialogCommit() {
-        if(getVersionBuilder()!=null) {
+        if (getVersionBuilder() != null) {
             //如果是静默下载直接安装
             if (getVersionBuilder().isSilentDownload()) {
                 String downloadPath = getVersionBuilder().getDownloadAPKPath() + getString(R.string.versionchecklib_download_apkname, getVersionBuilder().getApkName() != null ? getVersionBuilder().getApkName() : getPackageName());
