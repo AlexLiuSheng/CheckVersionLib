@@ -4,6 +4,7 @@ import android.app.IntentService;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Looper;
@@ -96,8 +97,12 @@ public class VersionService extends Service {
         //清除之前的任务，如果有
 //        AllenVersionChecker.getInstance().cancelAllMission(context);
         Intent intent = new Intent(context, VersionService.class);
-        context.startService(intent);
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            context.startForegroundService(intent);
+        } else {
+            context.startService(intent);
+        }
     }
 
 
