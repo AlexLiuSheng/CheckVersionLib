@@ -11,6 +11,7 @@ import com.allenliu.versionchecklib.utils.ALog;
 import com.allenliu.versionchecklib.utils.AllenEventBusUtil;
 import com.allenliu.versionchecklib.utils.AppUtils;
 import com.allenliu.versionchecklib.v2.AllenVersionChecker;
+import com.allenliu.versionchecklib.v2.builder.DownloadBuilder;
 import com.allenliu.versionchecklib.v2.builder.UIData;
 import com.allenliu.versionchecklib.v2.eventbus.AllenEventType;
 import com.allenliu.versionchecklib.v2.eventbus.CommonEvent;
@@ -147,11 +148,12 @@ public class UIActivity extends AllenBaseActivity implements DialogInterface.OnC
     }
 
     private void dealVersionDialogCommit() {
-        if (getVersionBuilder() != null) {
+        DownloadBuilder versionBuilder = getVersionBuilder();
+        if (versionBuilder != null) {
             //如果是静默下载直接安装
-            if (getVersionBuilder().isSilentDownload()) {
-                String downloadPath = getVersionBuilder().getDownloadAPKPath() + getString(R.string.versionchecklib_download_apkname, getVersionBuilder().getApkName() != null ? getVersionBuilder().getApkName() : getPackageName());
-                AppUtils.installApk(this, new File(downloadPath));
+            if (versionBuilder.isSilentDownload()) {
+                String downloadPath = versionBuilder.getDownloadAPKPath() + getString(R.string.versionchecklib_download_apkname, versionBuilder.getApkName() != null ? versionBuilder.getApkName() : getPackageName());
+                AppUtils.installApk(this, new File(downloadPath), versionBuilder.getCustomInstallListener());
                 checkForceUpdate();
                 //否定开始下载
             } else {
