@@ -34,7 +34,7 @@ compile 'com.allenliu.versionchecklib:library:2.1.7'
 
 
 
-> Only use download mode
+> Only using download mode
 
 the easiest way to use
 
@@ -47,7 +47,7 @@ the easiest way to use
                 .excuteMission(context);
 ```
 
-`UIData`：UIData is the type of Bundle，it save some data for displaying ui page，it can use in your customization page/
+`UIData`：UIData is the type of Bundle，it saves some data for displaying ui page，it can use in your customization page/
 
 
 
@@ -237,7 +237,7 @@ builder.setShowNotification(false);  true for default
 ```
 ### customize the ui page
 
-Customization page use the way of listener,developer need return the Dialog(parent:android.app) that you customized
+Customization page used the way of listener,developer need return the Dialog(parent:android.app) that you customized
 
 
  - all the dialog must initiate with the context inside the listener.
@@ -296,9 +296,9 @@ set`CustomDownloadingDialogListener`
 
 setCustomDownloadFailedListener
 
-- if has button of **retry**,the id must be`@id/versionchecklib_failed_dialog_retry`
+- if having button of **retry**,the id must be`@id/versionchecklib_failed_dialog_retry`
 
-- if has the button of **commit/cancel**,the id must be `@id/versionchecklib_failed_dialog_cancel`
+- if having the button of **commit/cancel**,the id must be `@id/versionchecklib_failed_dialog_cancel`
 
 ```
    builder.setCustomDownloadFailedListener((context, versionBundle) -> {
