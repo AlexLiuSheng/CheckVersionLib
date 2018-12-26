@@ -26,7 +26,7 @@
 ### 导入
 
 ```
-compile 'com.allenliu.versionchecklib:library:2.1.6'
+compile 'com.allenliu.versionchecklib:library:2.1.7'
 ```
 
 ### 使用

@@ -78,8 +78,8 @@ public class VersionService extends Service {
             notificationHelper.onDestroy();
         notificationHelper = null;
         isServiceAlive = false;
-        if(executors!=null)
-        executors.shutdown();
+        if (executors != null)
+            executors.shutdown();
         stopForeground(true);
         AllenHttp.getHttpClient().dispatcher().cancelAll();
         if (EventBus.getDefault().isRegistered(this)) {
@@ -139,22 +139,21 @@ public class VersionService extends Service {
             try {
                 final Response response = client.newCall(request).execute();
                 if (response.isSuccessful()) {
-                    if (!isServiceAlive)
-                        return;
-                    final String result = response.body().string();
+                    final String result = response.body() != null ? response.body().string() : null;
 
                     handler.post(new Runnable() {
                         @Override
                         public void run() {
+                            if (builder == null)
+                                return;
                             UIData versionBundle = requestVersionListener.onRequestVersionSuccess(result);
-                            builder.setVersionBundle(versionBundle);
+                            if (versionBundle != null)
+                                builder.setVersionBundle(versionBundle);
                             downloadAPK();
                         }
                     });
 
                 } else {
-                    if (!isServiceAlive)
-                        return;
                     handler.post(new Runnable() {
                         @Override
                         public void run() {
@@ -165,11 +164,10 @@ public class VersionService extends Service {
                 }
             } catch (final IOException e) {
                 e.printStackTrace();
-                if (!isServiceAlive)
-                    return;
                 handler.post(new Runnable() {
                     @Override
                     public void run() {
+
                         AllenVersionChecker.getInstance().cancelAllMission(getApplicationContext());
                         requestVersionListener.onRequestVersionFailure(e.getMessage());
                     }
@@ -190,7 +188,7 @@ public class VersionService extends Service {
     }
 
     private void downloadAPK() {
-        if (builder.getVersionBundle() != null) {
+        if (builder != null && builder.getVersionBundle() != null) {
             if (builder.isDirectDownload()) {
                 AllenEventBusUtil.sendEventBus(AllenEventType.START_DOWNLOAD_APK);
             } else {
