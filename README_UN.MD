@@ -26,7 +26,7 @@
 ### 导入
 
 ```
-compile 'com.allenliu.versionchecklib:library:2.1.7'
+compile 'com.allenliu.versionchecklib:library:2.1.8'
 ```
 
 ### 使用
@@ -235,6 +235,11 @@ builder.setShowNotification(false);  默认true
            builder.setShowDownloadingDialog(false);
            builder.setShowDownloadFailDialog(false);
 ```
+> 自定义安装回调
+```
+    setCustomDownloadInstallListener(CustomInstallListener customDownloadInstallListener)
+```
+
 ### 自定义界面
 
 自定义界面使用回调方式，开发者需要返回自己定义的Dialog（父类android.app）

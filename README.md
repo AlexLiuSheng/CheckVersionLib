@@ -27,7 +27,7 @@ The strongest feature is easier to integrate than version  of V1.+
 ### include
 
 ```
-compile 'com.allenliu.versionchecklib:library:2.1.7'
+compile 'com.allenliu.versionchecklib:library:2.1.8'
 ```
 
 ### usage
@@ -235,6 +235,11 @@ builder.setShowNotification(false);  true for default
            builder.setShowDownloadingDialog(false);
            builder.setShowDownloadFailDialog(false);
 ```
+> customize install callback
+```
+  setCustomDownloadInstallListener(CustomInstallListener customDownloadInstallListener)
+```
+
 ### customize the ui page
 
 Customization page used the way of listener,developer need return the Dialog(parent:android.app) that you customized
