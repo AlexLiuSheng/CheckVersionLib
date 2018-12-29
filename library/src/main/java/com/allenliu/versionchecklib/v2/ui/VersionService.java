@@ -254,7 +254,7 @@ public class VersionService extends Service {
             showVersionDialog();
         } else {
             builderHelper.checkForceUpdate();
-            AppUtils.installApk(getApplicationContext(), new File(downloadPath));
+            AppUtils.installApk(getApplicationContext(), new File(downloadPath), builder.getCustomInstallListener());
         }
     }
 
