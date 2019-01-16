@@ -27,7 +27,7 @@ The strongest feature is easier to integrate than version  of V1.+
 ### include
 
 ```
-compile 'com.allenliu.versionchecklib:library:2.1.8'
+compile 'com.allenliu.versionchecklib:library:2.1.9'
 ```
 
 ### usage
@@ -75,7 +75,7 @@ the easiest way to call
 
                     }
                 })
-                .excuteMission(context);
+                .executeMission(context);
 
 
 ```
@@ -111,7 +111,7 @@ Some other http params for request app version,as follows
 
                     }
                 })
-                .excuteMission(context);
+                .executeMission(context);
 ```
 
 the instructions above is the basic using for integrating(library has a set of default ui page),you can use some other params,if it does not fit your requirement the above.

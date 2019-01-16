@@ -64,6 +64,7 @@ public class VersionService extends Service {
             EventBus.getDefault().register(this);
         }
         ALog.e("version service create");
+        init();
 //        builder = tempBuilder;
         return super.onStartCommand(intent, flags, startId);
     }
@@ -72,7 +73,7 @@ public class VersionService extends Service {
     public void onDestroy() {
         super.onDestroy();
         ALog.e("version service destroy");
-        builder = null;
+//        builder = null;
         builderHelper = null;
         if (notificationHelper != null)
             notificationHelper.onDestroy();
@@ -348,16 +349,27 @@ public class VersionService extends Service {
                 boolean permissionResult = (boolean) commonEvent.getData();
                 if (permissionResult)
                     startDownloadApk();
-                else
-                    stopSelf();
+                else {
+                    if (builderHelper!=null) {
+                        builderHelper.checkForceUpdate();
+                    }
+
+                }
                 break;
         }
 
     }
 
-    @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
-    public synchronized void onReceiveDownloadBuilder(DownloadBuilder downloadBuilder) {
-        builder = downloadBuilder;
+
+
+//    @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
+//    public synchronized void onReceiveDownloadBuilder(DownloadBuilder downloadBuilder) {
+//        builder = downloadBuilder;
+//        init();
+//        EventBus.getDefault().removeStickyEvent(downloadBuilder);
+//    }
+
+    private void init() {
         if (builder != null) {
             isServiceAlive = true;
             builderHelper = new BuilderHelper(getApplicationContext(), builder);
@@ -371,8 +383,9 @@ public class VersionService extends Service {
                 }
             });
 
+        } else {
+            AllenVersionChecker.getInstance().cancelAllMission(this);
         }
-        EventBus.getDefault().removeStickyEvent(downloadBuilder);
     }
 
 

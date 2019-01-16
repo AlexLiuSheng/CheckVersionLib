@@ -11,6 +11,7 @@ import java.security.SecureRandom;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.SSLContext;
@@ -36,7 +37,7 @@ public class AllenHttp {
         if (client == null) {
             OkHttpClient.Builder builder = new OkHttpClient.Builder();
             builder.sslSocketFactory(createSSLSocketFactory());
-
+            builder.connectTimeout(15,TimeUnit.SECONDS);
             builder.hostnameVerifier(new TrustAllHostnameVerifier());
             client=builder.build();
         }

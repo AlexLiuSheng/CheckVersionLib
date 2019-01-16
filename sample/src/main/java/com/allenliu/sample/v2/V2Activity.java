@@ -171,6 +171,7 @@ public class V2Activity extends AppCompatActivity {
         String address = etAddress.getText().toString();
         if (address != null && !"".equals(address))
             builder.setDownloadAPKPath(address);
+//        builder.setShowNotification(false);
 
 //        builder.setApkName("HAHA");
 //builder.setNewestVersionCode(10);

@@ -26,7 +26,7 @@
 ### 导入
 
 ```
-compile 'com.allenliu.versionchecklib:library:2.1.8'
+compile 'com.allenliu.versionchecklib:library:2.1.9'
 ```
 
 ### 使用
@@ -73,7 +73,7 @@ compile 'com.allenliu.versionchecklib:library:2.1.8'
 
                     }
                 })
-                .excuteMission(context);
+                .executeMission(context);
 
 
 ```
@@ -109,7 +109,7 @@ compile 'com.allenliu.versionchecklib:library:2.1.8'
 
                     }
                 })
-                .excuteMission(context);
+                .executeMission(context);
 ```
 
 以上就是最基本的使用（库默认会有一套界面），如果还不满足项目需求，下面就可以用这个库来飙车了

@@ -23,7 +23,12 @@ import okhttp3.Response;
 public class DownloadMangerV2 {
     public static void download(final String url, final String downloadApkPath, final String fileName, final DownloadListener listener) {
         if (url != null && !url.isEmpty()) {
-            Request request = new Request.Builder().url(url).build();
+            Request request = new Request
+                    .Builder()
+                    //#issue 220
+
+                    .addHeader("Accept-Encoding", "identity")
+                    .url(url).build();
             new Handler(Looper.getMainLooper()).post(new Runnable() {
                 @Override
                 public void run() {
@@ -43,6 +48,7 @@ public class DownloadMangerV2 {
                         }
                     });
                 }
+
                 @Override
                 public void onDownloading(final int progress) {
                     new Handler(Looper.getMainLooper()).post(new Runnable() {
