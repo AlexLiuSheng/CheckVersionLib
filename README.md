@@ -44,7 +44,7 @@ the easiest way to use
                 .downloadOnly(
                         UIData.create().setDownloadUrl(downloadUrl)
                 )
-                .excuteMission(context);
+                .executeMission(context);
 ```
 
 `UIData`：UIData is the type of Bundle，it saves some data for displaying ui page，it can use in your customization page/
