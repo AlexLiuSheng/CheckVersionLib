@@ -1,6 +1,9 @@
 package com.allenliu.versionchecklib.v2.ui;
 
 import android.app.IntentService;
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
@@ -10,6 +13,7 @@ import android.os.IBinder;
 import android.os.Looper;
 import android.support.annotation.Nullable;
 import android.support.annotation.WorkerThread;
+import android.support.v4.app.NotificationCompat;
 
 import com.allenliu.versionchecklib.R;
 import com.allenliu.versionchecklib.callback.DownloadListener;
@@ -98,7 +102,6 @@ public class VersionService extends Service {
         //清除之前的任务，如果有
 //        AllenVersionChecker.getInstance().cancelAllMission(context);
         Intent intent = new Intent(context, VersionService.class);
-
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             context.startForegroundService(intent);
         } else {
@@ -108,85 +111,10 @@ public class VersionService extends Service {
 
 
     protected void onHandleWork() {
-        if (checkWhetherNeedRequestVersion()) {
-            requestVersion();
-        } else {
-            downloadAPK();
-        }
+        downloadAPK();
+
     }
 
-    /**
-     * 请求版本接口
-     */
-    private void requestVersion() {
-        RequestVersionBuilder requestVersionBuilder = builder.getRequestVersionBuilder();
-        OkHttpClient client = AllenHttp.getHttpClient();
-        HttpRequestMethod requestMethod = requestVersionBuilder.getRequestMethod();
-        Request request = null;
-        switch (requestMethod) {
-            case GET:
-                request = AllenHttp.get(requestVersionBuilder).build();
-                break;
-            case POST:
-                request = AllenHttp.post(requestVersionBuilder).build();
-                break;
-            case POSTJSON:
-                request = AllenHttp.postJson(requestVersionBuilder).build();
-                break;
-        }
-        final RequestVersionListener requestVersionListener = requestVersionBuilder.getRequestVersionListener();
-        Handler handler = new Handler(Looper.getMainLooper());
-        if (requestVersionListener != null) {
-            try {
-                final Response response = client.newCall(request).execute();
-                if (response.isSuccessful()) {
-                    final String result = response.body() != null ? response.body().string() : null;
-
-                    handler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            if (builder == null)
-                                return;
-                            UIData versionBundle = requestVersionListener.onRequestVersionSuccess(result);
-                            if (versionBundle != null)
-                                builder.setVersionBundle(versionBundle);
-                            downloadAPK();
-                        }
-                    });
-
-                } else {
-                    handler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            AllenVersionChecker.getInstance().cancelAllMission(getApplicationContext());
-                            requestVersionListener.onRequestVersionFailure(response.message());
-                        }
-                    });
-                }
-            } catch (final IOException e) {
-                e.printStackTrace();
-                handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-
-                        AllenVersionChecker.getInstance().cancelAllMission(getApplicationContext());
-                        requestVersionListener.onRequestVersionFailure(e.getMessage());
-                    }
-                });
-
-            }
-        } else {
-            throw new RuntimeException("using request version function,you must set a requestVersionListener");
-        }
-    }
-
-
-    private boolean checkWhetherNeedRequestVersion() {
-        if (builder.getRequestVersionBuilder() != null)
-            return true;
-        else
-            return false;
-    }
 
     private void downloadAPK() {
         if (builder != null && builder.getVersionBundle() != null) {
@@ -254,8 +182,8 @@ public class VersionService extends Service {
         if (builder.isSilentDownload()) {
             showVersionDialog();
         } else {
-            builderHelper.checkForceUpdate();
             AppUtils.installApk(getApplicationContext(), new File(downloadPath), builder.getCustomInstallListener());
+            builderHelper.checkForceUpdate();
         }
     }
 
@@ -286,7 +214,7 @@ public class VersionService extends Service {
         DownloadMangerV2.download(downloadUrl, builder.getDownloadAPKPath(), getString(R.string.versionchecklib_download_apkname, builder.getApkName() != null ? builder.getApkName() : getPackageName()), new DownloadListener() {
             @Override
             public void onCheckerDownloading(int progress) {
-                if (isServiceAlive) {
+                if (isServiceAlive && builder != null) {
                     if (!builder.isSilentDownload()) {
                         notificationHelper.updateNotification(progress);
                         updateDownloadingDialogProgress(progress);
@@ -350,7 +278,7 @@ public class VersionService extends Service {
                 if (permissionResult)
                     startDownloadApk();
                 else {
-                    if (builderHelper!=null) {
+                    if (builderHelper != null) {
                         builderHelper.checkForceUpdate();
                     }
 
@@ -361,7 +289,6 @@ public class VersionService extends Service {
     }
 
 
-
 //    @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
 //    public synchronized void onReceiveDownloadBuilder(DownloadBuilder downloadBuilder) {
 //        builder = downloadBuilder;
@@ -370,11 +297,16 @@ public class VersionService extends Service {
 //    }
 
     private void init() {
+        //https://issuetracker.google.com/issues/76112072
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+            startForeground(NotificationHelper.NOTIFICATION_ID, NotificationHelper.createSimpleNotification(this));
+
         if (builder != null) {
             isServiceAlive = true;
             builderHelper = new BuilderHelper(getApplicationContext(), builder);
             notificationHelper = new NotificationHelper(getApplicationContext(), builder);
-            startForeground(1, notificationHelper.getServiceNotification());
+
+            startForeground(NotificationHelper.NOTIFICATION_ID, notificationHelper.getServiceNotification());
             executors = Executors.newSingleThreadExecutor();
             executors.submit(new Runnable() {
                 @Override

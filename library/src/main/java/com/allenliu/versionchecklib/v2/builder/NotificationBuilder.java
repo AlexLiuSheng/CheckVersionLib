@@ -1,7 +1,5 @@
 package com.allenliu.versionchecklib.v2.builder;
 
-import com.allenliu.versionchecklib.R;
-
 /**
  * Created by allenliu on 2018/1/19.
  */
@@ -18,7 +16,8 @@ public class NotificationBuilder {
     }
 
     private NotificationBuilder() {
-        icon = R.mipmap.ic_launcher;
+
+//        icon = R.mipmap.ic_launcher;
         isRingtone = true;
     }
 

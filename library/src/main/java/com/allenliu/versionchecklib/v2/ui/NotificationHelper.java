@@ -11,6 +11,7 @@ import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.NotificationCompat;
 
 import com.allenliu.versionchecklib.R;
@@ -34,10 +35,11 @@ public class NotificationHelper {
     private Context context;
     NotificationCompat.Builder notificationBuilder = null;
     NotificationManager manager = null;
-    private boolean isDownloadSuccess=false,isFailed=false;
+    private boolean isDownloadSuccess = false, isFailed = false;
     private int currentProgress = 0;
     private String contentText;
-    private  final int NOTIFICATION_ID=1;
+    public static final int NOTIFICATION_ID = 1;
+
     public NotificationHelper(Context context, DownloadBuilder builder) {
         this.context = context;
         this.versionBuilder = builder;
@@ -51,7 +53,7 @@ public class NotificationHelper {
      */
     public void updateNotification(int progress) {
         if (versionBuilder.isShowNotification()) {
-            if ((progress - currentProgress) > 5&&!isDownloadSuccess&&!isFailed) {
+            if ((progress - currentProgress) > 5 && !isDownloadSuccess && !isFailed) {
                 notificationBuilder.setContentIntent(null);
                 notificationBuilder.setContentText(String.format(contentText, progress));
                 notificationBuilder.setProgress(100, progress, false);
@@ -65,8 +67,8 @@ public class NotificationHelper {
      * show notification
      */
     public void showNotification() {
-        isDownloadSuccess=false;
-        isFailed=false;
+        isDownloadSuccess = false;
+        isFailed = false;
         if (versionBuilder.isShowNotification()) {
             manager = (NotificationManager) context.getSystemService(NOTIFICATION_SERVICE);
             notificationBuilder = createNotification();
@@ -78,7 +80,7 @@ public class NotificationHelper {
      * show download success notification
      */
     public void showDownloadCompleteNotifcation(File file) {
-        isDownloadSuccess=true;
+        isDownloadSuccess = true;
         if (!versionBuilder.isShowNotification())
             return;
         Intent i = new Intent(Intent.ACTION_VIEW);
@@ -102,8 +104,8 @@ public class NotificationHelper {
     }
 
     public void showDownloadFailedNotification() {
-        isDownloadSuccess=false;
-        isFailed=true;
+        isDownloadSuccess = false;
+        isFailed = true;
         if (versionBuilder.isShowNotification()) {
             Intent intent = new Intent(context, PermissionDialogActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -156,37 +158,41 @@ public class NotificationHelper {
     }
 
     public void onDestroy() {
-        if(manager!=null)
-        manager.cancel(NOTIFICATION_ID);
+        if (manager != null)
+            manager.cancel(NOTIFICATION_ID);
     }
-    public Notification getServiceNotification() {
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-            String channelid = "version_service_id";
-            NotificationCompat.Builder notifcationBuilder = new NotificationCompat.Builder(context, channelid)
-                    .setContentTitle(context.getString(R.string.app_name))
-                    .setContentText(context.getString(R.string.versionchecklib_version_service_runing))
-                    .setSmallIcon(versionBuilder.getNotificationBuilder().getIcon())
-                    .setAutoCancel(false);
 
+    private static final String channelid = "version_service_id";
+
+    public Notification getServiceNotification() {
+
+        NotificationCompat.Builder notifcationBuilder = new NotificationCompat.Builder(context, channelid)
+                .setContentTitle(context.getString(R.string.app_name))
+                .setContentText(context.getString(R.string.versionchecklib_version_service_runing))
+                .setSmallIcon(versionBuilder.getNotificationBuilder().getIcon())
+                .setAutoCancel(false);
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
             NotificationChannel notificationChannel = new NotificationChannel(channelid, "version_service_name", NotificationManager.IMPORTANCE_LOW);
             notificationChannel.enableLights(false);
 //            notificationChannel.setLightColor(getColor(R.color.versionchecklib_theme_color));
             notificationChannel.enableVibration(false);
             NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-            manager.createNotificationChannel(notificationChannel);
-
-            return notifcationBuilder.build();
-        } else {
-            NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(context)
-                    .setContentTitle(context.getString(R.string.app_name))
-                    .setContentText(context.getString(R.string.versionchecklib_version_service_runing))
-                    .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-                    .setSmallIcon(versionBuilder.getNotificationBuilder().getIcon())
-                    .setAutoCancel(false);
-            return notificationBuilder.build();
+            if (manager != null) {
+                manager.createNotificationChannel(notificationChannel);
+            }
 
         }
+        return notifcationBuilder.build();
 
+    }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public static Notification createSimpleNotification(Context context) {
+        NotificationChannel channel = new NotificationChannel(channelid,
+                "MyApp", NotificationManager.IMPORTANCE_DEFAULT);
+        ((NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE)).createNotificationChannel(channel);
+        return new NotificationCompat.Builder(context, channelid)
+                .setContentTitle("")
+                .setContentText("").build();
     }
 }

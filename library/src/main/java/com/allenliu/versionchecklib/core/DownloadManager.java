@@ -247,7 +247,7 @@ public class DownloadManager {
         }
         builder = new NotificationCompat.Builder(context, CHANNEL_ID);
         builder.setAutoCancel(true);
-        builder.setSmallIcon(R.mipmap.ic_launcher);
+//        builder.setSmallIcon(R.mipmap.ic_launcher);
 //        builder.setOnlyAlertOnce(true);
         builder.setContentTitle(context.getString(R.string.app_name));
 //        builder.setSound(null);

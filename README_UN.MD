@@ -43,7 +43,7 @@ compile 'com.allenliu.versionchecklib:library:2.1.9'
                 .downloadOnly(
                         UIData.create().setDownloadUrl(downloadUrl)
                 )
-                .excuteMission(context);
+                .executeMission(context);
 ```
 
 `UIData`：UIData是一个Bundle，用于存放用于UI展示的一些数据，后面自定义界面时候可以拿来用

@@ -2,6 +2,7 @@ package com.allenliu.sample.v2;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.os.Build;
 import android.os.Environment;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -198,6 +199,7 @@ public class V2Activity extends AppCompatActivity {
      * 通常关闭整个activity所有界面，这里方便测试直接关闭当前activity
      */
     private void forceUpdate() {
+
         Toast.makeText(this, "force update handle", Toast.LENGTH_SHORT).show();
         finish();
     }

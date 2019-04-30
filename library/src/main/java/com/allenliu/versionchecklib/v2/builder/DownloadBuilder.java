@@ -1,6 +1,9 @@
 package com.allenliu.versionchecklib.v2.builder;
 
 import android.content.Context;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
+import android.content.res.Resources;
 import android.support.annotation.NonNull;
 
 import com.allenliu.versionchecklib.callback.APKDownloadListener;
@@ -11,6 +14,7 @@ import com.allenliu.versionchecklib.v2.callback.CustomDownloadingDialogListener;
 import com.allenliu.versionchecklib.v2.callback.CustomInstallListener;
 import com.allenliu.versionchecklib.v2.callback.CustomVersionDialogListener;
 import com.allenliu.versionchecklib.v2.callback.ForceUpdateListener;
+import com.allenliu.versionchecklib.v2.net.RequestVersionManager;
 import com.allenliu.versionchecklib.v2.ui.VersionService;
 
 import org.greenrobot.eventbus.EventBus;
@@ -247,10 +251,34 @@ public class DownloadBuilder {
         if (apkName == null) {
             apkName = context.getApplicationContext().getPackageName();
         }
+        if(notificationBuilder.getIcon()==0){
+            final PackageManager pm=context.getPackageManager();
+            final ApplicationInfo applicationInfo;
+            try {
+                applicationInfo = pm.getApplicationInfo(context.getPackageName(), PackageManager.GET_META_DATA);
+                final int appIconResId=applicationInfo.icon;
+                notificationBuilder.setIcon(appIconResId);
+            } catch (PackageManager.NameNotFoundException e) {
+                e.printStackTrace();
+            }
+        }
+        if(checkWhetherNeedRequestVersion()){
+            RequestVersionManager.getInstance().requestVersion(this,context);
+        }else{
+          download(context);
+        }
+        context=null;
+
+    }
+    public void download(Context context){
         VersionService.builder = this;
-//        EventBus.getDefault().postSticky(this);
         VersionService.enqueueWork(context.getApplicationContext());
     }
-
+    private   boolean checkWhetherNeedRequestVersion() {
+        if (getRequestVersionBuilder() != null)
+            return true;
+        else
+            return false;
+    }
 
 }
