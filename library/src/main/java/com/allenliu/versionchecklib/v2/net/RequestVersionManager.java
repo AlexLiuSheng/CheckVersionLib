@@ -23,7 +23,7 @@ import okhttp3.Response;
  * @author AllenLiu
  * @version 1.0
  * @date 2019/4/30
- * @copyRight 四川金信石信息技术有限公司
+ *
  * @since 1.0
  */
 public class RequestVersionManager {

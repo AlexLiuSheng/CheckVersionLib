@@ -1,7 +1,7 @@
 apply plugin: 'com.android.library'
 apply plugin: 'com.github.dcendents.android-maven'
 apply plugin: 'com.jfrog.bintray'
-version = "2.1.9"
+version = "2.2.0"
 android {
     compileSdkVersion 27
     buildToolsVersion "27.0.0"
@@ -100,5 +100,10 @@ bintray {
         licenses = ["Apache-2.0"]
         publish = true
     }
+}
+tasks.withType(Javadoc) {
+    options.addStringOption('Xdoclint:none', '-quiet')
+    options.addStringOption('encoding', 'UTF-8')
+    options.addStringOption('charSet', 'UTF-8')
 }
 

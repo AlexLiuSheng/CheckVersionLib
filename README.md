@@ -27,7 +27,7 @@ The strongest feature is easier to integrate than version  of V1.+
 ### include
 
 ```
-compile 'com.allenliu.versionchecklib:library:2.1.9'
+compile 'com.allenliu.versionchecklib:library:2.2.0'
 ```
 
 ### usage
