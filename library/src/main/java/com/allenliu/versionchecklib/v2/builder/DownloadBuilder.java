@@ -271,8 +271,7 @@ public class DownloadBuilder {
 
     }
     public void download(Context context){
-        VersionService.builder = this;
-        VersionService.enqueueWork(context.getApplicationContext());
+        VersionService.enqueueWork(context.getApplicationContext(),this);
     }
     private   boolean checkWhetherNeedRequestVersion() {
         if (getRequestVersionBuilder() != null)

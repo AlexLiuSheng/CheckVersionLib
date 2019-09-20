@@ -5,8 +5,10 @@ import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.Service;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
@@ -28,6 +30,7 @@ import com.allenliu.versionchecklib.v2.AllenVersionChecker;
 import com.allenliu.versionchecklib.v2.builder.DownloadBuilder;
 import com.allenliu.versionchecklib.v2.builder.RequestVersionBuilder;
 import com.allenliu.versionchecklib.v2.builder.UIData;
+import com.allenliu.versionchecklib.v2.builder.VersionCheckBinder;
 import com.allenliu.versionchecklib.v2.callback.RequestVersionListener;
 import com.allenliu.versionchecklib.v2.eventbus.AllenEventType;
 import com.allenliu.versionchecklib.v2.eventbus.CommonEvent;
@@ -54,13 +57,41 @@ import okhttp3.Response;
  * helper methods.
  */
 public class VersionService extends Service {
-    public static DownloadBuilder builder;
+    private DownloadBuilder builder;
 //    private static DownloadBuilder tempBuilder;
 
     private BuilderHelper builderHelper;
     private NotificationHelper notificationHelper;
     private boolean isServiceAlive = false;
     private ExecutorService executors;
+    private VersionCheckBinder binder=new VersionCheckBinder(this);
+
+    public void setBuilder(DownloadBuilder builder) {
+        this.builder = builder;
+    }
+    public static void enqueueWork(final Context context, final DownloadBuilder builder) {
+        //清除之前的任务，如果有
+//        AllenVersionChecker.getInstance().cancelAllMission(context);
+        Intent intent = new Intent(context, VersionService.class);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            context.startForegroundService(intent);
+        } else {
+            context.startService(intent);
+        }
+        ServiceConnection serviceConnection=new ServiceConnection() {
+            @Override
+            public void onServiceConnected(ComponentName name, IBinder service) {
+                VersionCheckBinder binder= (VersionCheckBinder) service;
+                binder.setDownloadBuilder(builder);
+            }
+
+            @Override
+            public void onServiceDisconnected(ComponentName name) {
+
+            }
+        };
+        context.bindService(intent,serviceConnection,Context.BIND_AUTO_CREATE);
+    }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
@@ -95,24 +126,14 @@ public class VersionService extends Service {
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
-        return null;
+        return binder;
     }
 
-    public static void enqueueWork(final Context context) {
-        //清除之前的任务，如果有
-//        AllenVersionChecker.getInstance().cancelAllMission(context);
-        Intent intent = new Intent(context, VersionService.class);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            context.startForegroundService(intent);
-        } else {
-            context.startService(intent);
-        }
-    }
+
 
 
     protected void onHandleWork() {
         downloadAPK();
-
     }
 
 
