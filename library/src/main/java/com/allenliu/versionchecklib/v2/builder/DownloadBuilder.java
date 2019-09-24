@@ -3,7 +3,6 @@ package com.allenliu.versionchecklib.v2.builder;
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
-import android.content.res.Resources;
 import android.support.annotation.NonNull;
 
 import com.allenliu.versionchecklib.callback.APKDownloadListener;
@@ -16,8 +15,6 @@ import com.allenliu.versionchecklib.v2.callback.CustomVersionDialogListener;
 import com.allenliu.versionchecklib.v2.callback.ForceUpdateListener;
 import com.allenliu.versionchecklib.v2.net.RequestVersionManager;
 import com.allenliu.versionchecklib.v2.ui.VersionService;
-
-import org.greenrobot.eventbus.EventBus;
 
 /**
  * Created by allenliu on 2018/1/12.
@@ -41,6 +38,7 @@ public class DownloadBuilder {
     private CustomVersionDialogListener customVersionDialogListener;
     private CustomInstallListener customInstallListener;
     private OnCancelListener onCancelListener;
+
     private ForceUpdateListener forceUpdateListener;
     private UIData versionBundle;
     private Integer newestVersionCode;
@@ -251,33 +249,45 @@ public class DownloadBuilder {
         if (apkName == null) {
             apkName = context.getApplicationContext().getPackageName();
         }
-        if(notificationBuilder.getIcon()==0){
-            final PackageManager pm=context.getPackageManager();
+        if (notificationBuilder.getIcon() == 0) {
+            final PackageManager pm = context.getPackageManager();
             final ApplicationInfo applicationInfo;
             try {
                 applicationInfo = pm.getApplicationInfo(context.getPackageName(), PackageManager.GET_META_DATA);
-                final int appIconResId=applicationInfo.icon;
+                final int appIconResId = applicationInfo.icon;
                 notificationBuilder.setIcon(appIconResId);
             } catch (PackageManager.NameNotFoundException e) {
                 e.printStackTrace();
             }
         }
-        if(checkWhetherNeedRequestVersion()){
-            RequestVersionManager.getInstance().requestVersion(this,context);
-        }else{
-          download(context);
+        if (checkWhetherNeedRequestVersion()) {
+            RequestVersionManager.getInstance().requestVersion(this, context.getApplicationContext());
+        } else {
+            download(context);
         }
-        context=null;
 
     }
-    public void download(Context context){
-        VersionService.enqueueWork(context.getApplicationContext(),this);
+
+    public void download(Context context) {
+        VersionService.enqueueWork(context.getApplicationContext(), this);
     }
-    private   boolean checkWhetherNeedRequestVersion() {
+
+    private boolean checkWhetherNeedRequestVersion() {
         if (getRequestVersionBuilder() != null)
             return true;
         else
             return false;
     }
 
+    public void destory() {
+        setCustomDownloadFailedListener(null);
+        setCustomDownloadingDialogListener(null);
+        setCustomVersionDialogListener(null);
+        setForceUpdateListener(null);
+        setApkDownloadListener(null);
+        setOnCancelListener(null);
+        if (getRequestVersionBuilder() != null)
+            getRequestVersionBuilder().destory();
+        requestVersionBuilder = null;
+    }
 }

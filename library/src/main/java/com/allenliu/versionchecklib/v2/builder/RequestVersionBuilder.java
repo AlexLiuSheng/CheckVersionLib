@@ -17,7 +17,7 @@ public class RequestVersionBuilder {
     private RequestVersionListener requestVersionListener;
 
     public RequestVersionBuilder() {
-        requestMethod=HttpRequestMethod.GET;
+        requestMethod = HttpRequestMethod.GET;
 
     }
 
@@ -62,13 +62,16 @@ public class RequestVersionBuilder {
     }
 
     /**
-     *
      * @param requestVersionListener requestVersionResultListener
      * @return download builder setting
      */
     public DownloadBuilder request(RequestVersionListener requestVersionListener) {
         this.requestVersionListener = requestVersionListener;
         return new DownloadBuilder(this, null);
+    }
+
+    public void destory() {
+        requestVersionListener = null;
     }
 
 }

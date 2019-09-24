@@ -51,6 +51,7 @@ public class DownloadingActivity extends AllenBaseActivity implements DialogInte
 
     @Override
     public void receiveEvent(CommonEvent commonEvent) {
+        super.receiveEvent(commonEvent);
         switch (commonEvent.getEventType()) {
             case AllenEventType.UPDATE_DOWNLOADING_PROGRESS:
                 int progress = (int) commonEvent.getData();
@@ -87,6 +88,10 @@ public class DownloadingActivity extends AllenBaseActivity implements DialogInte
     public void showCustomDialog() {
         if(getVersionBuilder()!=null) {
             downloadingDialog = getVersionBuilder().getCustomDownloadingDialogListener().getCustomDownloadingDialog(this, currentProgress, getVersionBuilder().getVersionBundle());
+            if (getVersionBuilder().getForceUpdateListener() != null)
+                downloadingDialog.setCancelable(false);
+            else
+                downloadingDialog.setCancelable(true);
             View cancelView = downloadingDialog.findViewById(R.id.versionchecklib_loading_dialog_cancel);
             if (cancelView != null) {
                 cancelView.setOnClickListener(new View.OnClickListener() {

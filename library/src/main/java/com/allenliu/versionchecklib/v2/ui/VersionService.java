@@ -5,9 +5,11 @@ import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.Service;
+import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.os.Build;
 import android.os.Handler;
@@ -16,6 +18,7 @@ import android.os.Looper;
 import android.support.annotation.Nullable;
 import android.support.annotation.WorkerThread;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.content.LocalBroadcastManager;
 
 import com.allenliu.versionchecklib.R;
 import com.allenliu.versionchecklib.callback.DownloadListener;
@@ -27,6 +30,7 @@ import com.allenliu.versionchecklib.utils.ALog;
 import com.allenliu.versionchecklib.utils.AllenEventBusUtil;
 import com.allenliu.versionchecklib.utils.AppUtils;
 import com.allenliu.versionchecklib.v2.AllenVersionChecker;
+import com.allenliu.versionchecklib.v2.builder.BuilderManager;
 import com.allenliu.versionchecklib.v2.builder.DownloadBuilder;
 import com.allenliu.versionchecklib.v2.builder.RequestVersionBuilder;
 import com.allenliu.versionchecklib.v2.builder.UIData;
@@ -58,30 +62,31 @@ import okhttp3.Response;
  */
 public class VersionService extends Service {
     private DownloadBuilder builder;
-//    private static DownloadBuilder tempBuilder;
-
     private BuilderHelper builderHelper;
     private NotificationHelper notificationHelper;
     private boolean isServiceAlive = false;
     private ExecutorService executors;
-    private VersionCheckBinder binder=new VersionCheckBinder(this);
+    private VersionCheckBinder binder = new VersionCheckBinder(this);
 
     public void setBuilder(DownloadBuilder builder) {
         this.builder = builder;
     }
+
     public static void enqueueWork(final Context context, final DownloadBuilder builder) {
         //清除之前的任务，如果有
-//        AllenVersionChecker.getInstance().cancelAllMission(context);
+        AllenVersionChecker.getInstance().cancelAllMission(context);
+        BuilderManager.getInstance().setDownloadBuilder(builder);
         Intent intent = new Intent(context, VersionService.class);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             context.startForegroundService(intent);
         } else {
             context.startService(intent);
         }
-        ServiceConnection serviceConnection=new ServiceConnection() {
+        ServiceConnection serviceConnection = new ServiceConnection() {
             @Override
             public void onServiceConnected(ComponentName name, IBinder service) {
-                VersionCheckBinder binder= (VersionCheckBinder) service;
+                VersionCheckBinder binder = (VersionCheckBinder) service;
+                binder.setServiceConnection(this);
                 binder.setDownloadBuilder(builder);
             }
 
@@ -90,7 +95,7 @@ public class VersionService extends Service {
 
             }
         };
-        context.bindService(intent,serviceConnection,Context.BIND_AUTO_CREATE);
+        context.bindService(intent, serviceConnection, Context.BIND_AUTO_CREATE);
     }
 
     @Override
@@ -98,9 +103,12 @@ public class VersionService extends Service {
         if (!EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().register(this);
         }
+
         ALog.e("version service create");
-        init();
-//        builder = tempBuilder;
+        //https://issuetracker.google.com/issues/76112072
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+            startForeground(NotificationHelper.NOTIFICATION_ID, NotificationHelper.createSimpleNotification(this));
+//        init();
         return super.onStartCommand(intent, flags, startId);
     }
 
@@ -108,7 +116,8 @@ public class VersionService extends Service {
     public void onDestroy() {
         super.onDestroy();
         ALog.e("version service destroy");
-//        builder = null;
+        builder.destory();
+        BuilderManager.getInstance().destory();
         builderHelper = null;
         if (notificationHelper != null)
             notificationHelper.onDestroy();
@@ -128,8 +137,6 @@ public class VersionService extends Service {
     public IBinder onBind(Intent intent) {
         return binder;
     }
-
-
 
 
     protected void onHandleWork() {
@@ -258,7 +265,7 @@ public class VersionService extends Service {
 
             @Override
             public void onCheckerDownloadFail() {
-
+              ALog.e("download failed");
                 if (!isServiceAlive)
                     return;
                 if (builder.getApkDownloadListener() != null)
@@ -271,7 +278,7 @@ public class VersionService extends Service {
                     }
                     notificationHelper.showDownloadFailedNotification();
                 } else {
-                    AllenVersionChecker.getInstance().cancelAllMission(getApplicationContext());
+                    AllenVersionChecker.getInstance().cancelAllMission();
                 }
 
             }
@@ -305,6 +312,13 @@ public class VersionService extends Service {
 
                 }
                 break;
+            case AllenEventType.STOP_SERVICE:
+                if(binder.getServiceConnection()!=null) {
+                    getApplicationContext().unbindService(binder.getServiceConnection());
+                    stopSelf();
+                    binder.setServiceConnection(null);
+                }
+
         }
 
     }
@@ -317,16 +331,11 @@ public class VersionService extends Service {
 //        EventBus.getDefault().removeStickyEvent(downloadBuilder);
 //    }
 
-    private void init() {
-        //https://issuetracker.google.com/issues/76112072
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
-            startForeground(NotificationHelper.NOTIFICATION_ID, NotificationHelper.createSimpleNotification(this));
-
+    public void init() {
         if (builder != null) {
             isServiceAlive = true;
             builderHelper = new BuilderHelper(getApplicationContext(), builder);
             notificationHelper = new NotificationHelper(getApplicationContext(), builder);
-
             startForeground(NotificationHelper.NOTIFICATION_ID, notificationHelper.getServiceNotification());
             executors = Executors.newSingleThreadExecutor();
             executors.submit(new Runnable() {
@@ -335,9 +344,8 @@ public class VersionService extends Service {
                     onHandleWork();
                 }
             });
-
         } else {
-            AllenVersionChecker.getInstance().cancelAllMission(this);
+            AllenVersionChecker.getInstance().cancelAllMission();
         }
     }
 

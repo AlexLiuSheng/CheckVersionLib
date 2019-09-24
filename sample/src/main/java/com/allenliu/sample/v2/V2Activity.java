@@ -96,7 +96,11 @@ public class V2Activity extends AppCompatActivity {
                     .request(new RequestVersionListener() {
                         @Nullable
                         @Override
-                        public UIData onRequestVersionSuccess(String result) {
+                        public UIData onRequestVersionSuccess(DownloadBuilder downloadBuilder,String result) {
+//                            V2.1.1可以根据服务器返回的结果，动态在此设置是否强制更新等
+//                            downloadBuilder.setForceUpdateListener(() -> {
+//                                forceUpdate();
+//                            });
                             Toast.makeText(V2Activity.this, "request successful", Toast.LENGTH_SHORT).show();
                             return crateUIData();
                         }
@@ -170,7 +174,7 @@ public class V2Activity extends AppCompatActivity {
         //自定义下载路径
         builder.setDownloadAPKPath(Environment.getExternalStorageDirectory() + "/ALLEN/AllenVersionPath2/");
         String address = etAddress.getText().toString();
-        if (address != null && !"".equals(address))
+        if (!"".equals(address))
             builder.setDownloadAPKPath(address);
 //        builder.setShowNotification(false);
 
@@ -279,6 +283,7 @@ public class V2Activity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        AllenVersionChecker.getInstance().cancelAllMission(this);
+        //合适的地方关闭
+        AllenVersionChecker.getInstance().cancelAllMission();
     }
 }

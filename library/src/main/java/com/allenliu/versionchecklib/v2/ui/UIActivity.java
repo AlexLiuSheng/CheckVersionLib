@@ -38,15 +38,15 @@ public class UIActivity extends AllenBaseActivity implements DialogInterface.OnC
         super.onDestroy();
     }
 
-    @Override
-    public void receiveEvent(CommonEvent commonEvent) {
-        switch (commonEvent.getEventType()) {
-            case AllenEventType.SHOW_VERSION_DIALOG:
-                showVersionDialog();
-                break;
-        }
-
-    }
+//    @Override
+//    public void receiveEvent(CommonEvent commonEvent) {
+//        switch (commonEvent.getEventType()) {
+//            case AllenEventType.SHOW_VERSION_DIALOG:
+//                showVersionDialog();
+//                break;
+//        }
+//
+//    }
 
     @Override
     public void showDefaultDialog() {

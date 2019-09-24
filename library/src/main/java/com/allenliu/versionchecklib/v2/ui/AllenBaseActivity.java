@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 
+import com.allenliu.versionchecklib.v2.builder.BuilderManager;
 import com.allenliu.versionchecklib.v2.builder.DownloadBuilder;
 import com.allenliu.versionchecklib.v2.builder.UIData;
 import com.allenliu.versionchecklib.v2.eventbus.AllenEventType;
@@ -88,9 +89,9 @@ public abstract class AllenBaseActivity extends AppCompatActivity {
     }
 
     protected DownloadBuilder getVersionBuilder() {
-        if (VersionService.builder == null)
+        if (BuilderManager.getInstance().getDownloadBuilder() == null)
             finish();
-        return VersionService.builder;
+        return BuilderManager.getInstance().getDownloadBuilder();
 
 
     }
@@ -111,6 +112,9 @@ public abstract class AllenBaseActivity extends AppCompatActivity {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void receiveEvent(CommonEvent commonEvent) {
+        if(commonEvent.getEventType()==AllenEventType.CLOSE){
+            finish();
+        }
     }
 
     public abstract void showDefaultDialog();

@@ -26,7 +26,7 @@
 ### 导入
 
 ```
-compile 'com.allenliu.versionchecklib:library:2.2.0'
+compile 'com.allenliu.versionchecklib:library:2.2.1'
 ```
 
 ### 使用
@@ -112,6 +112,13 @@ compile 'com.allenliu.versionchecklib:library:2.2.0'
                 .executeMission(context);
 ```
 
+### 合适的地方关闭任务
+ 为了避免不必要的内存泄漏，需要在合适的地方取消任务
+ ```
+ AllenVersionChecker.getInstance().cancelAllMission();
+ ```
+
+
 以上就是最基本的使用（库默认会有一套界面），如果还不满足项目需求，下面就可以用这个库来飙车了
 
 ### 一些其他的function设置
@@ -159,6 +166,17 @@ compile 'com.allenliu.versionchecklib:library:2.2.0'
                 forceUpdate();
             });
 ```    
+**update in v2.2.1** 
+   动态设置是否强制更新，如果使用本库来请求服务器，可以在回调时动态设置一些参数或者回调
+  ```
+     public UIData onRequestVersionSuccess(DownloadBuilder downloadBuilder,String result) {
+                            downloadBuilder.setForceUpdateListener(() -> {
+                                forceUpdate();
+                            });
+                            Toast.makeText(V2Activity.this, "request successful", Toast.LENGTH_SHORT).show();
+                            return crateUIData();
+                        }
+  ```  
 > 下载忽略本地缓存
 
   如果本地有安装包缓存也会重新下载apk
@@ -312,12 +330,19 @@ eg.
 ```
 ***
 
+### update Log
+  - 2.2.1
+    - 修复内存泄漏问题
+    - 使用binder传递参数
+    - 一些已知的bug 	
+
+
 ###  混淆配置
 ```
    -keepattributes Annotation
-   -keepclassmembers class * {    @org.greenrobot.eventbus.Subscribe ;}
+   -keepclassmembers class * {    @org.greenrobot.eventbus.Subscribe<methods>;}
    -keep enum org.greenrobot.eventbus.ThreadMode { *; }
-   -keepclassmembers class * extends org.greenrobot.eventbus.util.ThrowableFailureEvent {    (java.lang.Throwable);}
+   -keepclassmembers class * extends org.greenrobot.eventbus.util.ThrowableFailureEvent {    <init>(java.lang.Throwable);}
    -keep class com.allenliu.versionchecklib.**{*;}
 ```
 

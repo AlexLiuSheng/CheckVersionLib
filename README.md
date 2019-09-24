@@ -27,7 +27,7 @@ The strongest feature is easier to integrate than version  of V1.+
 ### include
 
 ```
-compile 'com.allenliu.versionchecklib:library:2.2.0'
+compile 'com.allenliu.versionchecklib:library:2.2.1'
 ```
 
 ### usage
@@ -116,6 +116,11 @@ Some other http params for request app version,as follows
 
 the instructions above is the basic using for integrating(library has a set of default ui page),you can use some other params,if it does not fit your requirement the above.
 
+### cancel all mission
+to avoid memory leak,It is necessary to cancel all missiones when you dont want to use library.you should put code of cancel in properly place.
+```
+ AllenVersionChecker.getInstance().cancelAllMission();
+```
 ### some other functions
 first of all,the builder of follow is called `DownloadBuilder`
 ```
@@ -154,11 +159,24 @@ first of all,the builder of follow is called `DownloadBuilder`
 > Force Update
 
   set the listener represent need force update function,it will be call when user cancel the download operation,developer need close all the activities of application.
+
   ```
   builder.setForceUpdateListener(() -> {
                 forceUpdate();
             });
+
 ```    
+**update in v2.2.1** 
+   for setForceUpdateListener dynamically after server response,you can setForceUpdateListener in callback of http request,eg.
+  ```
+     public UIData onRequestVersionSuccess(DownloadBuilder downloadBuilder,String result) {
+                            downloadBuilder.setForceUpdateListener(() -> {
+                                forceUpdate();
+                            });
+                            Toast.makeText(V2Activity.this, "request successful", Toast.LENGTH_SHORT).show();
+                            return crateUIData();
+                        }
+  ```  
 > Force ReDownload no matter there is cache
 
 
@@ -316,12 +334,17 @@ setCustomDownloadFailedListener
 ###  ProGuard
 ```
    -keepattributes Annotation
-   -keepclassmembers class * {    @org.greenrobot.eventbus.Subscribe ;}
+   -keepclassmembers class * {    @org.greenrobot.eventbus.Subscribe<methods>;}
    -keep enum org.greenrobot.eventbus.ThreadMode { *; }
-   -keepclassmembers class * extends org.greenrobot.eventbus.util.ThrowableFailureEvent {    (java.lang.Throwable);}
+   -keepclassmembers class * extends org.greenrobot.eventbus.util.ThrowableFailureEvent {    <init>(java.lang.Throwable);}
    -keep class com.allenliu.versionchecklib.**{*;}
 ```
 
+### update Log
+  - 2.2.1
+    - fix the bugs of memory leak
+    - use binder to pass params
+    - some known issues 	
 
 ### Last
 

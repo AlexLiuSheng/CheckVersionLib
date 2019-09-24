@@ -53,7 +53,7 @@ public final class AppUtils {
                 "application/vnd.android.package-archive");
         context.startActivity(intent);
         AllenChecker.cancelMission();
-        AllenVersionChecker.getInstance().cancelAllMission(context);
+        AllenVersionChecker.getInstance().cancelAllMission();
     }
 
     public static void installApk(Context context, File file, CustomInstallListener listener) {
@@ -75,7 +75,7 @@ public final class AppUtils {
                     "application/vnd.android.package-archive");
             context.startActivity(intent);
             AllenChecker.cancelMission();
-            AllenVersionChecker.getInstance().cancelAllMission(context);
+            AllenVersionChecker.getInstance().cancelAllMission();
         }
     }
 

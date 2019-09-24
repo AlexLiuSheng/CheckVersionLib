@@ -6,9 +6,12 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 
 import com.allenliu.versionchecklib.core.http.AllenHttp;
+import com.allenliu.versionchecklib.utils.ALog;
+import com.allenliu.versionchecklib.utils.AllenEventBusUtil;
 import com.allenliu.versionchecklib.v2.builder.DownloadBuilder;
 import com.allenliu.versionchecklib.v2.builder.RequestVersionBuilder;
 import com.allenliu.versionchecklib.v2.builder.UIData;
+import com.allenliu.versionchecklib.v2.eventbus.AllenEventType;
 import com.allenliu.versionchecklib.v2.ui.VersionService;
 
 /**
@@ -17,10 +20,10 @@ import com.allenliu.versionchecklib.v2.ui.VersionService;
 
 public class AllenVersionChecker {
 
-//    public AllenVersionChecker() {
+    //    public AllenVersionChecker() {
 //        throw new RuntimeException("AllenVersionChecker can not be instantiated from outside");
 //    }
-    private AllenVersionChecker(){
+    private AllenVersionChecker() {
 
     }
 
@@ -32,11 +35,17 @@ public class AllenVersionChecker {
         public static final AllenVersionChecker allenVersionChecker = new AllenVersionChecker();
     }
 
+    @Deprecated
     public void cancelAllMission(Context context) {
+        cancelAllMission();
+    }
+
+    public void cancelAllMission() {
         AllenHttp.getHttpClient().dispatcher().cancelAll();
-        Intent intent = new Intent(context, VersionService.class);
-        VersionService.builder=null;
-        context.getApplicationContext().stopService(intent);
+//        Intent intent = new Intent(context.getApplicationContext(), VersionService.class);
+//        context.getApplicationContext().stopService(intent);
+        AllenEventBusUtil.sendEventBus(AllenEventType.CLOSE);
+        AllenEventBusUtil.sendEventBus(AllenEventType.STOP_SERVICE);
     }
 
     /**
@@ -49,6 +58,7 @@ public class AllenVersionChecker {
 
     /**
      * use request version function
+     *
      * @return requestVersionBuilder
      */
     public RequestVersionBuilder requestVersion() {
