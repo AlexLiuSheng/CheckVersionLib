@@ -2,20 +2,15 @@ package com.allenliu.sample.v1;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.RadioGroup;
 
 import com.allenliu.sample.R;
-import com.allenliu.versionchecklib.v2.builder.NotificationBuilder;
-import com.allenliu.versionchecklib.v2.builder.UIData;
-import com.allenliu.versionchecklib.v2.callback.ForceUpdateListener;
-import com.allenliu.versionchecklib.v2.callback.RequestVersionListener;
 import com.allenliu.versionchecklib.core.AllenChecker;
-import com.allenliu.versionchecklib.v2.AllenVersionChecker;
 import com.allenliu.versionchecklib.core.VersionDialogActivity;
 import com.allenliu.versionchecklib.core.VersionParams;
 

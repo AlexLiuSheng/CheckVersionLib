@@ -3,7 +3,7 @@ package com.allenliu.versionchecklib.v2.ui;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.v7.app.AlertDialog;
+import androidx.appcompat.app.AlertDialog;
 import android.view.View;
 
 import com.allenliu.versionchecklib.R;
@@ -14,7 +14,6 @@ import com.allenliu.versionchecklib.v2.AllenVersionChecker;
 import com.allenliu.versionchecklib.v2.builder.DownloadBuilder;
 import com.allenliu.versionchecklib.v2.builder.UIData;
 import com.allenliu.versionchecklib.v2.eventbus.AllenEventType;
-import com.allenliu.versionchecklib.v2.eventbus.CommonEvent;
 
 import java.io.File;
 

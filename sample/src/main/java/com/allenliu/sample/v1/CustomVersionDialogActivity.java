@@ -2,7 +2,7 @@ package com.allenliu.sample.v1;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.v7.app.AlertDialog;
+import androidx.appcompat.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,6 +19,8 @@ import com.allenliu.versionchecklib.callback.CommitClickListener;
 import com.allenliu.versionchecklib.core.http.AllenHttp;
 
 import java.io.File;
+
+import static com.allenliu.versionchecklib.core.http.AllenHttp.getHttpClient;
 
 /**
  * @author allenliu
@@ -182,12 +184,12 @@ public class CustomVersionDialogActivity extends VersionDialogActivity implement
                 loadingDialog = new AlertDialog.Builder(this).setTitle("").setView(loadingView).create();
                 loadingDialog.setCancelable(true);
                 loadingDialog.setCanceledOnTouchOutside(false);
-                loadingDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
-                    @Override
-                    public void onCancel(DialogInterface dialog) {
-                        AllenHttp.getHttpClient().dispatcher().cancelAll();
-                    }
-                });
+//                loadingDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+//                    @Override
+//                    public void onCancel(DialogInterface dialog) {
+//                       AllenHttp.getHttpClient().dispatcher().cancelAll();
+//                    }
+//                });
             }
             ProgressBar pb = (ProgressBar) loadingView.findViewById(com.allenliu.versionchecklib.R.id.pb);
             TextView tvProgress = (TextView) loadingView.findViewById(com.allenliu.versionchecklib.R.id.tv_progress);

@@ -4,7 +4,7 @@
     android:padding="20dp"
     android:layout_height="wrap_content">
 
-    <android.support.v4.widget.ContentLoadingProgressBar
+    <androidx.core.widget.ContentLoadingProgressBar
         android:layout_width="match_parent"
         android:id="@+id/pb"
         style="?android:attr/progressBarStyleHorizontal"
