@@ -26,10 +26,23 @@ The strongest feature is easier to integrate than version  of V1.+
 
 ### include
 
-```
-compile 'com.allenliu.versionchecklib:library:2.2.1'
-```
+#### jcenter
 
+```
+implementation 'com.allenliu.versionchecklib:library:2.2.1'
+```
+#### jitpack && androiud x
+```
+allprojects {
+		repositories {
+			...
+			maven { url 'https://jitpack.io' }
+		}
+	}
+dependencies {
+	        implementation 'com.github.AlexLiuSheng:CheckVersionLib:2.2.1'
+	}
+```
 ### usage
 
 
