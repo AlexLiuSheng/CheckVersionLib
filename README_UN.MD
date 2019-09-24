@@ -25,8 +25,21 @@
 
 ### 导入
 
+#### jcenter
 ```
-compile 'com.allenliu.versionchecklib:library:2.2.1'
+implementation 'com.allenliu.versionchecklib:library:2.2.1'
+```
+#### jitpack && androiud x
+```
+allprojects {
+		repositories {
+			...
+			maven { url 'https://jitpack.io' }
+		}
+	}
+dependencies {
+	        implementation 'com.github.AlexLiuSheng:CheckVersionLib:2.2.1'
+	}
 ```
 
 ### 使用
