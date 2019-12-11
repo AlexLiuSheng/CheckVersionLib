@@ -346,6 +346,12 @@ public class DownloadBuilder {
         setForceUpdateListener(null);
         setApkDownloadListener(null);
         setOnCancelListener(null);
+        setReadyDownloadCommitClickListener(null);
+        setDownloadFailedCommitClickListener(null);
+        setReadyDownloadCancelListener(null);
+        setDownloadingCancelListener(null);
+        setDownloadFailedCancelListener(null);
+
         if (getRequestVersionBuilder() != null)
             getRequestVersionBuilder().destory();
         requestVersionBuilder = null;
