@@ -43,7 +43,17 @@ public abstract class FileCallBack implements Callback {
     }
 
     @Override
-    public void onResponse(final Call call, final Response response) throws IOException {
+    public void onResponse(final Call call, final Response response) {
+        if(!response.isSuccessful()){
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    onDownloadFailed();
+
+                }
+            });
+            return;
+        }
         InputStream is = null;
         byte[] buf = new byte[2048];
         int len = 0;
@@ -56,9 +66,7 @@ public abstract class FileCallBack implements Callback {
 
         try {
             is = response.body().byteStream();
-            long total = response.body().contentLength();
-
-
+            long total;
             final File file = new File(path, name);
             if (file.exists()) {
                 file.delete();

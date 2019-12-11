@@ -6,6 +6,7 @@ import android.content.pm.PackageManager;
 import androidx.annotation.NonNull;
 
 import com.allenliu.versionchecklib.callback.APKDownloadListener;
+import com.allenliu.versionchecklib.callback.CommitClickListener;
 import com.allenliu.versionchecklib.callback.OnCancelListener;
 import com.allenliu.versionchecklib.utils.FileHelper;
 import com.allenliu.versionchecklib.v2.callback.CustomDownloadFailedListener;
@@ -28,6 +29,7 @@ public class DownloadBuilder {
     private String downloadUrl;
     private boolean isShowDownloadingDialog;
     private boolean isShowNotification;
+    private boolean runOnForegroundService;
     private boolean isShowDownloadFailDialog;
     private boolean isDirectDownload;
     private NotificationBuilder notificationBuilder;
@@ -38,6 +40,11 @@ public class DownloadBuilder {
     private CustomVersionDialogListener customVersionDialogListener;
     private CustomInstallListener customInstallListener;
     private OnCancelListener onCancelListener;
+    private CommitClickListener readyDownloadCommitClickListener;
+    private CommitClickListener downloadFailedCommitClickListener;
+    private OnCancelListener downloadingCancelListener;
+    private OnCancelListener downloadFailedCancelListener;
+    private OnCancelListener readyDownloadCancelListener;
 
     private ForceUpdateListener forceUpdateListener;
     private UIData versionBundle;
@@ -58,6 +65,7 @@ public class DownloadBuilder {
         isDirectDownload = false;
         isShowDownloadFailDialog = true;
         notificationBuilder = NotificationBuilder.create();
+        runOnForegroundService=true;
     }
 
     public DownloadBuilder(RequestVersionBuilder requestVersionBuilder, UIData versionBundle) {
@@ -115,6 +123,14 @@ public class DownloadBuilder {
         return this;
     }
 
+    public boolean isRunOnForegroundService() {
+        return runOnForegroundService;
+    }
+
+    public DownloadBuilder setRunOnForegroundService(boolean runOnForegroundService) {
+        this.runOnForegroundService = runOnForegroundService;
+        return this;
+    }
 
     public DownloadBuilder setSilentDownload(boolean silentDownload) {
         isSilentDownload = silentDownload;
@@ -165,6 +181,50 @@ public class DownloadBuilder {
         return this;
     }
 
+    public CommitClickListener getReadyDownloadCommitClickListener() {
+        return readyDownloadCommitClickListener;
+    }
+
+    public DownloadBuilder setReadyDownloadCommitClickListener(CommitClickListener readyDownloadCommitClickListener) {
+        this.readyDownloadCommitClickListener = readyDownloadCommitClickListener;
+        return this;
+    }
+
+    public CommitClickListener getDownloadFailedCommitClickListener() {
+        return downloadFailedCommitClickListener;
+    }
+
+    public DownloadBuilder setDownloadFailedCommitClickListener(CommitClickListener downloadFailedCommitClickListener) {
+        this.downloadFailedCommitClickListener = downloadFailedCommitClickListener;
+        return this;
+    }
+
+    public OnCancelListener getDownloadingCancelListener() {
+        return downloadingCancelListener;
+    }
+
+    public DownloadBuilder setDownloadingCancelListener(OnCancelListener downloadingCancelListener) {
+        this.downloadingCancelListener = downloadingCancelListener;
+        return this;
+    }
+
+    public OnCancelListener getDownloadFailedCancelListener() {
+        return downloadFailedCancelListener;
+    }
+
+    public DownloadBuilder setDownloadFailedCancelListener(OnCancelListener downloadFailedCancelListener) {
+        this.downloadFailedCancelListener = downloadFailedCancelListener;
+        return this;
+    }
+
+    public OnCancelListener getReadyDownloadCancelListener() {
+        return readyDownloadCancelListener;
+    }
+
+    public DownloadBuilder setReadyDownloadCancelListener(OnCancelListener readyDownloadCancelListener) {
+        this.readyDownloadCancelListener = readyDownloadCancelListener;
+        return this;
+    }
 
     public boolean isSilentDownload() {
         return isSilentDownload;

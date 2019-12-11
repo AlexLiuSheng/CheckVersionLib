@@ -43,7 +43,7 @@ public class BuilderHelper {
     public void checkForceUpdate() {
         if (builder.getForceUpdateListener() != null) {
             builder.getForceUpdateListener().onShouldForceUpdate();
-            AllenVersionChecker.getInstance().cancelAllMission(context);
+            AllenVersionChecker.getInstance().cancelAllMission();
         }
     }
 }

@@ -41,8 +41,8 @@ public class AllenVersionChecker {
         AllenHttp.getHttpClient().dispatcher().cancelAll();
 //        Intent intent = new Intent(context.getApplicationContext(), VersionService.class);
 //        context.getApplicationContext().stopService(intent);
-        AllenEventBusUtil.sendEventBus(AllenEventType.CLOSE);
-        AllenEventBusUtil.sendEventBus(AllenEventType.STOP_SERVICE);
+        AllenEventBusUtil.sendEventBusStick(AllenEventType.CLOSE);
+        AllenEventBusUtil.sendEventBusStick(AllenEventType.STOP_SERVICE);
     }
 
     /**

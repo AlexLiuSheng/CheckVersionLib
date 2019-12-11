@@ -2,10 +2,8 @@ package com.allenliu.sample.v2;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.os.Environment;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
+import android.os.Environment;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -13,6 +11,9 @@ import android.widget.ProgressBar;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.allenliu.sample.R;
 import com.allenliu.sample.v1.BaseDialog;
@@ -75,7 +76,7 @@ public class V2Activity extends AppCompatActivity {
                 sendRequest();
                 break;
             case R.id.cancelBtn:
-                AllenVersionChecker.getInstance().cancelAllMission(this);
+                AllenVersionChecker.getInstance().cancelAllMission();
                 break;
         }
     }
@@ -88,10 +89,12 @@ public class V2Activity extends AppCompatActivity {
                     .getInstance()
                     .downloadOnly(crateUIData());
         } else {
+
             builder = AllenVersionChecker
                     .getInstance()
                     .requestVersion()
                     .setRequestUrl("https://www.baidu.com")
+
                     .request(new RequestVersionListener() {
                         @Nullable
                         @Override
@@ -141,6 +144,14 @@ public class V2Activity extends AppCompatActivity {
                 Toast.makeText(V2Activity.this, "cancel", Toast.LENGTH_SHORT).show();
             }
         });
+        builder.setReadyDownloadCommitClickListener(() -> {
+            Toast.makeText(V2Activity.this, "commit click", Toast.LENGTH_SHORT).show();
+
+        });
+
+
+
+
 
         //更新界面选择
         switch (radioGroup.getCheckedRadioButtonId()) {

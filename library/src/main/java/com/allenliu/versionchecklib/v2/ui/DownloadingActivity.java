@@ -17,6 +17,8 @@ import com.allenliu.versionchecklib.utils.ALog;
 import com.allenliu.versionchecklib.v2.eventbus.AllenEventType;
 import com.allenliu.versionchecklib.v2.eventbus.CommonEvent;
 
+import org.greenrobot.eventbus.EventBus;
+
 public class DownloadingActivity extends AllenBaseActivity implements DialogInterface.OnCancelListener {
     public static final String PROGRESS = "progress";
     private Dialog downloadingDialog;
@@ -60,6 +62,7 @@ public class DownloadingActivity extends AllenBaseActivity implements DialogInte
                 break;
             case AllenEventType.CLOSE_DOWNLOADING_ACTIVITY:
                 destroy();
+                EventBus.getDefault().removeStickyEvent(commonEvent);
                 break;
         }
     }
@@ -126,7 +129,6 @@ public class DownloadingActivity extends AllenBaseActivity implements DialogInte
 
     private void destroy() {
         ALog.e("loading activity destroy");
-
         if (downloadingDialog != null && downloadingDialog.isShowing()) {
             downloadingDialog.dismiss();
 //            onCancel(false);

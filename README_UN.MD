@@ -21,13 +21,13 @@
 
 - [x] 支持静默下载 （一行代码）
 
-- [x] 适配到Android O
+- [x] 适配到Android Q
 
 ### 导入
 
 #### jcenter
 ```
-implementation 'com.allenliu.versionchecklib:library:2.2.1'
+implementation 'com.allenliu.versionchecklib:library:2.2.2'
 ```
 #### jitpack && androiud x
 ```
@@ -38,7 +38,7 @@ allprojects {
 		}
 	}
 dependencies {
-	        implementation 'com.github.AlexLiuSheng:CheckVersionLib:2.2.1'
+	        implementation 'com.github.AlexLiuSheng:CheckVersionLib:2.2.2'
 	}
 ```
 
@@ -203,9 +203,14 @@ dependencies {
 builder.setShowDownloadingDialog(false); 默认true
 ```
 > 是否显示通知栏
-
 ```
 builder.setShowNotification(false);  默认true
+```
+> **以前台service运行（update in 2.2.2）**
+推荐以前台服务运行更新，防止在后台时，服务被杀死
+```
+builder.setRunOnForegroundService(true); 默认true
+
 ```
 > 自定义通知栏
 ```
@@ -253,12 +258,23 @@ builder.setShowNotification(false);  默认true
          });
 ```
 > 设置取消监听
+此回调会监听所有cancel事件
 ```
-
+ 
  builder.setOnCancelListener(() -> {
             Toast.makeText(V2Activity.this,"Cancel Hanlde",Toast.LENGTH_SHORT).show();
         });
 ```
+**如果想单独监听几种状态下的cancel，可像如下这样设置**
+- ` builder.setDownloadingCancelListener();`
+- `builder.setDownloadFailedCancelListener();`
+- `builder.setReadyDownloadCancelListener();`
+
+> 设置确定监听(**added after 2.2.2**)
+
+- ` builder.setReadyDownloadCommitClickListener();`
+- `builder.setDownloadFailedCommitClickListener();`
+
 > 静默下载+直接安装（不会弹出升级对话框）
 ```
     builder.setDirectDownload(true);

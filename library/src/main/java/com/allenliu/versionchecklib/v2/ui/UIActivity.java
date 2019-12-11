@@ -128,8 +128,9 @@ public class UIActivity extends AllenBaseActivity implements DialogInterface.OnC
         } else {
             showDefaultDialog();
         }
-        if (versionDialog != null)
+        if (versionDialog != null) {
             versionDialog.setOnCancelListener(this);
+        }
     }
 
     @Override
@@ -149,6 +150,10 @@ public class UIActivity extends AllenBaseActivity implements DialogInterface.OnC
     private void dealVersionDialogCommit() {
         DownloadBuilder versionBuilder = getVersionBuilder();
         if (versionBuilder != null) {
+            //增加commit 回调
+            if(versionBuilder.getReadyDownloadCommitClickListener()!=null){
+                versionBuilder.getReadyDownloadCommitClickListener().onCommitClick();
+            }
             //如果是静默下载直接安装
             if (versionBuilder.isSilentDownload()) {
                 String downloadPath = versionBuilder.getDownloadAPKPath() + getString(R.string.versionchecklib_download_apkname, versionBuilder.getApkName() != null ? versionBuilder.getApkName() : getPackageName());
@@ -167,7 +172,7 @@ public class UIActivity extends AllenBaseActivity implements DialogInterface.OnC
     public void onCancel(DialogInterface dialogInterface) {
         cancelHandler();
         checkForceUpdate();
-        AllenVersionChecker.getInstance().cancelAllMission(this);
+        AllenVersionChecker.getInstance().cancelAllMission();
         finish();
     }
 

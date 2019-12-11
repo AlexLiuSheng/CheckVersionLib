@@ -67,7 +67,7 @@ public class DownloadFailedActivity extends AllenBaseActivity implements DialogI
     }
 
     private void showDowloadFailedDialog() {
-        AllenEventBusUtil.sendEventBus(AllenEventType.CLOSE_DOWNLOADING_ACTIVITY);
+        AllenEventBusUtil.sendEventBusStick(AllenEventType.CLOSE_DOWNLOADING_ACTIVITY);
 
         if (getVersionBuilder()!=null&&getVersionBuilder().getCustomDownloadFailedListener() != null) {
             ALog.e("show customization failed dialog");
@@ -85,11 +85,15 @@ public class DownloadFailedActivity extends AllenBaseActivity implements DialogI
                 "");
         cancelHandler();
         checkForceUpdate();
-        AllenVersionChecker.getInstance().cancelAllMission(this);
+        AllenVersionChecker.getInstance().cancelAllMission();
         finish();
     }
 
     private void retryDownload() {
+        //增加commit 回调
+        if(getVersionBuilder().getDownloadFailedCommitClickListener()!=null){
+            getVersionBuilder().getDownloadFailedCommitClickListener().onCommitClick();
+        }
         AllenEventBusUtil.sendEventBus(AllenEventType.START_DOWNLOAD_APK);
         finish();
     }
