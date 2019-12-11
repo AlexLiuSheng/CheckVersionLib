@@ -27,7 +27,7 @@
 
 #### jcenter
 ```
-implementation 'com.allenliu.versionchecklib:library:2.2.2'
+implementation 'com.allenliu.versionchecklib:library:2.2.3'
 ```
 #### jitpack && androiud x
 ```
@@ -38,7 +38,7 @@ allprojects {
 		}
 	}
 dependencies {
-	        implementation 'com.github.AlexLiuSheng:CheckVersionLib:2.2.2'
+	        implementation 'com.github.AlexLiuSheng:CheckVersionLib:2.2.3'
 	}
 ```
 
