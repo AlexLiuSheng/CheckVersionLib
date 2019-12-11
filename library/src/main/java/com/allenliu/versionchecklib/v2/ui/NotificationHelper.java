@@ -11,6 +11,7 @@ import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
+
 import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationCompat;
 
@@ -151,7 +152,8 @@ public class NotificationHelper {
         if (libNotificationBuilder.isRingtone()) {
             Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
             Ringtone r = RingtoneManager.getRingtone(context, notification);
-            r.play();
+            if (r != null)
+                r.play();
         }
 
         return builder;

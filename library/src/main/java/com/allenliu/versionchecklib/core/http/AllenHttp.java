@@ -100,17 +100,19 @@ public class AllenHttp {
 
 
     private static String getRequestParamsJson(HttpParams params) {
-        String json;
-        JSONObject jsonObject = new JSONObject();
-        for (Map.Entry<String, Object> entry : params.entrySet()) {
-            try {
-                jsonObject.put(entry.getKey(), entry.getValue());
-            } catch (JSONException e) {
-                e.printStackTrace();
+        String json=null;
+        if(params!=null) {
+            JSONObject jsonObject = new JSONObject();
+            for (Map.Entry<String, Object> entry : params.entrySet()) {
+                try {
+                    jsonObject.put(entry.getKey(), entry.getValue());
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
-        }
 
-        json = jsonObject.toString();
+            json = jsonObject.toString();
+        }
         ALog.e("json:" + json);
         return json;
     }
@@ -207,9 +209,12 @@ public class AllenHttp {
     private static FormBody getRequestParams(RequestVersionBuilder versionParams) {
         FormBody.Builder builder = new FormBody.Builder();
         HttpParams params = versionParams.getRequestParams();
-        for (Map.Entry<String, Object> entry : params.entrySet()) {
-            builder.add(entry.getKey(), entry.getValue() + "");
-            ALog.e("params key:" + entry.getKey() + "-----value:" + entry.getValue());
+        //#https://github.com/AlexLiuSheng/CheckVersionLib/issues/293
+        if(params!=null) {
+            for (Map.Entry<String, Object> entry : params.entrySet()) {
+                builder.add(entry.getKey(), entry.getValue() + "");
+                ALog.e("params key:" + entry.getKey() + "-----value:" + entry.getValue());
+            }
         }
         return builder.build();
     }

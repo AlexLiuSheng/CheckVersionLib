@@ -15,4 +15,10 @@ public class AllenEventBusUtil {
         commonEvent.setEventType(eventType);
         EventBus.getDefault().post(commonEvent);
     }
+    public static void sendEventBusStick(int eventType) {
+        CommonEvent commonEvent = new CommonEvent();
+        commonEvent.setSuccessful(true);
+        commonEvent.setEventType(eventType);
+        EventBus.getDefault().postSticky(commonEvent);
+    }
 }

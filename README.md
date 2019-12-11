@@ -22,14 +22,13 @@ The strongest feature is easier to integrate than version  of V1.+
 
 - [x] Support Silence Download （one line code）
 
-- [x] Adapt to Android O
+- [x] Adapt to Android Q
 
 ### include
 
 #### jcenter
-
 ```
-implementation 'com.allenliu.versionchecklib:library:2.2.1'
+implementation 'com.allenliu.versionchecklib:library:2.2.2'
 ```
 #### jitpack && androiud x
 ```
@@ -40,9 +39,10 @@ allprojects {
 		}
 	}
 dependencies {
-	        implementation 'com.github.AlexLiuSheng:CheckVersionLib:2.2.1'
+	        implementation 'com.github.AlexLiuSheng:CheckVersionLib:2.2.2'
 	}
 ```
+
 ### usage
 
 
@@ -207,6 +207,11 @@ builder.setShowDownloadingDialog(false); true for default
 ```
 builder.setShowNotification(false);  true for default 
 ```
+> **run as foreground service（update in 2.2.2）**
+recomended
+```
+builder.setRunOnForegroundService(true); 默认true
+```
 > customize notification
 ```
       builder.setNotificationBuilder(
@@ -259,6 +264,15 @@ builder.setShowNotification(false);  true for default
             Toast.makeText(V2Activity.this,"Cancel Hanlde",Toast.LENGTH_SHORT).show();
         });
 ```
+**if u want to monitor the cancel operation in different state**
+- ` builder.setDownloadingCancelListener();`
+- `builder.setDownloadFailedCancelListener();`
+- `builder.setReadyDownloadCancelListener();`
+
+> set commit click listener(**added after 2.2.2**)
+
+- ` builder.setReadyDownloadCommitClickListener();`
+- `builder.setDownloadFailedCommitClickListener();`
 > silent download+install directly（dont popup update dialog）
 ```
     builder.setDirectDownload(true);
@@ -356,6 +370,7 @@ setCustomDownloadFailedListener
 -keepclassmembers class * extends org.greenrobot.eventbus.util.ThrowableFailureEvent {
     <init>(java.lang.Throwable);
 }
+ -keep class com.allenliu.versionchecklib.**{*;}
 ```
 
 ### update Log

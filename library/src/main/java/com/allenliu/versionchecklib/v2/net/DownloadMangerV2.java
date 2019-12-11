@@ -26,7 +26,6 @@ public class DownloadMangerV2 {
             Request request = new Request
                     .Builder()
                     //#issue 220
-
                     .addHeader("Accept-Encoding", "identity")
                     .url(url).build();
             new Handler(Looper.getMainLooper()).post(new Runnable() {

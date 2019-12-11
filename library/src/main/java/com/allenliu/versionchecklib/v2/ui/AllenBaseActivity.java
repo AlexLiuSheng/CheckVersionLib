@@ -5,8 +5,10 @@ import android.app.Activity;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -103,16 +105,25 @@ public abstract class AllenBaseActivity extends AppCompatActivity {
     }
 
     protected void cancelHandler() {
-        if (getVersionBuilder() != null && getVersionBuilder().getOnCancelListener() != null) {
-            getVersionBuilder().getOnCancelListener().onCancel();
-
+        DownloadBuilder builder=getVersionBuilder();
+        if (builder != null) {
+            if (builder.getOnCancelListener() != null)
+                builder.getOnCancelListener().onCancel();
+            if(this instanceof UIActivity&&builder.getReadyDownloadCancelListener()!=null){
+                builder.getReadyDownloadCancelListener().onCancel();
+            }else if(this instanceof DownloadFailedActivity&&builder.getDownloadFailedCancelListener()!=null){
+                builder.getDownloadFailedCancelListener().onCancel();
+            }else if(this instanceof DownloadingActivity&&builder.getDownloadingCancelListener()!=null){
+                builder.getDownloadingCancelListener().onCancel();
+            }
         }
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void receiveEvent(CommonEvent commonEvent) {
-        if(commonEvent.getEventType()==AllenEventType.CLOSE){
+        if (commonEvent.getEventType() == AllenEventType.CLOSE) {
             finish();
+            EventBus.getDefault().removeStickyEvent(commonEvent);
         }
     }
 

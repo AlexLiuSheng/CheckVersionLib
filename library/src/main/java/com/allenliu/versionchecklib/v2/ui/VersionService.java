@@ -58,10 +58,11 @@ public class VersionService extends Service {
 
     public static void enqueueWork(final Context context, final DownloadBuilder builder) {
         //清除之前的任务，如果有
-        AllenVersionChecker.getInstance().cancelAllMission(context);
+        AllenVersionChecker.getInstance().cancelAllMission();
         BuilderManager.getInstance().setDownloadBuilder(builder);
         Intent intent = new Intent(context, VersionService.class);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        //显示通知栏的情况 才设置为前台服务
+        if (builder.isRunOnForegroundService() && Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             context.startForegroundService(intent);
         } else {
             context.startService(intent);
@@ -100,6 +101,8 @@ public class VersionService extends Service {
     public void onDestroy() {
         super.onDestroy();
         ALog.e("version service destroy");
+        if (builder.isRunOnForegroundService())
+            stopForeground(true);
         builder.destory();
         BuilderManager.getInstance().destory();
         builderHelper = null;
@@ -109,7 +112,6 @@ public class VersionService extends Service {
         isServiceAlive = false;
         if (executors != null)
             executors.shutdown();
-        stopForeground(true);
         AllenHttp.getHttpClient().dispatcher().cancelAll();
         if (EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().unregister(this);
@@ -140,7 +142,7 @@ public class VersionService extends Service {
                 }
             }
         } else {
-            AllenVersionChecker.getInstance().cancelAllMission(getApplicationContext());
+            AllenVersionChecker.getInstance().cancelAllMission();
         }
     }
 
@@ -218,7 +220,7 @@ public class VersionService extends Service {
             downloadUrl = builder.getVersionBundle().getDownloadUrl();
         }
         if (downloadUrl == null) {
-            AllenVersionChecker.getInstance().cancelAllMission(getApplicationContext());
+            AllenVersionChecker.getInstance().cancelAllMission();
             throw new RuntimeException("you must set a download url for download function using");
         }
         ALog.e("downloadPath:" + downloadPath);
@@ -249,14 +251,13 @@ public class VersionService extends Service {
 
             @Override
             public void onCheckerDownloadFail() {
-              ALog.e("download failed");
+                ALog.e("download failed");
                 if (!isServiceAlive)
                     return;
                 if (builder.getApkDownloadListener() != null)
                     builder.getApkDownloadListener().onDownloadFail();
-
                 if (!builder.isSilentDownload()) {
-                    AllenEventBusUtil.sendEventBus(AllenEventType.CLOSE_DOWNLOADING_ACTIVITY);
+                    AllenEventBusUtil.sendEventBusStick(AllenEventType.CLOSE_DOWNLOADING_ACTIVITY);
                     if (builder.isShowDownloadFailDialog()) {
                         showDownloadFailedDialog();
                     }
@@ -297,11 +298,13 @@ public class VersionService extends Service {
                 }
                 break;
             case AllenEventType.STOP_SERVICE:
-                if(binder.getServiceConnection()!=null) {
+                if (binder.getServiceConnection() != null) {
                     getApplicationContext().unbindService(binder.getServiceConnection());
                     stopSelf();
                     binder.setServiceConnection(null);
                 }
+                EventBus.getDefault().removeStickyEvent(commonEvent);
+                break;
 
         }
 
@@ -320,7 +323,8 @@ public class VersionService extends Service {
             isServiceAlive = true;
             builderHelper = new BuilderHelper(getApplicationContext(), builder);
             notificationHelper = new NotificationHelper(getApplicationContext(), builder);
-            startForeground(NotificationHelper.NOTIFICATION_ID, notificationHelper.getServiceNotification());
+            if (builder.isRunOnForegroundService())
+                startForeground(NotificationHelper.NOTIFICATION_ID, notificationHelper.getServiceNotification());
             executors = Executors.newSingleThreadExecutor();
             executors.submit(new Runnable() {
                 @Override
