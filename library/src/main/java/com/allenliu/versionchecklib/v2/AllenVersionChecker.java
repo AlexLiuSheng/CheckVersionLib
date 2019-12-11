@@ -1,8 +1,8 @@
 package com.allenliu.versionchecklib.v2;
 
 import android.content.Context;
+import android.support.annotation.Nullable;
 
-import androidx.annotation.Nullable;
 
 import com.allenliu.versionchecklib.core.http.AllenHttp;
 import com.allenliu.versionchecklib.utils.AllenEventBusUtil;

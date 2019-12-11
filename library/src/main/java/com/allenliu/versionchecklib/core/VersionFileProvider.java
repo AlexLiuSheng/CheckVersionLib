@@ -1,6 +1,7 @@
 package com.allenliu.versionchecklib.core;
 
-import androidx.core.content.FileProvider;
+
+import android.support.v4.content.FileProvider;
 
 /**
  * Created by Allen Liu on 2017/2/28.

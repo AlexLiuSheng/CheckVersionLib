@@ -3,9 +3,9 @@ package com.allenliu.versionchecklib.v2.ui;
 import android.app.Dialog;
 import android.content.DialogInterface;
 
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
+
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ProgressBar;

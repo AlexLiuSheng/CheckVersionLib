@@ -1,6 +1,6 @@
 package com.allenliu.versionchecklib.v2.callback;
 
-import androidx.annotation.Nullable;
+import android.support.annotation.Nullable;
 
 import com.allenliu.versionchecklib.v2.builder.DownloadBuilder;
 import com.allenliu.versionchecklib.v2.builder.UIData;
