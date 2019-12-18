@@ -1,11 +1,9 @@
 package com.allenliu.versionchecklib.v2.ui;
 
 import android.annotation.TargetApi;
-import android.app.Activity;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
-
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -51,7 +49,7 @@ public abstract class AllenBaseActivity extends AppCompatActivity {
      * 使状态栏透明
      */
     @TargetApi(Build.VERSION_CODES.KITKAT)
-    private void transparentStatusBar(Activity activity) {
+    private void transparentStatusBar(AppCompatActivity activity) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
             activity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
@@ -65,7 +63,7 @@ public abstract class AllenBaseActivity extends AppCompatActivity {
     /**
      * 设置根布局参数
      */
-    private void setRootView(Activity activity) {
+    private void setRootView(AppCompatActivity activity) {
         ViewGroup parent = (ViewGroup) activity.findViewById(android.R.id.content);
         for (int i = 0, count = parent.getChildCount(); i < count; i++) {
             View childView = parent.getChildAt(i);
@@ -76,7 +74,7 @@ public abstract class AllenBaseActivity extends AppCompatActivity {
         }
     }
 
-    public void setTransparent(Activity activity) {
+    public void setTransparent(AppCompatActivity activity) {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
             return;
         }
