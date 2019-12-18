@@ -1,4 +1,4 @@
-## CheckVersionLib[ ![Download](https://api.bintray.com/packages/zkxy/maven/VersionCheckLib/images/download.svg) ](https://bintray.com/zkxy/maven/VersionCheckLib/_latestVersion)
+## CheckVersionLib[![](https://jitpack.io/v/AlexLiuSheng/CheckVersionLib.svg)](https://jitpack.io/#AlexLiuSheng/CheckVersionLib)
 ## V2版震撼来袭，功能强大，链式编程，调用简单，集成轻松，扩展性强大
 
 老规矩先看V2效果，这个版本最大的特点就是使用非常简单，相对于1.+版本
