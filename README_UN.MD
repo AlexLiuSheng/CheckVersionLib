@@ -24,12 +24,6 @@
 - [x] 适配到Android Q
 
 ### 导入
-
-#### jcenter
-```
-implementation 'com.allenliu.versionchecklib:library:2.2.3'
-```
-#### jitpack && androiud x
 ```
 allprojects {
 		repositories {
@@ -37,6 +31,13 @@ allprojects {
 			maven { url 'https://jitpack.io' }
 		}
 	}
+```
+#### jcenter
+```
+  implementation 'com.github.AlexLiuSheng:CheckVersionLib:2.3.3.1_appcompat'
+```
+#### jitpack && androiud x
+```
 dependencies {
 	        implementation 'com.github.AlexLiuSheng:CheckVersionLib:2.2.3'
 	}
