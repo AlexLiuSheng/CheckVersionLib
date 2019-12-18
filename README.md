@@ -33,7 +33,7 @@ allprojects {
 		}
 	}
 ```
-#### jcenter
+#### appcompat
 ```
   implementation 'com.github.AlexLiuSheng:CheckVersionLib:2.3.3.1_appcompat'
 ```
