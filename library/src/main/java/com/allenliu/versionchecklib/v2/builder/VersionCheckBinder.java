@@ -2,6 +2,7 @@ package com.allenliu.versionchecklib.v2.builder;
 
 import android.content.ServiceConnection;
 import android.os.Binder;
+import android.os.Environment;
 
 import com.allenliu.versionchecklib.v2.ui.VersionService;
 

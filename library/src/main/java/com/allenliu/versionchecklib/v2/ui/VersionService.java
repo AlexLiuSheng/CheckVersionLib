@@ -88,13 +88,12 @@ public class VersionService extends Service {
         if (!EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().register(this);
         }
-
         ALog.e("version service create");
         //https://issuetracker.google.com/issues/76112072
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
             startForeground(NotificationHelper.NOTIFICATION_ID, NotificationHelper.createSimpleNotification(this));
 //        init();
-        return super.onStartCommand(intent, flags, startId);
+        return START_REDELIVER_INTENT;
     }
 
     @Override
