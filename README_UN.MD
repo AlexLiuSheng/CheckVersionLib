@@ -24,6 +24,7 @@
 - [x] 适配到Android Q
 
 ### 导入
+为了兼容Android Q，必须设置compileSdkVersion和targetSdkVersion为29
 ```
 allprojects {
 		repositories {

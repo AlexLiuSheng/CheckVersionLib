@@ -26,6 +26,7 @@ The strongest feature is easier to integrate than version  of V1.+
 - [x] Adapt to Android Q
 
 ### include
+For Android Q compatibility,you must set targetSDKVersion to 29 
 ```
 allprojects {
 		repositories {
