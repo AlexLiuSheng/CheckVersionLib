@@ -36,7 +36,7 @@ allprojects {
 ```
 #### appcompat
 ```
-  implementation 'com.github.AlexLiuSheng:CheckVersionLib:2.3.2_appcompat'
+  implementation 'com.github.AlexLiuSheng:CheckVersionLib:2.3.4_appcompat'
 ```
 #### jitpack && androiud x
 ```
