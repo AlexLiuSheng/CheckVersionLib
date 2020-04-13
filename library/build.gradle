@@ -3,12 +3,11 @@ apply plugin: 'com.github.dcendents.android-maven'
 apply plugin: 'com.jfrog.bintray'
 version = "2.2.3.2"
 android {
-    compileSdkVersion 28
-    buildToolsVersion "28.0.3"
+    compileSdkVersion BUILD_VERSION
     resourcePrefix "versionchecklib"
     defaultConfig {
         minSdkVersion 14
-        targetSdkVersion 28
+        targetSdkVersion BUILD_VERSION
         versionCode 1
         versionName version
     }
@@ -28,7 +27,7 @@ android {
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation 'com.android.support:appcompat-v7:28.0.0'
-    implementation 'com.squareup.okhttp3:okhttp:3.8.1'
+    implementation 'com.squareup.okhttp3:okhttp:4.3.1'
     implementation 'org.greenrobot:eventbus:3.1.1'
 
 }

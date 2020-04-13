@@ -1,12 +1,12 @@
 apply plugin: 'com.android.application'
 //apply plugin: 'me.tatarka.retrolambda'
 android {
-    compileSdkVersion 28
+    compileSdkVersion BUILD_VERSION
     buildToolsVersion "28.0.3"
     defaultConfig {
         applicationId "com.allenliu.sample"
         minSdkVersion 16
-        targetSdkVersion 28
+        targetSdkVersion BUILD_VERSION
         versionCode 1
         versionName "1.0"
 

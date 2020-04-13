@@ -1,41 +1,68 @@
 package com.allenliu.versionchecklib.utils;
 
+import android.content.Context;
 import android.os.Environment;
+import android.support.annotation.NonNull;
 
 import java.io.File;
 
+
+
 public class FileHelper {
+    @Deprecated
+    public static String getDownloadApkCachePath() {
 
-	public static String getDownloadApkCachePath() {
-
-		String appCachePath = null;
-
-
-		if (checkSDCard()) {
-			appCachePath = Environment.getExternalStorageDirectory() + "/AllenVersionPath/" ;
-		} else {
-			appCachePath = Environment.getDataDirectory().getPath() + "/AllenVersionPath/" ;
-		}
-		File file = new File(appCachePath);
-		if (!file.exists()) {
-			file.mkdirs();
-		}
-		return appCachePath;
-	}
+        String appCachePath = null;
 
 
+        if (checkSDCard()) {
 
-	/**
-	 *
-	 */
-	public static boolean checkSDCard() {
-		boolean sdCardExist = Environment.getExternalStorageState().equals(
-				Environment.MEDIA_MOUNTED);
+            appCachePath = Environment.getExternalStorageDirectory() + "/AllenVersionPath/";
+        } else {
+            appCachePath = Environment.getDataDirectory().getPath() + "/AllenVersionPath/";
+        }
+        File file = new File(appCachePath);
+        if (!file.exists()) {
+            file.mkdirs();
+        }
+        return appCachePath;
+    }
 
-		return sdCardExist;
+    public static String getDownloadApkCachePath(Context context) {
+        String appCachePath;
+        if (checkSDCard()) {
+            appCachePath = context.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS).getAbsolutePath() + "/AllenVersionPath/";
 
-	}
+        } else {
+            appCachePath = context.getFilesDir().getAbsolutePath() + "/AllenVersionPath/";
+
+        }
 
 
+        File file = new File(appCachePath);
+        if (!file.exists()) {
+            file.mkdirs();
+        }
+        return appCachePath;
+    }
 
+
+    /**
+     *
+     */
+    private static boolean checkSDCard() {
+
+        return Environment.getExternalStorageState().equals(
+                Environment.MEDIA_MOUNTED);
+
+    }
+
+
+    public static String dealDownloadPath(@NonNull String downloadAPKPath) {
+        if (!downloadAPKPath.endsWith(File.separator)) {
+            downloadAPKPath += File.separator;
+        }
+        return downloadAPKPath;
+
+    }
 }

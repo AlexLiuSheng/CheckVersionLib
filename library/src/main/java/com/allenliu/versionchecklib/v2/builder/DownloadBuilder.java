@@ -59,7 +59,7 @@ public class DownloadBuilder {
 
     private void initialize() {
         isSilentDownload = false;
-        downloadAPKPath = FileHelper.getDownloadApkCachePath();
+//        downloadAPKPath = FileHelper.getDownloadApkCachePath();
         isForceRedownload = false;
         isShowDownloadingDialog = true;
         isShowNotification = true;
@@ -321,12 +321,22 @@ public class DownloadBuilder {
                 e.printStackTrace();
             }
         }
+        //fix path permission
+        setupDownloadPath(context);
+//        downloadAPKPath=context.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS).getPath() + "/";
         if (checkWhetherNeedRequestVersion()) {
             RequestVersionManager.getInstance().requestVersion(this, context.getApplicationContext());
         } else {
             download(context);
         }
 
+    }
+
+    private void setupDownloadPath(Context context) {
+        if (downloadAPKPath == null) {
+            downloadAPKPath = FileHelper.getDownloadApkCachePath(context);
+        }
+        downloadAPKPath = FileHelper.dealDownloadPath(downloadAPKPath);
     }
 
     public void download(Context context) {

@@ -36,7 +36,7 @@ public class AllenHttp {
     public static OkHttpClient getHttpClient() {
         if (client == null) {
             OkHttpClient.Builder builder = new OkHttpClient.Builder();
-            builder.sslSocketFactory(createSSLSocketFactory());
+            builder.sslSocketFactory(createSSLSocketFactory(),new TrustAllCerts());
             builder.connectTimeout(15,TimeUnit.SECONDS);
             builder.hostnameVerifier(new TrustAllHostnameVerifier());
             client=builder.build();
