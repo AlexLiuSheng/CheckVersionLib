@@ -3,6 +3,8 @@ package com.allenliu.versionchecklib.v2.builder;
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
+import android.os.Environment;
+
 import androidx.annotation.NonNull;
 
 import com.allenliu.versionchecklib.callback.APKDownloadListener;
@@ -58,14 +60,14 @@ public class DownloadBuilder {
 
     private void initialize() {
         isSilentDownload = false;
-        downloadAPKPath = FileHelper.getDownloadApkCachePath();
+//        downloadAPKPath = FileHelper.getDownloadApkCachePath();
         isForceRedownload = false;
         isShowDownloadingDialog = true;
         isShowNotification = true;
         isDirectDownload = false;
         isShowDownloadFailDialog = true;
         notificationBuilder = NotificationBuilder.create();
-        runOnForegroundService=true;
+        runOnForegroundService = true;
     }
 
     public DownloadBuilder(RequestVersionBuilder requestVersionBuilder, UIData versionBundle) {
@@ -309,6 +311,7 @@ public class DownloadBuilder {
         if (apkName == null) {
             apkName = context.getApplicationContext().getPackageName();
         }
+
         if (notificationBuilder.getIcon() == 0) {
             final PackageManager pm = context.getPackageManager();
             final ApplicationInfo applicationInfo;
@@ -320,12 +323,22 @@ public class DownloadBuilder {
                 e.printStackTrace();
             }
         }
+        //fix path permission
+        setupDownloadPath(context);
+//        downloadAPKPath=context.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS).getPath() + "/";
         if (checkWhetherNeedRequestVersion()) {
             RequestVersionManager.getInstance().requestVersion(this, context.getApplicationContext());
         } else {
             download(context);
         }
 
+    }
+
+    private void setupDownloadPath(Context context) {
+        if (downloadAPKPath == null) {
+            downloadAPKPath = FileHelper.getDownloadApkCachePath(context);
+        }
+        downloadAPKPath = FileHelper.dealDownloadPath(downloadAPKPath);
     }
 
     public void download(Context context) {

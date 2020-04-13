@@ -181,8 +181,8 @@ public class V2Activity extends AppCompatActivity {
                 builder.setCustomDownloadFailedListener(createCustomDownloadFailedDialog());
                 break;
         }
-        //自定义下载路径
-        builder.setDownloadAPKPath(Environment.getExternalStorageDirectory() + "/ALLEN/AllenVersionPath2/");
+        //自定义下载路径.在Android Q以上，请将路径设置为app内部路径，不要随便设置
+//        builder.setDownloadAPKPath(Environment.getExternalStorageDirectory() + "/ALLEN/AllenVersionPath2");
         String address = etAddress.getText().toString();
         if (!"".equals(address))
             builder.setDownloadAPKPath(address);
