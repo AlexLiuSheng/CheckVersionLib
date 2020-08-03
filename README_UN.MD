@@ -35,12 +35,12 @@ allprojects {
 ```
 #### appcompat
 ```
-  implementation 'com.github.AlexLiuSheng:CheckVersionLib:2.3.4_appcompat'
+  implementation 'com.github.AlexLiuSheng:CheckVersionLib:2.4_appcompat'
 ```
-#### jitpack && androiud x
+#### jitpack && android x
 ```
 dependencies {
-	        implementation 'com.github.AlexLiuSheng:CheckVersionLib:2.2.4'
+	        implementation 'com.github.AlexLiuSheng:CheckVersionLib:2.4_androidx'
 	}
 ```
 
