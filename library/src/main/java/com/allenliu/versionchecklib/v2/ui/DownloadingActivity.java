@@ -2,14 +2,13 @@ package com.allenliu.versionchecklib.v2.ui;
 
 import android.app.Dialog;
 import android.content.DialogInterface;
-
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+
+import androidx.appcompat.app.AlertDialog;
 
 import com.allenliu.versionchecklib.R;
 import com.allenliu.versionchecklib.core.http.AllenHttp;
@@ -86,7 +85,7 @@ public class DownloadingActivity extends AllenBaseActivity implements DialogInte
 
     @Override
     public void showCustomDialog() {
-        if(getVersionBuilder()!=null) {
+        if (getVersionBuilder() != null) {
             downloadingDialog = getVersionBuilder().getCustomDownloadingDialogListener().getCustomDownloadingDialog(this, currentProgress, getVersionBuilder().getVersionBundle());
             if (getVersionBuilder().getForceUpdateListener() != null)
                 downloadingDialog.setCancelable(false);
@@ -97,6 +96,7 @@ public class DownloadingActivity extends AllenBaseActivity implements DialogInte
                 cancelView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
+                        downloadingDialog.dismiss(); // 关闭dialog，释放当前activity引用
                         onCancel(false);
                     }
                 });

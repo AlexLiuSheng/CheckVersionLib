@@ -98,6 +98,7 @@ public class UIActivity extends AllenBaseActivity implements DialogInterface.OnC
                         public void onClick(View view) {
                             ALog.e("click");
                             dealVersionDialogCommit();
+                            versionDialog.dismiss(); // 关闭dialog，释放当前activity引用
                         }
                     });
 
@@ -110,6 +111,7 @@ public class UIActivity extends AllenBaseActivity implements DialogInterface.OnC
                     cancelView.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
+                            versionDialog.dismiss(); // 关闭dialog，释放当前activity引用
                             onCancel(versionDialog);
                         }
                     });
