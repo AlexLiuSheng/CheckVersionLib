@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="versionchecklib_confirm">Aceptar</string>
+    <string name="versionchecklib_cancel">Cancelar</string>
+    <string name="versionchecklib_retry">Reintentar</string>
+    <string name="versionchecklib_download_fail_retry">¿Error en la descarga, Reintentar?？</string>
+    <string name="versionchecklib_download_finish">Descarga finalizada, click para instalar </string>
+    <string name="versionchecklib_downloading">descargando...</string>
+    <string name="versionchecklib_check_new_version">Nueva Actualización</string>
+    <string name="versionchecklib_download_progress">progreso descarga:%d%%/100%%</string>
+    <string name="versionchecklib_download_fail">error en la descarga，click para reintentar</string>
+    <string name="versionchecklib_progress">%d/100</string>
+    <string name="versionchecklib_write_permission_deny">Descarga apk necesita permisos de escritura。</string>
+    <string name="versionchecklib_download_apkname">%s.apk</string>
+    <string name="versionchecklib_version_service_runing">el servicio de actualización de la aplicación se está ejecutando</string>
+</resources>
