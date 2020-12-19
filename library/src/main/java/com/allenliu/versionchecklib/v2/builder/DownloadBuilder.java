@@ -3,7 +3,6 @@ package com.allenliu.versionchecklib.v2.builder;
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
-import android.os.Environment;
 
 import androidx.annotation.NonNull;
 
@@ -309,7 +308,8 @@ public class DownloadBuilder {
 
     public void executeMission(Context context) {
         if (apkName == null) {
-            apkName = context.getApplicationContext().getPackageName();
+            //https://github.com/AlexLiuSheng/CheckVersionLib/issues/338
+            apkName = context.getApplicationContext().getPackageName().replaceAll("\\.", "");
         }
 
         if (notificationBuilder.getIcon() == 0) {
@@ -342,7 +342,7 @@ public class DownloadBuilder {
     }
 
     public void download(Context context) {
-        VersionService.enqueueWork(context.getApplicationContext(), this);
+        VersionService.Companion.enqueueWork(context.getApplicationContext(), this);
     }
 
     private boolean checkWhetherNeedRequestVersion() {
@@ -352,21 +352,4 @@ public class DownloadBuilder {
             return false;
     }
 
-    public void destory() {
-        setCustomDownloadFailedListener(null);
-        setCustomDownloadingDialogListener(null);
-        setCustomVersionDialogListener(null);
-        setForceUpdateListener(null);
-        setApkDownloadListener(null);
-        setOnCancelListener(null);
-        setReadyDownloadCommitClickListener(null);
-        setDownloadFailedCommitClickListener(null);
-        setReadyDownloadCancelListener(null);
-        setDownloadingCancelListener(null);
-        setDownloadFailedCancelListener(null);
-
-        if (getRequestVersionBuilder() != null)
-            getRequestVersionBuilder().destory();
-        requestVersionBuilder = null;
-    }
 }
