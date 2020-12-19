@@ -39,7 +39,7 @@
             android:name=".core.MyService"
             android:enabled="true"
 
-            android:exported="true" />
+            android:exported="false" />
         <service
             android:name=".v2.ui.VersionService"
             android:exported="false"
