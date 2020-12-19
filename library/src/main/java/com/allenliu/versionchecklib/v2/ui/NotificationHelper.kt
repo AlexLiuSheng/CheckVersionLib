@@ -10,8 +10,9 @@ import android.graphics.Color
 import android.media.RingtoneManager
 import android.net.Uri
 import android.os.Build
-import androidx.annotation.RequiresApi
-import androidx.core.app.NotificationCompat
+import android.support.annotation.RequiresApi
+import android.support.v4.app.NotificationCompat
+
 import com.allenliu.versionchecklib.R
 import com.allenliu.versionchecklib.core.PermissionDialogActivity
 import com.allenliu.versionchecklib.core.VersionFileProvider

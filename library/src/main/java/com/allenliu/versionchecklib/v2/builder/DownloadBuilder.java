@@ -3,8 +3,8 @@ package com.allenliu.versionchecklib.v2.builder;
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
+import android.support.annotation.NonNull;
 
-import androidx.annotation.NonNull;
 
 import com.allenliu.versionchecklib.callback.APKDownloadListener;
 import com.allenliu.versionchecklib.callback.CommitClickListener;

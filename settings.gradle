@@ -1,2 +1,3 @@
+//include ':appcompatsample'
 include ':library'
 //rootProject.name = 'library'

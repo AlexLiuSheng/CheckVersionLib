@@ -1,15 +1,14 @@
 package com.allenliu.versionchecklib.v2.ui
-
 import android.R
 import android.annotation.TargetApi
 import android.app.Activity
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
+import android.support.v7.app.AppCompatActivity
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
-import androidx.appcompat.app.AppCompatActivity
 import com.allenliu.versionchecklib.v2.builder.BuilderManager.doWhenNotNull
 import com.allenliu.versionchecklib.v2.eventbus.AllenEventType
 import com.allenliu.versionchecklib.v2.eventbus.CommonEvent

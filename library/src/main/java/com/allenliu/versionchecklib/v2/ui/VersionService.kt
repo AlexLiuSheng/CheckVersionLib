@@ -5,7 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.IBinder
-import androidx.annotation.WorkerThread
+import android.support.annotation.WorkerThread
 import com.allenliu.versionchecklib.R
 import com.allenliu.versionchecklib.callback.DownloadListener
 import com.allenliu.versionchecklib.core.DownloadManager
