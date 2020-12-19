@@ -3,7 +3,6 @@ package com.allenliu.sample.v2;
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
-import android.os.Environment;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -49,7 +48,7 @@ public class V2Activity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_v2);
         initView();
-
+//        sendDefaultReuqest();
     }
 
     private void initView() {
@@ -79,6 +78,38 @@ public class V2Activity extends AppCompatActivity {
                 AllenVersionChecker.getInstance().cancelAllMission();
                 break;
         }
+    }
+    private void sendDefaultReuqest(){
+        builder = AllenVersionChecker
+                .getInstance()
+                .requestVersion()
+                .setRequestUrl("https://www.baidu.com")
+
+                .request(new RequestVersionListener() {
+                    @Nullable
+                    @Override
+                    public UIData onRequestVersionSuccess(DownloadBuilder downloadBuilder,String result) {
+//                            V2.1.1可以根据服务器返回的结果，动态在此设置是否强制更新等
+//                            downloadBuilder.setForceUpdateListener(() -> {
+//                                forceUpdate();
+//                            });
+                        Toast.makeText(V2Activity.this, "request successful", Toast.LENGTH_SHORT).show();
+                        return crateUIData();
+                    }
+
+                    @Override
+                    public void onRequestVersionFailure(String message) {
+                        Toast.makeText(V2Activity.this, "request failed", Toast.LENGTH_SHORT).show();
+
+                    }
+                });
+        builder.setCustomVersionDialogListener(createCustomDialogTwo());
+        builder.setCustomDownloadingDialogListener(createCustomDownloadingDialog());
+        builder.setCustomDownloadFailedListener(createCustomDownloadFailedDialog());
+        builder.setForceRedownload(true);
+
+        builder.executeMission(this);
+
     }
 
     private void sendRequest() {
@@ -181,8 +212,8 @@ public class V2Activity extends AppCompatActivity {
                 builder.setCustomDownloadFailedListener(createCustomDownloadFailedDialog());
                 break;
         }
-        //自定义下载路径
-        builder.setDownloadAPKPath(Environment.getExternalStorageDirectory() + "/ALLEN/AllenVersionPath2/");
+        //自定义下载路径.在Android Q以上，请将路径设置为app内部路径，不要随便设置
+//        builder.setDownloadAPKPath(Environment.getExternalStorageDirectory() + "/ALLEN/AllenVersionPath2");
         String address = etAddress.getText().toString();
         if (!"".equals(address))
             builder.setDownloadAPKPath(address);

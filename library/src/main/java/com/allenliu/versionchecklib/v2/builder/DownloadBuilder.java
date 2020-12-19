@@ -3,8 +3,8 @@ package com.allenliu.versionchecklib.v2.builder;
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
-import android.support.annotation.NonNull;
 
+import androidx.annotation.NonNull;
 
 import com.allenliu.versionchecklib.callback.APKDownloadListener;
 import com.allenliu.versionchecklib.callback.CommitClickListener;
@@ -66,7 +66,7 @@ public class DownloadBuilder {
         isDirectDownload = false;
         isShowDownloadFailDialog = true;
         notificationBuilder = NotificationBuilder.create();
-        runOnForegroundService=true;
+        runOnForegroundService = true;
     }
 
     public DownloadBuilder(RequestVersionBuilder requestVersionBuilder, UIData versionBundle) {
@@ -306,10 +306,7 @@ public class DownloadBuilder {
         return this;
     }
 
-    public void executeMission(Context context) {
-        if (apkName == null) {
-            apkName = context.getApplicationContext().getPackageName();
-        }
+    private void setupDefaultNotificationIcon(Context context) {
         if (notificationBuilder.getIcon() == 0) {
             final PackageManager pm = context.getPackageManager();
             final ApplicationInfo applicationInfo;
@@ -321,6 +318,14 @@ public class DownloadBuilder {
                 e.printStackTrace();
             }
         }
+    }
+
+    public void executeMission(Context context) {
+        if (apkName == null) {
+            //https://github.com/AlexLiuSheng/CheckVersionLib/issues/338
+            apkName = context.getApplicationContext().getPackageName().replaceAll("\\.", "");
+        }
+        setupDefaultNotificationIcon(context);
         //fix path permission
         setupDownloadPath(context);
 //        downloadAPKPath=context.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS).getPath() + "/";
@@ -340,7 +345,7 @@ public class DownloadBuilder {
     }
 
     public void download(Context context) {
-        VersionService.enqueueWork(context.getApplicationContext(), this);
+        VersionService.Companion.enqueueWork(context.getApplicationContext(), this);
     }
 
     private boolean checkWhetherNeedRequestVersion() {
@@ -350,21 +355,4 @@ public class DownloadBuilder {
             return false;
     }
 
-    public void destory() {
-        setCustomDownloadFailedListener(null);
-        setCustomDownloadingDialogListener(null);
-        setCustomVersionDialogListener(null);
-        setForceUpdateListener(null);
-        setApkDownloadListener(null);
-        setOnCancelListener(null);
-        setReadyDownloadCommitClickListener(null);
-        setDownloadFailedCommitClickListener(null);
-        setReadyDownloadCancelListener(null);
-        setDownloadingCancelListener(null);
-        setDownloadFailedCancelListener(null);
-
-        if (getRequestVersionBuilder() != null)
-            getRequestVersionBuilder().destory();
-        requestVersionBuilder = null;
-    }
 }

@@ -70,8 +70,6 @@ public class RequestVersionBuilder {
         return new DownloadBuilder(this, null);
     }
 
-    public void destory() {
-        requestVersionListener = null;
-    }
+
 
 }

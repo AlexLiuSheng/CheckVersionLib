@@ -182,7 +182,7 @@ public class AllenHttp {
     }
     public static Request.Builder get(RequestVersionBuilder versionParams) {
         Request.Builder builder = new Request.Builder();
-        builder = assembleHeader(builder, versionParams);
+        assembleHeader(builder, versionParams);
         builder.url(assembleUrl(versionParams.getRequestUrl(), versionParams.getRequestParams()));
 
         return builder;
@@ -191,7 +191,7 @@ public class AllenHttp {
     public static Request.Builder post(RequestVersionBuilder versionParams) {
         FormBody formBody = getRequestParams(versionParams);
         Request.Builder builder = new Request.Builder();
-        builder = assembleHeader(builder, versionParams);
+        assembleHeader(builder, versionParams);
         builder.post(formBody).url(versionParams.getRequestUrl());
         return builder;
     }
@@ -201,7 +201,7 @@ public class AllenHttp {
         String json = getRequestParamsJson(versionParams.getRequestParams());
         RequestBody body = RequestBody.create(JSON, json);
         Request.Builder builder = new Request.Builder();
-        builder = assembleHeader(builder, versionParams);
+        assembleHeader(builder, versionParams);
         builder.post(body).url(versionParams.getRequestUrl());
         return builder;
     }
