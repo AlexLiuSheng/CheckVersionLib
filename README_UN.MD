@@ -24,7 +24,6 @@
 - [x] 适配到Android Q
 
 ### 导入
-为了兼容Android Q，必须设置compileSdkVersion和targetSdkVersion为29
 ```
 allprojects {
 		repositories {
@@ -35,12 +34,12 @@ allprojects {
 ```
 #### appcompat
 ```
-  implementation 'com.github.AlexLiuSheng:CheckVersionLib:2.4_appcompat'
+  implementation 'com.github.AlexLiuSheng:CheckVersionLib:2.4.1_appcompat'
 ```
 #### jitpack && android x
 ```
 dependencies {
-	        implementation 'com.github.AlexLiuSheng:CheckVersionLib:2.4_androidx'
+	        implementation 'com.github.AlexLiuSheng:CheckVersionLib:2.4.1_androidx'
 	}
 ```
 

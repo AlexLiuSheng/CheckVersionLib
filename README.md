@@ -26,7 +26,6 @@ The strongest feature is easier to integrate than version  of V1.+
 - [x] Adapt to Android Q
 
 ### include
-For Android Q compatibility,you must set targetSDKVersion to 29 
 ```
 allprojects {
 		repositories {
@@ -37,13 +36,13 @@ allprojects {
 ```
 #### appcompat
 ```
-  implementation 'com.github.AlexLiuSheng:CheckVersionLib:2.4_appcompat'
+  implementation 'com.github.AlexLiuSheng:CheckVersionLib:2.4.1_appcompat'
 ```
 #### jitpack && android x
 ```
 
 dependencies {
-	        implementation 'com.github.AlexLiuSheng:CheckVersionLib:2.4_androidx'
+	        implementation 'com.github.AlexLiuSheng:CheckVersionLib:2.4.1_androidx'
 	}
 ```
 
