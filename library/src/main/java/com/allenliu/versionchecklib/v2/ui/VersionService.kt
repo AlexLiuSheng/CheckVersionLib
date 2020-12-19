@@ -265,6 +265,7 @@ class VersionService : Service() {
                 val permissionResult = commonEvent.data as Boolean
                 if (permissionResult) startDownloadApk() else {
                     BuilderManager.checkForceUpdate()
+                    AllenVersionChecker.getInstance().cancelAllMission()
                 }
             }
             AllenEventType.STOP_SERVICE -> {

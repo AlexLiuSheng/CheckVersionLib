@@ -306,12 +306,7 @@ public class DownloadBuilder {
         return this;
     }
 
-    public void executeMission(Context context) {
-        if (apkName == null) {
-            //https://github.com/AlexLiuSheng/CheckVersionLib/issues/338
-            apkName = context.getApplicationContext().getPackageName().replaceAll("\\.", "");
-        }
-
+    private void setupDefaultNotificationIcon(Context context) {
         if (notificationBuilder.getIcon() == 0) {
             final PackageManager pm = context.getPackageManager();
             final ApplicationInfo applicationInfo;
@@ -323,6 +318,14 @@ public class DownloadBuilder {
                 e.printStackTrace();
             }
         }
+    }
+
+    public void executeMission(Context context) {
+        if (apkName == null) {
+            //https://github.com/AlexLiuSheng/CheckVersionLib/issues/338
+            apkName = context.getApplicationContext().getPackageName().replaceAll("\\.", "");
+        }
+        setupDefaultNotificationIcon(context);
         //fix path permission
         setupDownloadPath(context);
 //        downloadAPKPath=context.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS).getPath() + "/";
