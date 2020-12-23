@@ -222,8 +222,13 @@ public class VersionDialogActivity extends AllenBaseActivity implements Download
 
 
     protected void requestPermissionAndDownloadFile() {
+        // if dir is writable, skip checking permission
+        if (new File(versionParams.getDownloadAPKPath()).canWrite()) {
+            Log.i(TAG, "requestPermissionAndDownloadFile: " + new File(versionParams.getDownloadAPKPath()).canWrite());
+            downloadFile();
+        }
         // Here, thisActivity is the current activity
-        if (ContextCompat.checkSelfPermission(this,
+        else if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 != PackageManager.PERMISSION_GRANTED) {
 
