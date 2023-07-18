@@ -11,6 +11,10 @@ import com.allenliu.versionchecklib.utils.AllenEventBusUtil
 import com.allenliu.versionchecklib.v2.AllenVersionChecker
 import com.allenliu.versionchecklib.v2.builder.BuilderManager
 import com.allenliu.versionchecklib.v2.eventbus.AllenEventType
+import com.allenliu.versionchecklib.v2.eventbus.CommonEvent
+import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
 
 class DownloadFailedActivity : AllenBaseActivity(), DialogInterface.OnCancelListener {
     private var downloadFailedDialog: Dialog? = null
@@ -77,17 +81,32 @@ class DownloadFailedActivity : AllenBaseActivity(), DialogInterface.OnCancelList
             downloadFailedCommitClickListener?.onCommitClick()
         }
         AllenEventBusUtil.sendEventBus(AllenEventType.START_DOWNLOAD_APK)
-        finish()
+
+    }
+
+    override fun onStop() {
+        super.onStop()
+        if (downloadFailedDialog != null && downloadFailedDialog!!.isShowing) downloadFailedDialog!!.dismiss()
     }
 
     override fun onPause() {
         super.onPause()
-        if (downloadFailedDialog != null && downloadFailedDialog!!.isShowing) downloadFailedDialog!!.dismiss()
+
         //        finish();
     }
 
     override fun onResume() {
         super.onResume()
         if (downloadFailedDialog != null && !downloadFailedDialog!!.isShowing) downloadFailedDialog!!.show()
+    }
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    override fun receiveEvent(commonEvent: CommonEvent<*>) {
+        super.receiveEvent(commonEvent)
+        when (commonEvent.eventType) {
+            AllenEventType.START_DOWNLOAD_APK -> {
+                finish()
+            }
+
+        }
     }
 }

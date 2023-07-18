@@ -1,12 +1,9 @@
 package com.allenliu.versionchecklib.core;
 
-import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-import androidx.appcompat.app.AppCompatActivity;
+
 import android.widget.Toast;
 
 import com.allenliu.versionchecklib.R;
@@ -18,42 +15,26 @@ import org.greenrobot.eventbus.EventBus;
 
 import static com.allenliu.versionchecklib.core.VersionDialogActivity.MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE;
 
-public class PermissionDialogActivity extends AllenBaseActivity {
+/**
+ * 不再库里做权限处理，默认下载路径为应用下载目录
+ */
+public class JumpActivity extends AllenBaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (ContextCompat.checkSelfPermission(this,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                != PackageManager.PERMISSION_GRANTED) {
-
-            // Should we show an explanation?
-            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-
-                // Show an expanation to the user *asynchronously* -- don't block
-                // this thread waiting for the user's response! After the user
-                // sees the explanation, try again to request the permission.
-                ActivityCompat.requestPermissions(this,
-                        new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                        MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE);
-//                if(!downloadUrl.isEmpty())
-//               downloadAPK(downloadUrl,null);
-            } else {
-
-                // No explanation needed, we can request the permission.
-
-                ActivityCompat.requestPermissions(this,
-                        new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                        MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE);
-
-                // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
-                // app-defined int constant. The callback method gets the
-                // result of the request.
-            }
-        } else {
-            sendBroadcast(true);
-        }
+        sendBroadcast(true);
+        return;
+        // Should we show an explanation?
+        // Show an expanation to the user *asynchronously* -- don't block
+        // this thread waiting for the user's response! After the user
+        // sees the explanation, try again to request the permission.
+        //                if(!downloadUrl.isEmpty())
+        //               downloadAPK(downloadUrl,null);
+        // No explanation needed, we can request the permission.
+        // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
+        // app-defined int constant. The callback method gets the
+        // result of the request.
     }
 
     @Override
@@ -72,8 +53,8 @@ public class PermissionDialogActivity extends AllenBaseActivity {
         intent.putExtra("result", result);
         sendBroadcast(intent);
         //post event
-        CommonEvent commonEvent=new CommonEvent();
-        commonEvent.setEventType(AllenEventType.REQUEST_PERMISSION);
+        CommonEvent commonEvent = new CommonEvent();
+        commonEvent.setEventType(AllenEventType.START_DOWNLOAD_APK);
         commonEvent.setSuccessful(true);
         commonEvent.setData(result);
         EventBus.getDefault().post(commonEvent);
@@ -85,6 +66,7 @@ public class PermissionDialogActivity extends AllenBaseActivity {
     @Override
     public void onRequestPermissionsResult(int requestCode,
                                            String permissions[], int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         switch (requestCode) {
             case MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE: {
                 // If request is cancelled, the result arrays are empty.

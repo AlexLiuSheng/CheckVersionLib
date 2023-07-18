@@ -153,7 +153,7 @@ public abstract class AVersionService extends Service implements DownloadListene
             BroadcastReceiver receiver = new VersionBroadCastReceiver();
             IntentFilter intentFilter = new IntentFilter(PERMISSION_ACTION);
             registerReceiver(receiver, intentFilter);
-            Intent intent = new Intent(this, PermissionDialogActivity.class);
+            Intent intent = new Intent(this, JumpActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
 //            silentDownload();

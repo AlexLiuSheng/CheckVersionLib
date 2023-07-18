@@ -7,9 +7,7 @@ import android.os.Build
 import android.os.IBinder
 import androidx.annotation.WorkerThread
 import com.allenliu.versionchecklib.R
-import com.allenliu.versionchecklib.callback.DownloadListener
 import com.allenliu.versionchecklib.core.DownloadManager
-import com.allenliu.versionchecklib.core.PermissionDialogActivity
 import com.allenliu.versionchecklib.core.http.AllenHttp
 import com.allenliu.versionchecklib.utils.ALog
 import com.allenliu.versionchecklib.utils.AllenEventBusUtil
@@ -18,7 +16,6 @@ import com.allenliu.versionchecklib.v2.AllenVersionChecker
 import com.allenliu.versionchecklib.v2.builder.BuilderManager
 import com.allenliu.versionchecklib.v2.builder.DownloadBuilder
 import com.allenliu.versionchecklib.v2.callback.DownloadListenerKt
-import com.allenliu.versionchecklib.v2.callback.LifecycleListener
 import com.allenliu.versionchecklib.v2.eventbus.AllenEventType
 import com.allenliu.versionchecklib.v2.eventbus.CommonEvent
 import com.allenliu.versionchecklib.v2.net.DownloadMangerV2
@@ -39,7 +36,10 @@ class VersionService : Service() {
         }
         ALog.e("version service create")
         //https://issuetracker.google.com/issues/76112072
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) startForeground(NotificationHelper.NOTIFICATION_ID, NotificationHelper.createSimpleNotification(this))
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) startForeground(
+            NotificationHelper.NOTIFICATION_ID,
+            NotificationHelper.createSimpleNotification(this)
+        )
         init()
         return START_REDELIVER_INTENT
     }
@@ -89,10 +89,10 @@ class VersionService : Service() {
         BuilderManager.doWhenNotNull {
             if (versionBundle != null) {
                 if (isDirectDownload) {
-                    AllenEventBusUtil.sendEventBus(AllenEventType.START_DOWNLOAD_APK)
+                    startDownloadApk()
                 } else {
                     if (isSilentDownload) {
-                        requestPermissionAndDownload()
+                        startDownloadApk()
                     } else {
                         showVersionDialog()
                     }
@@ -145,11 +145,13 @@ class VersionService : Service() {
     }
 
     private fun requestPermissionAndDownload() {
-        BuilderManager.doWhenNotNull {
-            val intent = Intent(this@VersionService, PermissionDialogActivity::class.java)
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-            startActivity(intent)
-        }
+        //不再请求权限
+        startDownloadApk()
+//        BuilderManager.doWhenNotNull {
+//            val intent = Intent(this@VersionService, PermissionDialogActivity::class.java)
+//            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+//            startActivity(intent)
+//        }
 
     }
 
@@ -170,7 +172,10 @@ class VersionService : Service() {
     private val downloadFilePath: String
         get() {
             return BuilderManager.doWhenNotNull {
-                downloadAPKPath + getString(R.string.versionchecklib_download_apkname, if (apkName != null) apkName else packageName)
+                downloadAPKPath + getString(
+                    R.string.versionchecklib_download_apkname,
+                    if (apkName != null) apkName else packageName
+                )
 
             } ?: ""
         }
@@ -178,31 +183,49 @@ class VersionService : Service() {
     @WorkerThread
     private fun startDownloadApk() {
         //判断是否缓存并且是否强制重新下载
-        BuilderManager.doWhenNotNull {
-            val downloadPath = downloadFilePath
-            if (DownloadManager.checkAPKIsExists(applicationContext, downloadPath, getNewestVersionCode()) && !isForceRedownload()) {
-                ALog.e("using cache")
-                install()
-                return@doWhenNotNull
+        fun inner() {
+            BuilderManager.doWhenNotNull {
+                val downloadPath = downloadFilePath
+                if (DownloadManager.checkAPKIsExists(
+                        applicationContext,
+                        downloadPath,
+                        getNewestVersionCode()
+                    ) && !isForceRedownload()
+                ) {
+                    ALog.e("using cache")
+                    install()
+                    return@doWhenNotNull
+                }
+                BuilderManager.checkAndDeleteAPK()
+                var downloadUrl: String? = downloadUrl
+                if (downloadUrl == null && versionBundle != null) {
+                    downloadUrl = versionBundle.downloadUrl
+                }
+                if (downloadUrl == null) {
+                    AllenVersionChecker.getInstance().cancelAllMission()
+                    throw RuntimeException("you must set a download url for download function using")
+                }
+                ALog.e("downloadPath:$downloadPath")
+                DownloadMangerV2.download(
+                    downloadUrl,
+                    downloadAPKPath,
+                    getString(
+                        R.string.versionchecklib_download_apkname,
+                        if (apkName != null) apkName else packageName
+                    ),
+                    downloadListener
+                )
             }
-            BuilderManager.checkAndDeleteAPK()
-            var downloadUrl: String? = downloadUrl
-            if (downloadUrl == null && versionBundle != null) {
-                downloadUrl = versionBundle.downloadUrl
-            }
-            if (downloadUrl == null) {
-                AllenVersionChecker.getInstance().cancelAllMission()
-                throw RuntimeException("you must set a download url for download function using")
-            }
-            ALog.e("downloadPath:$downloadPath")
-            DownloadMangerV2.download(downloadUrl, downloadAPKPath, getString(R.string.versionchecklib_download_apkname, if (apkName != null) apkName else packageName), downloadListener)
         }
+        executors?.submit { inner() }
+
 
     }
 
     private val downloadListener: DownloadListenerKt = object : DownloadListenerKt {
         override fun onCheckerDownloading(progress: Int) {
             BuilderManager.doWhenNotNull {
+                ALog.e("download progress $progress")
                 if (isServiceAlive) {
                     if (!isSilentDownload) {
                         notificationHelper?.updateNotification(progress)
@@ -224,7 +247,6 @@ class VersionService : Service() {
             }
 
         }
-
 
 
         override fun onCheckerDownloadFail() {
@@ -260,14 +282,7 @@ class VersionService : Service() {
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun receiveEvent(commonEvent: CommonEvent<*>) {
         when (commonEvent.eventType) {
-            AllenEventType.START_DOWNLOAD_APK -> requestPermissionAndDownload()
-            AllenEventType.REQUEST_PERMISSION -> {
-                val permissionResult = commonEvent.data as Boolean
-                if (permissionResult) startDownloadApk() else {
-                    BuilderManager.checkForceUpdate()
-                    AllenVersionChecker.getInstance().cancelAllMission()
-                }
-            }
+            AllenEventType.START_DOWNLOAD_APK -> startDownloadApk()
             AllenEventType.STOP_SERVICE -> {
                 stopSelf()
                 EventBus.getDefault().removeStickyEvent(commonEvent)
@@ -285,7 +300,10 @@ class VersionService : Service() {
         BuilderManager.doWhenNotNull {
             isServiceAlive = true
             notificationHelper = NotificationHelper(applicationContext)
-            if (isRunOnForegroundService) startForeground(NotificationHelper.NOTIFICATION_ID, notificationHelper?.serviceNotification)
+            if (isRunOnForegroundService) startForeground(
+                NotificationHelper.NOTIFICATION_ID,
+                notificationHelper?.serviceNotification
+            )
             executors = Executors.newSingleThreadExecutor()
             executors?.submit { onHandleWork() }
         }

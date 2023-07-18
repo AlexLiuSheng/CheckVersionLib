@@ -1,13 +1,13 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-android-extensions'
+//apply plugin: 'kotlin-android-extensions'
 android {
-    compileSdkVersion 33
+    compileSdkVersion 32
 //    buildToolsVersion "29.0.3"
     resourcePrefix "versionchecklib"
     defaultConfig {
         minSdkVersion 14
-        targetSdkVersion 33
+        targetSdkVersion 32
     }
 
     buildTypes {
@@ -21,12 +21,16 @@ android {
     lint {
         abortOnError false
     }
+    compileOptions {
+        targetCompatibility  JavaVersion.VERSION_17
+        sourceCompatibility JavaVersion.VERSION_17
+    }
 }
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     compileOnly 'androidx.appcompat:appcompat:1.6.1'
-    implementation 'com.squareup.okhttp3:okhttp:4.3.1'
+    implementation 'com.squareup.okhttp3:okhttp:4.10.0'
     implementation 'org.greenrobot:eventbus:3.3.1'
-
+    implementation "androidx.annotation:annotation:1.6.0"
 }

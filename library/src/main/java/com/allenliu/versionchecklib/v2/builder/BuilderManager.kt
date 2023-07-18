@@ -1,5 +1,6 @@
 package com.allenliu.versionchecklib.v2.builder
 
+import android.annotation.SuppressLint
 import android.content.Context
 import com.allenliu.versionchecklib.R
 import com.allenliu.versionchecklib.core.DownloadManager
@@ -14,6 +15,7 @@ import java.io.File
  *    @desc   :
  *
  */
+@SuppressLint("StaticFieldLeak")
 object BuilderManager {
     private var downloadBuilder: DownloadBuilder? = null
     lateinit var context: Context

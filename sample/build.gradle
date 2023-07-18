@@ -1,11 +1,11 @@
 apply plugin: 'com.android.application'
 //apply plugin: 'me.tatarka.retrolambda'
 android {
-    compileSdkVersion 33
+    compileSdkVersion 32
     defaultConfig {
         applicationId "com.allenliu.sample"
         minSdkVersion 16
-        targetSdkVersion 33
+        targetSdkVersion 32
         versionCode 1
         versionName "1.0"
 
@@ -18,8 +18,8 @@ android {
         }
     }
     compileOptions {
-        targetCompatibility 1.8
-        sourceCompatibility 1.8
+        targetCompatibility  JavaVersion.VERSION_17
+        sourceCompatibility JavaVersion.VERSION_17
     }
     namespace 'com.allenliu.sample'
 }
@@ -32,8 +32,8 @@ dependencies {
     implementation project(':library')
 //    implementation 'com.github.AlexLiuSheng:CheckVersionLib:2.2.2'
 //    compile 'com.allenliu.versionchecklib:library:2.0.9'
-    implementation 'androidx.appcompat:appcompat:1.6.1'
+    implementation 'androidx.appcompat:appcompat:1.5.1'
     //    compile 'com.allenliu.versionchecklib:library:1.7.6'
     //compile files('libs/library.jar')
-    testImplementation('com.squareup.leakcanary:leakcanary-android:2.12')
+    implementation('com.squareup.leakcanary:leakcanary-android:2.12')
 }

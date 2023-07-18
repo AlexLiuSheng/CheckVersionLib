@@ -25,13 +25,8 @@ public class DownloadMangerV2 {
                     //#issue 220
                     .addHeader("Accept-Encoding", "identity")
                     .url(url).build();
-            new Handler(Looper.getMainLooper()).post(new Runnable() {
-                @Override
-                public void run() {
-                    if (listener != null && !listener.isDisposed())
-                        listener.onCheckerStartDownload();
-                }
-            });
+
+
 
             AllenHttp.getHttpClient().newCall(request).enqueue(new FileCallBack(downloadApkPath, fileName) {
                 @Override
@@ -67,7 +62,31 @@ public class DownloadMangerV2 {
             throw new RuntimeException("you must set download url for download function using");
         }
     }
-
+   private void mockDownload(DownloadListenerKt listener){
+       new Handler(Looper.getMainLooper()).post(new Runnable() {
+           @Override
+           public void run() {
+               if (listener != null && !listener.isDisposed())
+                   listener.onCheckerStartDownload();
+           }
+       });
+       for (int i = 0; i < 100; i++) {
+           try {
+               Thread.sleep(100);
+           } catch (InterruptedException e) {
+               throw new RuntimeException(e);
+           }
+           int finalI = i;
+           new Handler(Looper.getMainLooper()).post(new Runnable() {
+               @Override
+               public void run() {
+                   if (listener != null && !listener.isDisposed())
+                       listener.onCheckerDownloading(finalI);
+               }
+           });
+       }
+       handleFailed(listener);
+   }
 
     private static void handleFailed(final DownloadListenerKt listener) {
         new Handler(Looper.getMainLooper()).post(new Runnable() {

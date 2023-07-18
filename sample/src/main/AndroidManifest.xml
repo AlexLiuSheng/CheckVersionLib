@@ -24,7 +24,8 @@
             android:launchMode="singleTask"
             android:theme="@style/versionCheckLibvtransparentTheme" />
         <activity android:name=".v2.V2Activity" />
-        <activity android:name=".MainActivity">
+        <activity android:name=".MainActivity"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

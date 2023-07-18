@@ -13,7 +13,7 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import com.allenliu.versionchecklib.R
-import com.allenliu.versionchecklib.core.PermissionDialogActivity
+import com.allenliu.versionchecklib.core.JumpActivity
 import com.allenliu.versionchecklib.core.VersionFileProvider
 import com.allenliu.versionchecklib.utils.ALog
 import com.allenliu.versionchecklib.v2.builder.BuilderManager
@@ -38,15 +38,19 @@ class NotificationHelper(private val context: Context) {
      * @param progress the progress of notification
      */
     fun updateNotification(progress: Int) {
+
         BuilderManager.doWhenNotNull {
             if (isShowNotification) {
                 notification?.let {
+
                     if (progress - currentProgress > 5 && !isDownloadSuccess && !isFailed) {
+                        ALog.e("update progress notification")
                         contentText?.let { text ->
                             it.setContentIntent(null)
                             it.setContentText(String.format(text, progress))
                             it.setProgress(100, progress, false)
                             manager.notify(NOTIFICATION_ID, it.build())
+
                             currentProgress = progress
                         }
 
@@ -63,8 +67,10 @@ class NotificationHelper(private val context: Context) {
      * show notification
      */
     fun showNotification() {
+        currentProgress=0
         isDownloadSuccess = false
         isFailed = false
+        ALog.e("reset notification")
         BuilderManager.doWhenNotNull {
             if (isShowNotification) {
                 notification = createNotification(this)
@@ -78,6 +84,7 @@ class NotificationHelper(private val context: Context) {
      * show download success notification
      */
     fun showDownloadCompleteNotifcation(file: File) {
+        currentProgress=0
         BuilderManager.doWhenNotNull {
             isDownloadSuccess = true
             if (!isShowNotification) return@doWhenNotNull
@@ -93,7 +100,12 @@ class NotificationHelper(private val context: Context) {
             //设置intent的类型
             i.setDataAndType(uri,
                     "application/vnd.android.package-archive")
-            val pendingIntent = PendingIntent.getActivity(context, 0, i, 0)
+            val pendingIntent = PendingIntent.getActivity(
+                context,
+                0,
+                i,
+                PendingIntent.FLAG_IMMUTABLE
+            )
             notification?.let {
                 it.setContentIntent(pendingIntent)
                 it.setContentText(context.getString(R.string.versionchecklib_download_finish))
@@ -112,9 +124,9 @@ class NotificationHelper(private val context: Context) {
         BuilderManager.doWhenNotNull {
             if (isShowNotification) {
                 notification?.let {
-                    val intent = Intent(context, PermissionDialogActivity::class.java)
+                    val intent = Intent(context, JumpActivity::class.java)
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                    val pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
+                    val pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_IMMUTABLE)
                     it.setContentIntent(pendingIntent)
                     it.setContentText(context.getString(R.string.versionchecklib_download_fail))
                     it.setProgress(100, 0, false)
