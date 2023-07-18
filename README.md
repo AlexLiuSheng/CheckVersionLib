@@ -23,7 +23,7 @@ The strongest feature is easier to integrate than version  of V1.+
 
 - [x] Support Silence Download （one line code）
 
-- [x] Adapt to Android Q
+- [x] Adapt to Android 13
 
 ### include
 ```
@@ -34,15 +34,11 @@ allprojects {
 		}
 	}
 ```
-#### appcompat
-```
-  implementation 'com.github.AlexLiuSheng:CheckVersionLib:2.4.1_appcompat'
-```
-#### jitpack && android x
+
 ```
 
 dependencies {
-	        implementation 'com.github.AlexLiuSheng:CheckVersionLib:2.4.1_androidx'
+	        implementation 'com.github.AlexLiuSheng:CheckVersionLib:2.4.2'
 	}
 ```
 

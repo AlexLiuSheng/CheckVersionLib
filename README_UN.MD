@@ -21,7 +21,7 @@
 
 - [x] 支持静默下载 （一行代码）
 
-- [x] 适配到Android Q
+- [x] 适配到Android 13
 
 ### 导入
 ```
@@ -32,20 +32,16 @@ allprojects {
 		}
 	}
 ```
-#### appcompat
-```
-  implementation 'com.github.AlexLiuSheng:CheckVersionLib:2.4.1_appcompat'
-```
-#### jitpack && android x
+
 ```
 dependencies {
-	        implementation 'com.github.AlexLiuSheng:CheckVersionLib:2.4.1_androidx'
+	        implementation 'com.github.AlexLiuSheng:CheckVersionLib:2.4.2'
 	}
 ```
 
 ### 使用
 
-和1.+版本一样，两种模式
+两种模式
 
 > 只使用下载模式
 
