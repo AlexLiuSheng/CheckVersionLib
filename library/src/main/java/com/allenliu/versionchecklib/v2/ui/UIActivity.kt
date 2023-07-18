@@ -101,6 +101,11 @@ class UIActivity : AllenBaseActivity(), DialogInterface.OnCancelListener {
     override fun onPause() {
         super.onPause()
 
+
+    }
+
+    override fun onStop() {
+        super.onStop()
         versionDialog?.let {
             if (it.isShowing) {
                 it.dismiss()
@@ -139,8 +144,8 @@ class UIActivity : AllenBaseActivity(), DialogInterface.OnCancelListener {
 
     override fun onCancel(dialogInterface: DialogInterface) {
         cancelHandler()
-        checkForceUpdate()
         AllenVersionChecker.getInstance().cancelAllMission()
         finish()
+        checkForceUpdate()
     }
 }

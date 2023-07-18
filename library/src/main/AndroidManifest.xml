@@ -1,10 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.allenliu.versionchecklib">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
@@ -15,10 +13,7 @@
         android:supportsRtl="true"
         android:requestLegacyExternalStorage="true"
         android:usesCleartextTraffic="true">
-        <activity
-            android:name=".core.VersionDialogActivity"
-            android:launchMode="singleTask"
-            android:theme="@style/versionCheckLibvtransparentTheme" />
+
 
         <provider
             android:name=".core.VersionFileProvider"
@@ -31,15 +26,11 @@
         </provider>
 
         <activity
-            android:name=".core.PermissionDialogActivity"
+            android:name=".core.JumpActivity"
             android:launchMode="singleTask"
             android:theme="@style/versionCheckLibvtransparentTheme" />
 
-        <service
-            android:name=".core.MyService"
-            android:enabled="true"
 
-            android:exported="false" />
         <service
             android:name=".v2.ui.VersionService"
             android:exported="false"
@@ -56,7 +47,7 @@
         <activity
             android:name=".v2.ui.DownloadFailedActivity"
             android:launchMode="singleTask"
-            android:theme="@style/versionCheckLibvtransparentTheme"></activity>
+            android:theme="@style/versionCheckLibvtransparentTheme" />
     </application>
 
 </manifest>

@@ -1,11 +1,11 @@
 package com.allenliu.sample;
 
 import android.content.Intent;
-import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 
-import com.allenliu.sample.v1.V1Activity;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.allenliu.sample.v2.V2Activity;
 
 public class MainActivity extends AppCompatActivity {
@@ -20,8 +20,7 @@ public class MainActivity extends AppCompatActivity {
         Intent intent;
         switch (view.getId()) {
             case R.id.btn_v1:
-                intent = new Intent(this, V1Activity.class);
-                startActivity(intent);
+
                 break;
             case R.id.btn_v2:
                 intent = new Intent(this, V2Activity.class);

@@ -1,9 +1,10 @@
 package com.allenliu.versionchecklib.v2.builder
 
+import android.annotation.SuppressLint
 import android.content.Context
 import com.allenliu.versionchecklib.R
-import com.allenliu.versionchecklib.core.DownloadManager
 import com.allenliu.versionchecklib.utils.ALog
+import com.allenliu.versionchecklib.utils.AppUtils
 import com.allenliu.versionchecklib.v2.AllenVersionChecker
 import java.io.File
 
@@ -14,6 +15,7 @@ import java.io.File
  *    @desc   :
  *
  */
+@SuppressLint("StaticFieldLeak")
 object BuilderManager {
     private var downloadBuilder: DownloadBuilder? = null
     lateinit var context: Context
@@ -39,7 +41,7 @@ object BuilderManager {
             //判断versioncode与当前版本不一样的apk是否存在，存在删除安装包
             try {
                 val downloadPath: String = downloadAPKPath + context.getString(R.string.versionchecklib_download_apkname, context.packageName)
-                if (!DownloadManager.checkAPKIsExists(context, downloadPath)) {
+                if (!AppUtils.checkAPKIsExists(context, downloadPath)) {
                     ALog.e("删除本地apk")
                     File(downloadPath).delete()
                 }

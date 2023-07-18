@@ -28,7 +28,12 @@ class DownloadingActivity : AllenBaseActivity(), DialogInterface.OnCancelListene
 
     fun onCancel(isDownloadCompleted: Boolean) {
         if (!isDownloadCompleted) {
-            AllenHttp.getHttpClient().dispatcher.cancelAll()
+            //should cancel downloading http request if it is force update action
+            BuilderManager.doWhenNotNull {
+                forceUpdateListener?.let {
+                    AllenHttp.getHttpClient().dispatcher.cancelAll()
+                }
+            }
             cancelHandler()
             checkForceUpdate()
         }
@@ -47,6 +52,7 @@ class DownloadingActivity : AllenBaseActivity(), DialogInterface.OnCancelListene
                 currentProgress = progress
                 updateProgress()
             }
+
             AllenEventType.DOWNLOAD_COMPLETE -> onCancel(true)
             AllenEventType.CLOSE_DOWNLOADING_ACTIVITY -> {
                 destroy()
@@ -57,24 +63,30 @@ class DownloadingActivity : AllenBaseActivity(), DialogInterface.OnCancelListene
 
     override fun showDefaultDialog() {
         val loadingView = LayoutInflater.from(this).inflate(R.layout.downloading_layout, null)
-        downloadingDialog = AlertDialog.Builder(this).setTitle("").setView(loadingView).create().apply {
-            BuilderManager.doWhenNotNull {
-                if (forceUpdateListener != null) setCancelable(false) else setCancelable(true)
-                setCanceledOnTouchOutside(false)
-                val pb = loadingView.findViewById<ProgressBar>(R.id.pb)
-                val tvProgress = loadingView.findViewById<TextView>(R.id.tv_progress)
-                tvProgress.text = String.format(getString(R.string.versionchecklib_progress), currentProgress)
-                pb.progress = currentProgress
-                show()
-            }
+        downloadingDialog =
+            AlertDialog.Builder(this).setTitle("").setView(loadingView).create().apply {
+                BuilderManager.doWhenNotNull {
+                    if (forceUpdateListener != null) setCancelable(false) else setCancelable(true)
+                    setCanceledOnTouchOutside(false)
+                    val pb = loadingView.findViewById<ProgressBar>(R.id.pb)
+                    val tvProgress = loadingView.findViewById<TextView>(R.id.tv_progress)
+                    tvProgress.text =
+                        String.format(getString(R.string.versionchecklib_progress), currentProgress)
+                    pb.progress = currentProgress
+                    show()
+                }
 
-        }
+            }
 
     }
 
     override fun showCustomDialog() {
         BuilderManager.doWhenNotNull {
-            downloadingDialog = customDownloadingDialogListener.getCustomDownloadingDialog(this@DownloadingActivity, currentProgress, versionBundle).apply {
+            downloadingDialog = customDownloadingDialogListener.getCustomDownloadingDialog(
+                this@DownloadingActivity,
+                currentProgress,
+                versionBundle
+            ).apply {
                 if (forceUpdateListener != null) setCancelable(false) else setCancelable(true)
                 val cancelView = findViewById<View?>(R.id.versionchecklib_loading_dialog_cancel)
                 cancelView?.setOnClickListener { onCancel(false) }
@@ -85,10 +97,16 @@ class DownloadingActivity : AllenBaseActivity(), DialogInterface.OnCancelListene
 
     }
 
-    override fun onPause() {
-        super.onPause()
+    override fun onStop() {
+        super.onStop()
+        //#issue350
         destroyWithOutDismiss()
         isDestroy = true
+    }
+
+    override fun onPause() {
+        super.onPause()
+
     }
 
     override fun onResume() {
@@ -120,12 +138,17 @@ class DownloadingActivity : AllenBaseActivity(), DialogInterface.OnCancelListene
         if (!isDestroy) {
             BuilderManager.doWhenNotNull {
                 if (customDownloadingDialogListener != null) {
-                    customDownloadingDialogListener.updateUI(downloadingDialog, currentProgress, versionBundle)
+                    customDownloadingDialogListener.updateUI(
+                        downloadingDialog,
+                        currentProgress,
+                        versionBundle
+                    )
                 } else {
                     val pb = downloadingDialog?.findViewById<ProgressBar>(R.id.pb)
                     pb?.progress = currentProgress
                     val tvProgress = downloadingDialog?.findViewById<TextView>(R.id.tv_progress)
-                    tvProgress?.text = String.format(getString(R.string.versionchecklib_progress), currentProgress)
+                    tvProgress?.text =
+                        String.format(getString(R.string.versionchecklib_progress), currentProgress)
                     downloadingDialog?.show()
                 }
             }
