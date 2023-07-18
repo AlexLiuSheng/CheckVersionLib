@@ -13,10 +13,7 @@
         android:supportsRtl="true"
         android:requestLegacyExternalStorage="true"
         android:usesCleartextTraffic="true">
-        <activity
-            android:name=".core.VersionDialogActivity"
-            android:launchMode="singleTask"
-            android:theme="@style/versionCheckLibvtransparentTheme" />
+
 
         <provider
             android:name=".core.VersionFileProvider"
@@ -33,11 +30,7 @@
             android:launchMode="singleTask"
             android:theme="@style/versionCheckLibvtransparentTheme" />
 
-        <service
-            android:name=".core.MyService"
-            android:enabled="true"
 
-            android:exported="false" />
         <service
             android:name=".v2.ui.VersionService"
             android:exported="false"

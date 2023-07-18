@@ -8,29 +8,20 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        tools:remove="android:requestLegacyExternalStorage"
-        android:theme="@style/AppTheme">
-        <activity android:name=".v1.V1Activity">
-
-        </activity>
-
-        <service
-            android:name=".v1.DemoService"
-            android:enabled="true"
-            android:exported="true" />
+        android:theme="@style/AppTheme"
+        tools:remove="android:requestLegacyExternalStorage">
 
         <activity
-            android:name=".v1.CustomVersionDialogActivity"
-            android:launchMode="singleTask"
-            android:theme="@style/versionCheckLibvtransparentTheme" />
-        <activity android:name=".v2.V2Activity" />
-        <activity android:name=".MainActivity"
+            android:name=".v2.V2Activity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity android:name=".MainActivity">
+
         </activity>
     </application>
 

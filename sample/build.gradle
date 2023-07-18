@@ -4,7 +4,7 @@ android {
     compileSdkVersion 32
     defaultConfig {
         applicationId "com.allenliu.sample"
-        minSdkVersion 16
+        minSdkVersion 21
         targetSdkVersion 32
         versionCode 1
         versionName "1.0"

@@ -7,7 +7,6 @@ import android.os.Build
 import android.os.IBinder
 import androidx.annotation.WorkerThread
 import com.allenliu.versionchecklib.R
-import com.allenliu.versionchecklib.core.DownloadManager
 import com.allenliu.versionchecklib.core.http.AllenHttp
 import com.allenliu.versionchecklib.utils.ALog
 import com.allenliu.versionchecklib.utils.AllenEventBusUtil
@@ -35,11 +34,9 @@ class VersionService : Service() {
             EventBus.getDefault().register(this)
         }
         ALog.e("version service create")
-        //https://issuetracker.google.com/issues/76112072
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) startForeground(
-            NotificationHelper.NOTIFICATION_ID,
-            NotificationHelper.createSimpleNotification(this)
-        )
+
+
+
         init()
         return START_REDELIVER_INTENT
     }
@@ -186,11 +183,11 @@ class VersionService : Service() {
         fun inner() {
             BuilderManager.doWhenNotNull {
                 val downloadPath = downloadFilePath
-                if (DownloadManager.checkAPKIsExists(
+                if (AppUtils.checkAPKIsExists(
                         applicationContext,
                         downloadPath,
-                        getNewestVersionCode()
-                    ) && !isForceRedownload()
+                        newestVersionCode
+                    ) && !isForceRedownload
                 ) {
                     ALog.e("using cache")
                     install()
@@ -228,7 +225,8 @@ class VersionService : Service() {
                 ALog.e("download progress $progress")
                 if (isServiceAlive) {
                     if (!isSilentDownload) {
-                        notificationHelper?.updateNotification(progress)
+                        if (isShowNotification)
+                            notificationHelper?.updateNotification(progress)
                         updateDownloadingDialogProgress(progress)
                     }
                     apkDownloadListener?.onDownloading(progress)
@@ -240,7 +238,9 @@ class VersionService : Service() {
         override fun onCheckerDownloadSuccess(file: File) {
             BuilderManager.doWhenNotNull {
                 if (isServiceAlive) {
-                    if (!isSilentDownload) notificationHelper?.showDownloadCompleteNotifcation(file)
+                    if (!isSilentDownload && isShowNotification) notificationHelper?.showDownloadCompleteNotifcation(
+                        file
+                    )
                     apkDownloadListener?.onDownloadSuccess(file)
                     install()
                 }
@@ -259,7 +259,8 @@ class VersionService : Service() {
                     if (isShowDownloadFailDialog) {
                         showDownloadFailedDialog()
                     }
-                    notificationHelper?.showDownloadFailedNotification()
+                    if (isShowNotification)
+                        notificationHelper?.showDownloadFailedNotification()
                 } else {
                     AllenVersionChecker.getInstance().cancelAllMission()
                 }
@@ -271,7 +272,8 @@ class VersionService : Service() {
             BuilderManager.doWhenNotNull {
                 ALog.e("start download apk")
                 if (!isSilentDownload) {
-                    notificationHelper?.showNotification()
+                    if (isShowNotification)
+                        notificationHelper?.showNotification()
                     showDownloadingDialog()
                 }
             }
@@ -298,12 +300,16 @@ class VersionService : Service() {
     //    }
     private fun init() {
         BuilderManager.doWhenNotNull {
+            //https://issuetracker.google.com/issues/76112072
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && isRunOnForegroundService) {
+                startForeground(
+                    NotificationHelper.NOTIFICATION_ID,
+                    NotificationHelper.createSimpleNotification(this@VersionService)
+                )
+                Thread.sleep(500)
+            }
             isServiceAlive = true
             notificationHelper = NotificationHelper(applicationContext)
-            if (isRunOnForegroundService) startForeground(
-                NotificationHelper.NOTIFICATION_ID,
-                notificationHelper?.serviceNotification
-            )
             executors = Executors.newSingleThreadExecutor()
             executors?.submit { onHandleWork() }
         }

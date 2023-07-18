@@ -6,7 +6,7 @@ android {
 //    buildToolsVersion "29.0.3"
     resourcePrefix "versionchecklib"
     defaultConfig {
-        minSdkVersion 14
+        minSdkVersion 21
         targetSdkVersion 32
     }
 

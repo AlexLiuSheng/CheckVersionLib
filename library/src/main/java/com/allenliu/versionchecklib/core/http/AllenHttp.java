@@ -1,6 +1,8 @@
 package com.allenliu.versionchecklib.core.http;
 
-import com.allenliu.versionchecklib.core.VersionParams;
+
+import android.os.Build;
+
 import com.allenliu.versionchecklib.utils.ALog;
 import com.allenliu.versionchecklib.v2.builder.RequestVersionBuilder;
 
@@ -81,7 +83,6 @@ public class AllenHttp {
     }
 
 
-
     private static String assembleUrl(String url, HttpParams params) {
 
         StringBuffer urlBuilder = new StringBuffer(url);
@@ -100,8 +101,8 @@ public class AllenHttp {
 
 
     private static String getRequestParamsJson(HttpParams params) {
-        String json=null;
-        if(params!=null) {
+        String json = null;
+        if (params != null) {
             JSONObject jsonObject = new JSONObject();
             for (Map.Entry<String, Object> entry : params.entrySet()) {
                 try {
@@ -117,54 +118,6 @@ public class AllenHttp {
         return json;
     }
 
-    private static <T extends Request.Builder> T assembleHeader(T builder, VersionParams versionParams) {
-        com.allenliu.versionchecklib.core.http.HttpHeaders headers = versionParams.getHttpHeaders();
-        if (headers != null) {
-            ALog.e("header:");
-            for (Map.Entry<String, String> stringStringEntry : headers.entrySet()) {
-                String key = stringStringEntry.getKey();
-                String value = stringStringEntry.getValue();
-                ALog.e(key + "=" + value + "\n");
-                builder.addHeader(key, value);
-            }
-        }
-        return builder;
-    }
-    public static Request.Builder get(VersionParams versionParams) {
-        Request.Builder builder = new Request.Builder();
-        builder = assembleHeader(builder, versionParams);
-        builder.url(assembleUrl(versionParams.getRequestUrl(), versionParams.getRequestParams()));
-
-        return builder;
-    }
-
-    public static Request.Builder post(VersionParams versionParams) {
-        FormBody formBody = getRequestParams(versionParams);
-        Request.Builder builder = new Request.Builder();
-        builder = assembleHeader(builder, versionParams);
-        builder.post(formBody).url(versionParams.getRequestUrl());
-        return builder;
-    }
-
-    public static Request.Builder postJson(VersionParams versionParams) {
-        MediaType JSON = MediaType.parse("application/json; charset=utf-8");
-        String json = getRequestParamsJson(versionParams.getRequestParams());
-        RequestBody body = RequestBody.create(JSON, json);
-        Request.Builder builder = new Request.Builder();
-        builder = assembleHeader(builder, versionParams);
-        builder.post(body).url(versionParams.getRequestUrl());
-        return builder;
-    }
-
-    private static FormBody getRequestParams(VersionParams versionParams) {
-        FormBody.Builder builder = new FormBody.Builder();
-        HttpParams params = versionParams.getRequestParams();
-        for (Map.Entry<String, Object> entry : params.entrySet()) {
-            builder.add(entry.getKey(), entry.getValue() + "");
-            ALog.e("params key:" + entry.getKey() + "-----value:" + entry.getValue());
-        }
-        return builder.build();
-    }
     /**********************************V2.0 Using RequestBuilder ************************************************************************/
 
     private static <T extends Request.Builder> T assembleHeader(T builder, RequestVersionBuilder versionParams) {
