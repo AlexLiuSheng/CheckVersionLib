@@ -3,6 +3,7 @@ package com.allenliu.versionchecklib.v2.ui
 import android.app.Service
 import android.content.Context
 import android.content.Intent
+import android.content.pm.ServiceInfo
 import android.os.Build
 import android.os.IBinder
 import androidx.annotation.WorkerThread
@@ -302,10 +303,14 @@ class VersionService : Service() {
         BuilderManager.doWhenNotNull {
             //https://issuetracker.google.com/issues/76112072
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && isRunOnForegroundService) {
-                startForeground(
-                    NotificationHelper.NOTIFICATION_ID,
-                    NotificationHelper.createSimpleNotification(this@VersionService)
-                )
+                val notification = NotificationHelper.createSimpleNotification(this@VersionService)
+                val notificationId = NotificationHelper.NOTIFICATION_ID
+                // 指定服务类型
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                    startForeground(notificationId, notification, ServiceInfo.FOREGROUND_SERVICE_TYPE_DATA_SYNC)
+                } else {
+                    startForeground(notificationId, notification)
+                }
                 Thread.sleep(500)
             }
             isServiceAlive = true
